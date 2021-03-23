@@ -16,5 +16,7 @@ public class Main {
         // folder UDP
         UdpServer server = new UdpServer(1235);
         UdpClient c1 = new UdpClient(1234);
+        server.start();
+        c1.start();
     }
 }

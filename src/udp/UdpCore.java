@@ -17,7 +17,6 @@ public abstract class UdpCore extends Thread {
 
     public UdpCore(int port){
         this.port = port;
-        this.start();
     }
 
     public void run() {
@@ -52,6 +51,6 @@ public abstract class UdpCore extends Thread {
     }
 
     public String readPacket(DatagramPacket packet) {
-        return new String(packet.getData(), 0, packet.getLength());
+        return new String(packet.getData());
     }
 }
