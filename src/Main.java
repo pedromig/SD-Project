@@ -1,6 +1,7 @@
 import terminals.VotingTerminal;
-import udp.UdpClient;
-import udp.UdpServer;
+
+import utils.elections.StudentElection;
+
 
 public class Main {
 
@@ -10,13 +11,8 @@ public class Main {
         // Terminal UI
         VotingTerminal vt = new VotingTerminal();
         String [] opts = {"Encontrar", "Fazer", "Procurar", "Listar"};
-        int opt = vt.launchUI("Main Menu", opts);
-        System.out.println("The program is: " + opts[opt]);
+        int opt = vt.launchUI("Main Menu", opts).getOption(opts.length);
+        System.out.println("The program is: " + opts[opt + 1]);
 
-        // folder UDP
-        UdpServer server = new UdpServer(1235);
-        UdpClient c1 = new UdpClient(1234);
-        server.start();
-        c1.start();
     }
 }
