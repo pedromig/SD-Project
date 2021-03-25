@@ -1,8 +1,9 @@
 package utils.people;
 
+import java.io.Serializable;
 import java.util.GregorianCalendar;
 
-public abstract class Person {
+public abstract class Person implements Serializable {
     int phoneNumber, identityCardNumber;
     String name, password, address, faculty, department;
     GregorianCalendar identityCardExpiryDate;

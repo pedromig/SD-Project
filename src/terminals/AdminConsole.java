@@ -1,8 +1,10 @@
 package terminals;
 
 import rmi.interfaces.RmiServerInterface;
+import utils.people.Employee;
 import utils.people.Person;
 import utils.people.Student;
+import utils.people.Teacher;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -16,20 +18,53 @@ public class AdminConsole extends Terminal {
         super();
     }
 
+    public RmiServerInterface connect(){
+        RmiServerInterface server;
+        long counter = 0, timeout = 30;
+        while (true) {
+            try {
+                server = (RmiServerInterface) Naming.lookup("RmiServer");
+                server.ping();
+                break;
+            } catch (Exception e) {
+                for (int i = 0; i < 3; ++i){
+                    System.out.println("No Server available. Timeout in " + (timeout - counter++) + "s");
+                    System.out.println("Trying to reconnect in " + (3 - i));
+                    try {Thread.sleep(1000);} catch (Exception ignore) {}
+                    this.clear();
+                    if (counter == timeout){
+                        System.out.println("RMI Server Timed Out");
+                        return null;
+                    }
+                }
+            }
+        }
+        return server;
+    }
+
     public int mainMenu(){
         String[] mainMenuOpts = {"Sign Up", "Overview","Real time Data"};
         return this.launchUI("Main Menu", mainMenuOpts).getOption(mainMenuOpts.length);
     }
 
-    public void signUp() {
+    public Person signUp() {
         boolean abortFlag = false;
         int value = 0;
         String input = null;
         Scanner sc = new Scanner(System.in);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Person person = null;
 
+        /* Header */
         this.launchUI("Sign Up Menu", new String[]{});
+
+        /* Select Job */
+        String[] opts = new String[]{"Student", "Teacher", "Employee"};
+        int personType = this.launchUI("Select Job", opts).getOption(opts.length);
+
+        /* Insert Information */
         System.out.println("Enter \"QUIT\" to abort the operation at any time.");
+
         /* Username */
         while (!abortFlag) {
             System.out.print("Name: ");
@@ -173,9 +208,19 @@ public class AdminConsole extends Terminal {
         GregorianCalendar identityCardExpiryDate = (GregorianCalendar) sdf.getCalendar();
 
         if (!abortFlag){
-            Person p = new Student(username, password, address, faculty, department, phoneNumber, identityCardNumber, identityCardExpiryDate);
+            switch (personType){
+                case 1:
+                    person = new Student(username, password, address, faculty, department, phoneNumber, identityCardNumber, identityCardExpiryDate);
+                    break;
+                case 2:
+                    person = new Teacher(username, password, address, faculty, department, phoneNumber, identityCardNumber, identityCardExpiryDate);
+                    break;
+                case 3:
+                    person = new Employee(username, password, address, faculty, department, phoneNumber, identityCardNumber, identityCardExpiryDate);
+                    break;
+            }
         }
-
+        return person;
     }
 
     public void overview(RmiServerInterface server) throws RemoteException {
@@ -183,57 +228,59 @@ public class AdminConsole extends Terminal {
     }
 
     public void realTimeData(){
-
     }
 
     public static void main(String[] args) {
-        RmiServerInterface server = null, lastServer = null;
+        Person person;
         AdminConsole admin = new AdminConsole();
         admin.clear();
-        while(true){
-            try {
-                while(true) {
-                    // Trying to find an RMI Server
-                    try {
-                        server = (RmiServerInterface) Naming.lookup("RmiServer");
-                        if (!server.equals(lastServer)){
-                            if (lastServer != null)
-                                System.out.println("Please Re-enter the previous form.");
-                            break;
-                        }
+        RmiServerInterface server = admin.connect();
+        if (server == null) return;
 
-                        /* Animation */
-                        System.out.print("Waiting for available server");
-                        for (int i = 0; i < 3; i++){
-                            System.out.print(".");
-                            Thread.sleep(1000);
+        while (true){
+            int optMainMenu = admin.mainMenu();
+            while (optMainMenu != 0) {
+                admin.clear();
+                switch (optMainMenu) {
+                    case 1:
+                        person = admin.signUp();
+                        while (true){
+                            try {
+                                if (person != null)
+                                    server.signUp(person);
+                                break;
+                            } catch (Exception e) {
+                                server = admin.connect();
+                                if (server == null) return;
+                            }
                         }
-                        admin.clear();
-                    } catch (Exception ignore){}
-                }
-
-                /* User Interface*/
-                int optMainMenu = admin.mainMenu();
-                while(optMainMenu != 0){
-                    admin.clear();
-                    switch (optMainMenu) {
-                        case 1:
-                            admin.signUp();
-                            break;
-                        case 2:
+                        break;
+                    case 2:
+                        while (true){
+                        try {
                             admin.overview(server);
                             break;
-                        case 3:
-                            admin.realTimeData();
-                            break;
+                        } catch (Exception e) {
+                            server = admin.connect();
+                            if (server == null) return;
+                        }
                     }
-                    admin.clear();
-                    optMainMenu = admin.mainMenu();
+                        break;
+                    case 3:
+                        while (true){
+                            try {
+                                admin.realTimeData();
+                                break;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                server = admin.connect();
+                                if (server == null) return;
+                            }
+                        }
+                        break;
                 }
-            } catch (Exception e){
-                /* Server crash Handling */
-                System.out.println("Current Server Stopped Responding... Switching Servers!");
-                lastServer = server;
+                admin.clear();
+                optMainMenu = admin.mainMenu();
             }
         }
     }

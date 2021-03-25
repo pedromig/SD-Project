@@ -2,9 +2,10 @@ package utils.elections;
 
 import utils.people.Person;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 
-public abstract class Election<T extends Person> {
+public abstract class Election<T extends Person> implements Serializable {
     String name, description;
     SimpleDateFormat startDate, endDate;
 

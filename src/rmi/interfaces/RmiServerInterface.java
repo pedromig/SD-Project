@@ -13,6 +13,10 @@ public interface RmiServerInterface extends Remote {
         System.out.println(msg);
     }
 
+    public default String ping() throws RemoteException{
+        return "Ping Pong";
+    }
+
     /* Interface Methods */
 
     public void signUp(Person person) throws RemoteException;
