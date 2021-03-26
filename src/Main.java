@@ -17,7 +17,7 @@ public class Main {
         // Terminal UI
         VotingTerminal vt = new VotingTerminal();
         String [] opts = {"Encontrar", "Fazer", "Procurar", "Listar"};
-        int opt = vt.launchUI("Main Menu", opts).getOption(opts.length);
+        int opt = vt.choose("Main Menu", opts);
         System.out.println("The program is: " + opts[opt - 1]);
 
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");

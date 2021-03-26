@@ -8,9 +8,7 @@ import utils.people.Teacher;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
-import java.util.Scanner;
 
 public class AdminConsole extends Terminal {
 
@@ -27,18 +25,11 @@ public class AdminConsole extends Terminal {
                 server.ping();
                 break;
             } catch (Exception e) {
-                for (int i = 0; i < 3; ++i) {
-                    System.out.println("No Server available. Timeout in " + (timeout - counter++) + "s");
-                    System.out.println("Trying to reconnect in " + (3 - i));
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception ignore) {
-                    }
-                    this.clear();
-                    if (counter == timeout) {
-                        System.out.println("RMI Server Timed Out");
-                        return null;
-                    }
+                try { Thread.sleep(3000);} catch (Exception ignore) {}
+                counter += 3;
+                if (counter == timeout) {
+                    System.out.println("RMI Server Timed Out");
+                    return null;
                 }
             }
         }
@@ -47,170 +38,58 @@ public class AdminConsole extends Terminal {
 
     public int mainMenu() {
         String[] mainMenuOpts = {"Sign Up", "Overview", "Real time Data"};
-        return this.launchUI("Main Menu", mainMenuOpts).getOption(mainMenuOpts.length);
+        return this.choose("Main Menu", mainMenuOpts);
     }
 
     public Person signUp() {
-        boolean abortFlag = false;
         int value = 0;
+        boolean abortFlag;
         String input = null;
-        Scanner sc = new Scanner(System.in);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        sdf.setLenient(false);
         Person person = null;
 
         /* Header */
-        this.launchUI("Sign Up Menu", new String[]{});
+        this.header("Sign Up Menu");
 
         /* Select Job */
         String[] opts = new String[]{"Student", "Teacher", "Employee"};
-        int personType = this.launchUI("Select Job", opts).getOption(opts.length);
+        int personType = this.choose("Select Job", opts);
 
         /* Insert Information */
         System.out.println("Enter \"QUIT\" to abort the operation at any time.");
 
-        /* Username */
-        while (!abortFlag) {
-            System.out.print("Name: ");
-            input = sc.nextLine();
+        // Username
+        String username = this.parseString("Name", false);
+        abortFlag = (username == null);
 
-            if (input.equals("QUIT")) {
-                abortFlag = true;
-                System.out.println("Aborting...");
-            }
+        // Password
+        String password = this.parseString("Password", abortFlag);
+        abortFlag = (password == null);
 
-            if (input.length() != 0 && !input.contains(";") && !input.contains("|"))
-                break;
+        // Address
+        String address = this.parseString("Address", abortFlag);
+        abortFlag = (address == null);
 
-            System.out.println("Invalid Name!");
-        }
-        String username = input;
+        // Faculty
+        String faculty = this.parseString("Faculty", abortFlag);
+        abortFlag = (faculty == null);
 
-        /* Password */
-        while (!abortFlag) {
-            System.out.print("Password: ");
-            input = sc.nextLine();
+        // Department
+        String department = this.parseString("Department", abortFlag);
+        abortFlag = (department == null);
 
-            if (input.equals("QUIT")) {
-                abortFlag = true;
-                System.out.println("Aborting...");
-            }
+        // Phone Number
+        int phoneNumber = this.parsePositiveInt("Phone Number", abortFlag);
+        abortFlag = (phoneNumber == -1);
 
-            if (input.length() != 0 && !input.contains(";") && !input.contains("|"))
-                break;
+        // Identity Card Number
+        int identityCardNumber = this.parsePositiveInt("Identity Card Number", abortFlag);
+        abortFlag = (identityCardNumber == -1);
 
-            System.out.println("Invalid Password!");
-        }
-        String password = input;
+        // Identity Card Expiry Date
+        GregorianCalendar identityCardExpiryDate = this.parseDate("Identity Card Expiry Date", abortFlag);
+        abortFlag = (identityCardExpiryDate == null);
 
-        /* Address */
-        while (!abortFlag) {
-            System.out.print("Address: ");
-            input = sc.nextLine();
-
-            if (input.equals("QUIT")) {
-                abortFlag = true;
-                System.out.println("Aborting...");
-            }
-
-            if (input.length() != 0 && !input.contains(";") && !input.contains("|"))
-                break;
-
-            System.out.println("Invalid Address!");
-        }
-        String address = input;
-
-        /* Faculty */
-        while (!abortFlag) {
-            System.out.print("Faculty: ");
-            input = sc.nextLine();
-            if (input.equals("QUIT")) {
-                abortFlag = true;
-                System.out.println("Aborting...");
-            }
-
-            if (input.length() != 0 && !input.contains(";") && !input.contains("|"))
-                break;
-
-            System.out.println("Invalid Address!");
-        }
-        String faculty = input;
-
-        /* Department */
-        while (!abortFlag) {
-            System.out.print("Department: ");
-            input = sc.nextLine();
-
-            if (input.equals("QUIT")) {
-                abortFlag = true;
-                System.out.println("Aborting...");
-            }
-
-            if (input.length() != 0 && !input.contains(";") && !input.contains("|"))
-                break;
-
-            System.out.println("Invalid Address!");
-        }
-        String department = input;
-
-        /* Phone Number */
-        while (!abortFlag) {
-            try {
-                System.out.print("Phone Number: ");
-                input = sc.nextLine();
-
-                if (input.equals("QUIT")) {
-                    abortFlag = true;
-                    System.out.println("Aborting...");
-                    break;
-                }
-
-                value = Integer.parseInt(input);
-                break;
-            } catch (Exception e) {
-                System.out.println("Invalid Number!");
-            }
-        }
-        int phoneNumber = value;
-
-        /* Identity Card Number */
-        while (!abortFlag) {
-            try {
-                System.out.print("Identity Card Number: ");
-                input = sc.nextLine();
-
-                if (input.equals("QUIT")) {
-                    abortFlag = true;
-                    System.out.println("Aborting...");
-                    break;
-                }
-
-                value = Integer.parseInt(input);
-                break;
-            } catch (Exception e) {
-                System.out.println("Invalid Number!");
-            }
-        }
-        int identityCardNumber = value;
-
-        /* Identity Card Expiry Date */
-        while (!abortFlag) {
-            try {
-                System.out.print("Identity Card Expiry Date [dd/mm/yyyy]: ");
-                input = sc.nextLine();
-
-                if (input.equals("QUIT")) {
-                    abortFlag = true;
-                    System.out.println("Aborting...");
-                }
-                sdf.parse(input);
-                break;
-            } catch (Exception e) {
-                System.out.println("Invalid Date!");
-            }
-        }
-        GregorianCalendar identityCardExpiryDate = (GregorianCalendar) sdf.getCalendar();
-
+        /* Create Person Object */
         if (!abortFlag) {
             switch (personType) {
                 case 1:
@@ -224,7 +103,6 @@ public class AdminConsole extends Terminal {
                     break;
             }
         }
-        System.out.println(identityCardExpiryDate.getTime());
         return person;
     }
 
