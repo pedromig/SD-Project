@@ -30,7 +30,6 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     @Override
     public void createElection(Election<Person> election) throws RemoteException {
         System.out.println("create election");
-
     }
 
     @Override

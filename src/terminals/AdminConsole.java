@@ -14,11 +14,11 @@ import java.util.Scanner;
 
 public class AdminConsole extends Terminal {
 
-    public AdminConsole(){
+    public AdminConsole() {
         super();
     }
 
-    public RmiServerInterface connect(){
+    public RmiServerInterface connect() {
         RmiServerInterface server;
         long counter = 0, timeout = 30;
         while (true) {
@@ -27,12 +27,15 @@ public class AdminConsole extends Terminal {
                 server.ping();
                 break;
             } catch (Exception e) {
-                for (int i = 0; i < 3; ++i){
+                for (int i = 0; i < 3; ++i) {
                     System.out.println("No Server available. Timeout in " + (timeout - counter++) + "s");
                     System.out.println("Trying to reconnect in " + (3 - i));
-                    try {Thread.sleep(1000);} catch (Exception ignore) {}
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception ignore) {
+                    }
                     this.clear();
-                    if (counter == timeout){
+                    if (counter == timeout) {
                         System.out.println("RMI Server Timed Out");
                         return null;
                     }
@@ -42,8 +45,8 @@ public class AdminConsole extends Terminal {
         return server;
     }
 
-    public int mainMenu(){
-        String[] mainMenuOpts = {"Sign Up", "Overview","Real time Data"};
+    public int mainMenu() {
+        String[] mainMenuOpts = {"Sign Up", "Overview", "Real time Data"};
         return this.launchUI("Main Menu", mainMenuOpts).getOption(mainMenuOpts.length);
     }
 
@@ -53,6 +56,7 @@ public class AdminConsole extends Terminal {
         String input = null;
         Scanner sc = new Scanner(System.in);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setLenient(false);
         Person person = null;
 
         /* Header */
@@ -70,12 +74,12 @@ public class AdminConsole extends Terminal {
             System.out.print("Name: ");
             input = sc.nextLine();
 
-            if (input.equals("QUIT")){
+            if (input.equals("QUIT")) {
                 abortFlag = true;
                 System.out.println("Aborting...");
             }
 
-            if (!input.contains(";") && !input.contains("|"))
+            if (input.length() != 0 && !input.contains(";") && !input.contains("|"))
                 break;
 
             System.out.println("Invalid Name!");
@@ -87,12 +91,12 @@ public class AdminConsole extends Terminal {
             System.out.print("Password: ");
             input = sc.nextLine();
 
-            if (input.equals("QUIT")){
+            if (input.equals("QUIT")) {
                 abortFlag = true;
                 System.out.println("Aborting...");
             }
 
-            if (!input.contains(";") && !input.contains("|"))
+            if (input.length() != 0 && !input.contains(";") && !input.contains("|"))
                 break;
 
             System.out.println("Invalid Password!");
@@ -104,12 +108,12 @@ public class AdminConsole extends Terminal {
             System.out.print("Address: ");
             input = sc.nextLine();
 
-            if (input.equals("QUIT")){
+            if (input.equals("QUIT")) {
                 abortFlag = true;
                 System.out.println("Aborting...");
             }
 
-            if (!input.contains(";") && !input.contains("|"))
+            if (input.length() != 0 && !input.contains(";") && !input.contains("|"))
                 break;
 
             System.out.println("Invalid Address!");
@@ -120,12 +124,12 @@ public class AdminConsole extends Terminal {
         while (!abortFlag) {
             System.out.print("Faculty: ");
             input = sc.nextLine();
-            if (input.equals("QUIT")){
+            if (input.equals("QUIT")) {
                 abortFlag = true;
                 System.out.println("Aborting...");
             }
 
-            if (!input.contains(";") && !input.contains("|"))
+            if (input.length() != 0 && !input.contains(";") && !input.contains("|"))
                 break;
 
             System.out.println("Invalid Address!");
@@ -137,12 +141,12 @@ public class AdminConsole extends Terminal {
             System.out.print("Department: ");
             input = sc.nextLine();
 
-            if (input.equals("QUIT")){
+            if (input.equals("QUIT")) {
                 abortFlag = true;
                 System.out.println("Aborting...");
             }
 
-            if (!input.contains(";") && !input.contains("|"))
+            if (input.length() != 0 && !input.contains(";") && !input.contains("|"))
                 break;
 
             System.out.println("Invalid Address!");
@@ -150,12 +154,12 @@ public class AdminConsole extends Terminal {
         String department = input;
 
         /* Phone Number */
-        while (!abortFlag){
+        while (!abortFlag) {
             try {
                 System.out.print("Phone Number: ");
                 input = sc.nextLine();
 
-                if (input.equals("QUIT")){
+                if (input.equals("QUIT")) {
                     abortFlag = true;
                     System.out.println("Aborting...");
                     break;
@@ -170,12 +174,12 @@ public class AdminConsole extends Terminal {
         int phoneNumber = value;
 
         /* Identity Card Number */
-        while (!abortFlag){
+        while (!abortFlag) {
             try {
                 System.out.print("Identity Card Number: ");
                 input = sc.nextLine();
 
-                if (input.equals("QUIT")){
+                if (input.equals("QUIT")) {
                     abortFlag = true;
                     System.out.println("Aborting...");
                     break;
@@ -183,7 +187,7 @@ public class AdminConsole extends Terminal {
 
                 value = Integer.parseInt(input);
                 break;
-            } catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Invalid Number!");
             }
         }
@@ -195,7 +199,7 @@ public class AdminConsole extends Terminal {
                 System.out.print("Identity Card Expiry Date [dd/mm/yyyy]: ");
                 input = sc.nextLine();
 
-                if (input.equals("QUIT")){
+                if (input.equals("QUIT")) {
                     abortFlag = true;
                     System.out.println("Aborting...");
                 }
@@ -207,8 +211,8 @@ public class AdminConsole extends Terminal {
         }
         GregorianCalendar identityCardExpiryDate = (GregorianCalendar) sdf.getCalendar();
 
-        if (!abortFlag){
-            switch (personType){
+        if (!abortFlag) {
+            switch (personType) {
                 case 1:
                     person = new Student(username, password, address, faculty, department, phoneNumber, identityCardNumber, identityCardExpiryDate);
                     break;
@@ -220,6 +224,7 @@ public class AdminConsole extends Terminal {
                     break;
             }
         }
+        System.out.println(identityCardExpiryDate.getTime());
         return person;
     }
 
@@ -227,7 +232,7 @@ public class AdminConsole extends Terminal {
         server.print("olaaaaa");
     }
 
-    public void realTimeData(){
+    public void realTimeData() {
     }
 
     public static void main(String[] args) {
@@ -237,14 +242,14 @@ public class AdminConsole extends Terminal {
         RmiServerInterface server = admin.connect();
         if (server == null) return;
 
-        while (true){
+        while (true) {
             int optMainMenu = admin.mainMenu();
             while (optMainMenu != 0) {
                 admin.clear();
                 switch (optMainMenu) {
                     case 1:
                         person = admin.signUp();
-                        while (true){
+                        while (true) {
                             try {
                                 if (person != null)
                                     server.signUp(person);
@@ -257,18 +262,18 @@ public class AdminConsole extends Terminal {
                         }
                         break;
                     case 2:
-                        while (true){
-                        try {
-                            admin.overview(server);
-                            break;
-                        } catch (Exception e) {
-                            server = admin.connect();
-                            if (server == null) return;
+                        while (true) {
+                            try {
+                                admin.overview(server);
+                                break;
+                            } catch (Exception e) {
+                                server = admin.connect();
+                                if (server == null) return;
+                            }
                         }
-                    }
                         break;
                     case 3:
-                        while (true){
+                        while (true) {
                             try {
                                 admin.realTimeData();
                                 break;

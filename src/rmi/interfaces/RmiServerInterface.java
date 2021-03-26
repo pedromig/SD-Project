@@ -5,7 +5,6 @@ import utils.people.Person;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public interface RmiServerInterface extends Remote {
     /* Default Methods */
