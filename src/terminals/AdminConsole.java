@@ -250,6 +250,7 @@ public class AdminConsole extends Terminal {
                                     server.signUp(person);
                                 break;
                             } catch (Exception e) {
+                                System.out.println(e);
                                 server = admin.connect();
                                 if (server == null) return;
                             }

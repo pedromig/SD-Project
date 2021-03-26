@@ -8,4 +8,8 @@ public class Student extends Person {
         super(name, password, address, faculty, department, phoneNumber, identityCardNumber, identityCardExpiryDate);
     }
 
+    @Override
+    public String toString() {
+        return "Student" + super.toString();
+    }
 }

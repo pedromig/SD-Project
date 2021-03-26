@@ -18,4 +18,12 @@ public abstract class Person implements Serializable {
         this.department = department;
         this.identityCardExpiryDate = identityCardExpiryDate;
     }
+
+    @Override
+    public String toString() {
+        return  "{ name='" + name + '\'' +
+                ", faculty='" + faculty + '\'' +
+                ", department='" + department + '\'' +
+                '}';
+    }
 }

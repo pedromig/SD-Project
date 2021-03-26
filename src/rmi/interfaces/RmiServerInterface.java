@@ -5,6 +5,7 @@ import utils.people.Person;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public interface RmiServerInterface extends Remote {
     /* Default Methods */
@@ -13,7 +14,7 @@ public interface RmiServerInterface extends Remote {
         System.out.println(msg);
     }
 
-    public default String ping() throws RemoteException{
+    public default String ping() throws RemoteException {
         return "Ping Pong";
     }
 
