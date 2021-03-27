@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 
 public abstract class Person implements Serializable {
-    int phoneNumber, identityCardNumber;
-    String name, password, address, faculty, department;
-    GregorianCalendar identityCardExpiryDate;
+    private int phoneNumber, identityCardNumber;
+    private boolean inList;
+    private String name, password, address, faculty, department;
+    private GregorianCalendar identityCardExpiryDate;
 
     public Person(String name, String password, String address, String faculty, String department, int phoneNumber, int identityCardNumber, GregorianCalendar identityCardExpiryDate) {
         this.phoneNumber = phoneNumber;
@@ -17,6 +18,15 @@ public abstract class Person implements Serializable {
         this.faculty = faculty;
         this.department = department;
         this.identityCardExpiryDate = identityCardExpiryDate;
+        this.inList = false;
+    }
+
+    public void setInList(boolean inList) {
+        this.inList = inList;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -25,4 +35,5 @@ public abstract class Person implements Serializable {
                 "\tFaculty: "   + this.faculty     +
                 "\tDept: "      + this.department;
     }
+
 }

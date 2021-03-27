@@ -1,5 +1,6 @@
 package rmi.interfaces;
 
+import utils.ElectionList;
 import utils.elections.Election;
 import utils.people.Person;
 
@@ -25,6 +26,6 @@ public interface RmiServerInterface extends Remote {
 
     public void createElection(Election<? extends Person> election) throws RemoteException;
 
-    public Election<? extends Person> searchElection(String name) throws RemoteException;
+    public void addList(ElectionList<? extends Person> list) throws RemoteException;
 
 }

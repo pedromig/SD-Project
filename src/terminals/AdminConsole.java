@@ -1,6 +1,7 @@
 package terminals;
 
 import rmi.interfaces.RmiServerInterface;
+import utils.ElectionList;
 import utils.elections.Election;
 import utils.elections.EmployeeElection;
 import utils.elections.StudentElection;
@@ -44,7 +45,7 @@ public class AdminConsole extends Terminal {
     /* ############################## Menus ############################## */
 
     public int mainMenu() {
-        String[] mainMenuOpts = {"Sign Up", "Say Olaaaaa", "Create Election"};
+        String[] mainMenuOpts = {"Sign Up", "Say Olaaaaa", "Create Election", "Manage Lists"};
         return this.choose("Main Menu", mainMenuOpts);
     }
 
@@ -162,6 +163,50 @@ public class AdminConsole extends Terminal {
         return null;
     }
 
+    public int manageListsMenu(){
+        String[] manageListsOpts = {"Create List", "Add List to Election", "Remove List from Election", "Add People to List", "Remove People from List"};
+        return this.choose("Manage Lists", manageListsOpts);
+    }
+
+    public ElectionList<? extends Person> createListMenu(){
+        boolean abortFlag = false;
+
+        /* Header */
+        this.header("Create List");
+
+        /* Select List Type */
+        String[] opts = new String[]{"Student List", "Teacher List", "Employee List"};
+        int listType = this.choose("Select List Type", opts);
+
+        /* Insert Information */
+        System.out.println("Enter \"QUIT\" to abort the operation at any time.");
+
+        if (listType == 0) abortFlag = true;
+
+        // Name
+        String listName = this.parseString("List Name", abortFlag);
+        abortFlag = (listName == null);
+
+        if (!abortFlag) {
+            switch (listType) {
+                case 1:
+                    return new ElectionList<Student>(listName);
+                case 2:
+                    return new ElectionList<Teacher>(listName);
+                case 3:
+                    return new ElectionList<Employee>(listName);
+            }
+        }
+        return null;
+    }
+
+    public void addListToElectionMenu() {
+
+        //TODO: obter eleições que não tenham começado e mostra-las na launchUI com getOption() para o user escolher a eleição
+
+        //TODO: mostrar listas disponíveis para a eleição em causa (eleição é teacher only -> listas teacher only)
+    }
+
     public void sayOlaaaaa(RmiServerInterface server) throws RemoteException {
         server.print("olaaaaa");
         server.info();
@@ -171,6 +216,7 @@ public class AdminConsole extends Terminal {
     public static void main(String[] args) {
         Person person;
         Election<?> election;
+        ElectionList<?> list;
         AdminConsole admin = new AdminConsole();
         admin.clear();
         RmiServerInterface server = admin.connect();
@@ -181,6 +227,7 @@ public class AdminConsole extends Terminal {
         while (optMainMenu != 0) {
             admin.clear();
             switch (optMainMenu) {
+
                 case 1:
                     person = admin.signUpMenu();
                     while (true) {
@@ -189,23 +236,26 @@ public class AdminConsole extends Terminal {
                                 server.signUp(person);
                             break;
                         } catch (Exception e) {
-                            System.out.println(e);
+                            e.printStackTrace();
                             server = admin.connect();
                             if (server == null) return;
                         }
                     }
                     break;
+
                 case 2:
                     while (true) {
                         try {
                             admin.sayOlaaaaa(server);
                             break;
                         } catch (Exception e) {
+                            e.printStackTrace();
                             server = admin.connect();
                             if (server == null) return;
                         }
                     }
                     break;
+
                 case 3:
                     election = admin.createElectionMenu();
                     while (true) {
@@ -213,11 +263,48 @@ public class AdminConsole extends Terminal {
                             server.createElection(election);
                             break;
                         } catch (Exception e) {
+                            e.printStackTrace();
                             server = admin.connect();
                             if (server == null) return;
                         }
                     }
                     break;
+
+                case 4:
+                    int manageListsOpt = admin.manageListsMenu();
+                    while(manageListsOpt != 0) {
+                        admin.clear();
+                        switch (manageListsOpt){
+
+                            case 1:
+                                list = admin.createListMenu();
+                                while (true) {
+                                    try {
+                                        if (list != null)
+                                            server.addList(list);
+                                        break;
+                                    } catch (Exception e){
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if (server == null) return;
+                                    }
+                                }
+                                break;
+                            case 2:
+                                break;
+                            case 3:
+                                break;
+                            case 4:
+                                break;
+                            case 5:
+                                break;
+                        }
+
+                        admin.clear();
+                        manageListsOpt = admin.manageListsMenu();
+                    }
+                    break;
+
             }
             admin.clear();
             optMainMenu = admin.mainMenu();

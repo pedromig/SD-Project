@@ -16,6 +16,11 @@ public class EmployeeElection extends Election<Employee> {
     }
 
     @Override
+    public Class<Employee> getType() {
+        return Employee.class;
+    }
+
+    @Override
     public String toString() {
         return " - Employee Election " + super.toString();
     }

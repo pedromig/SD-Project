@@ -15,6 +15,11 @@ public class TeacherElection extends Election<Teacher> {
     }
 
     @Override
+    public Class<Teacher> getType() {
+        return Teacher.class;
+    }
+
+    @Override
     public String toString() {
         return " - Teacher Election " + super.toString();
     }
