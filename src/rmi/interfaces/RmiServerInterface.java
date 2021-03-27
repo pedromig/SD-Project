@@ -1,5 +1,6 @@
 package rmi.interfaces;
 
+import utils.ElectionList;
 import utils.elections.Election;
 import utils.people.Person;
 
@@ -17,12 +18,14 @@ public interface RmiServerInterface extends Remote {
         return "Ping Pong";
     }
 
+    public void info() throws RemoteException;
+
     /* Interface Methods */
 
     public void signUp(Person person) throws RemoteException;
 
-    public void createElection(Election<Person> election) throws RemoteException;
+    public void createElection(Election<? extends Person> election) throws RemoteException;
 
-    public Election<Person> searchElection(String name) throws RemoteException;
+    public void addList(ElectionList<? extends Person> list) throws RemoteException;
 
 }

@@ -1,6 +1,7 @@
 package terminals;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
@@ -8,18 +9,21 @@ import java.util.Scanner;
  *  An abstract class for an Terminal
  */
 public abstract class Terminal {
-    public final static String abortCode = "QUIT";
-    public final static String dateFormat = "dd/MM/yyyy";
+    public final static String ABORT_CODE = "QUIT";
+    public final static String DATE_FORMAT = "dd/MM/yyyy";
+    public final static String TIME_FORMAT = "HH:mm";
     protected Scanner sc;
-    protected SimpleDateFormat sdf;
+    protected SimpleDateFormat sdf, stf;
 
     /**
      *  Builder
      */
     public Terminal(){
         this.sc = new Scanner(System.in);
-        this.sdf = new SimpleDateFormat(dateFormat);
+        this.sdf = new SimpleDateFormat(DATE_FORMAT);
         sdf.setLenient(false);
+        this.stf = new SimpleDateFormat(TIME_FORMAT);
+        stf.setLenient(false);
     }
 
     /**
@@ -72,19 +76,19 @@ public abstract class Terminal {
      * @return An int of the option selected
      */
     public int getOption(int n) {
+        String input;
         int num;
         while(true){
             try {
                 System.out.print("Option: ");
-                num = sc.nextInt();
-                if (0 < num && num <= n){
+                input = sc.nextLine();
+                num = Integer.parseInt(input);
+
+                if (0 <= num && num <= n){
                     return num;
                 }
-            } catch (Exception e){
-                sc.next();
-            }
+            } catch (Exception ignore){}
             System.out.println("Invalid Option!");
-
         }
     }
 
@@ -103,7 +107,7 @@ public abstract class Terminal {
                 input = sc.nextLine();
 
                 /* Check abort code */
-                if (input.equals(abortCode)) {
+                if (input.equals(ABORT_CODE)) {
                     System.out.println("Aborting...");
                     return null;
                 }
@@ -135,7 +139,7 @@ public abstract class Terminal {
                     input = sc.nextLine();
 
                     /* Check abort code */
-                    if (input.equals(abortCode)) {
+                    if (input.equals(ABORT_CODE)) {
                         System.out.println("Aborting...");
                         return -1;
                     }
@@ -152,10 +156,10 @@ public abstract class Terminal {
     }
 
     /**
-     * Ask user for a date in the format specified in Terminal.dateFormat
+     * Ask user for a date in the format specified in Terminal.DATE_FORMAT
      * @param label Asking label
      * @param abortFlag boolean that indicates if this procedure should be aborted
-     * @returnThe User inputted GreogorianDate or null if the abortCode is entered
+     * @return The User inputted GregorianDate or null if the abortCode is entered
      */
     public GregorianCalendar parseDate(String label, boolean abortFlag) {
         String input;
@@ -165,12 +169,40 @@ public abstract class Terminal {
                     System.out.print(label + " [dd/mm/yyyy]: ");
                     input = sc.nextLine();
 
-                    if (input.equals(abortCode)) {
+                    if (input.equals(ABORT_CODE)) {
                         System.out.println("Aborting...");
                         return null;
                     }
                     sdf.parse(input);
                     return (GregorianCalendar) sdf.getCalendar();
+                } catch (Exception e) {
+                    System.out.println("Invalid " + label + "!");
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Ask user for Time in the format specified in Terminal.TIME_FORMAT
+     * @param label Asking label
+     * @param abortFlag boolean that indicates if this procedure should be aborted
+     * @return The User inputted Date or null if the abortCode is entered
+     */
+    public Date parseTime(String label, boolean abortFlag) {
+        String input;
+        if(!abortFlag) {
+            while (true) {
+                try {
+                    System.out.print(label + " [HH:mm]: ");
+                    input = sc.nextLine();
+
+                    if (input.equals(ABORT_CODE)) {
+                        System.out.println("Aborting...");
+                        return null;
+                    }
+                    stf.parse(input);
+                    return stf.getCalendar().getTime();
                 } catch (Exception e) {
                     System.out.println("Invalid " + label + "!");
                 }
