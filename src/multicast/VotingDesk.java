@@ -10,7 +10,6 @@ import java.net.MulticastSocket;
 import java.time.LocalDate;
 import java.util.Date;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.*;
 
 public class VotingDesk extends Thread {

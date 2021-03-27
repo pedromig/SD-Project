@@ -1,6 +1,4 @@
 package multicast.ui;
-
-
 import multicast.VotingDesk;
 
 
@@ -14,8 +12,9 @@ public class VotingDeskConsole extends Terminal {
 
     @Override
     public void execute(String command) {
+        System.out.println("Command: " + command);
         if (command.equals("clear")) {
-            this.terminal.setText("");
+            terminal.setText("");
         } else if (command.equals("exit")) {
             this.setVisible(false);
             synchronized (app.lock) {
@@ -25,7 +24,10 @@ public class VotingDeskConsole extends Terminal {
         } else {
             showNewLine();
         }
-        showPrompt();
+    }
+
+    @Override
+    public void startText() {
 
     }
 }

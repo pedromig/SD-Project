@@ -24,8 +24,6 @@ public class VotingTerminal extends Thread implements MulticastProtocol {
 
             MulticastPacket greeting = MulticastProtocol.greeting(this.getName());
             greeting.sendTo(discovery, discoveryGroup, discoveryPort);
-
-
             
         } catch (IOException e) {
             e.printStackTrace();
