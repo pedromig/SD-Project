@@ -17,12 +17,14 @@ public interface RmiServerInterface extends Remote {
         return "Ping Pong";
     }
 
+    public void info() throws RemoteException;
+
     /* Interface Methods */
 
     public void signUp(Person person) throws RemoteException;
 
-    public void createElection(Election<Person> election) throws RemoteException;
+    public void createElection(Election<? extends Person> election) throws RemoteException;
 
-    public Election<Person> searchElection(String name) throws RemoteException;
+    public Election<? extends Person> searchElection(String name) throws RemoteException;
 
 }

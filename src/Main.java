@@ -1,5 +1,7 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 
@@ -14,5 +16,7 @@ public class Main {
         sdf.setLenient(false);
         sdf.parse(s);
         System.out.println(sdf.getCalendar().getTime());
+        GregorianCalendar g = (GregorianCalendar) sdf.getCalendar();
+        Date d = new Date();
     }
 }

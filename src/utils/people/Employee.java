@@ -10,6 +10,6 @@ public class Employee extends Person {
 
     @Override
     public String toString() {
-        return "Employee" + super.toString();
+        return " - Employee" + super.toString();
     }
 }

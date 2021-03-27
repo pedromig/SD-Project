@@ -21,9 +21,8 @@ public abstract class Person implements Serializable {
 
     @Override
     public String toString() {
-        return  "{ name='" + name + '\'' +
-                ", faculty='" + faculty + '\'' +
-                ", department='" + department + '\'' +
-                '}';
+        return  "    Name: "    + this.name        +
+                "\tFaculty: "   + this.faculty     +
+                "\tDept: "      + this.department;
     }
 }

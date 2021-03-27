@@ -15,32 +15,43 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Vector;
 
 public class RmiServer extends UnicastRemoteObject implements RmiServerInterface {
-    private static final String electionsPath = "elections.obj", peoplePath = "people.obj";
-    private Vector<Election<Person>> elections;
+    private static final String electionsPath = "../../../database/elections.obj", peoplePath = "../../../database/people.obj";
+    private Vector<Election<? extends Person>> elections;
     private Vector<Person> people;
 
     /* ################## RmiServerInterface interface methods ######################## */
 
     @Override
+    public void info() throws RemoteException {
+        System.out.println("\nElections: ");
+        this.elections.forEach(System.out::println);
+        System.out.println("\nPeople: ");
+        this.people.forEach(System.out::println);
+    }
+
+    @Override
     public void signUp(Person person) throws RemoteException {
         this.people.add(person);
         this.savePeople();
+        System.out.println("SIGNED UP");
     }
 
     @Override
-    public void createElection(Election<Person> election) throws RemoteException {
-        System.out.println("create election");
+    public synchronized void createElection(Election<? extends Person> election) throws RemoteException {
+        this.elections.add(election);
+        this.saveElections();
+        System.out.println("ELECTION CREATED");
     }
 
     @Override
-    public Election<Person> searchElection(String name) throws RemoteException {
+    public Election<? extends Person> searchElection(String name) throws RemoteException {
         System.out.println("search election");
         return null;
     }
 
     /* ################################################################################# */
 
-    public RmiServer(Vector<Election<Person>> elections, Vector<Person> people) throws RemoteException {
+    public RmiServer(Vector<Election<? extends Person>> elections, Vector<Person> people) throws RemoteException {
         super();
         this.elections = elections;
         this.people = people;
@@ -69,8 +80,8 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     /* Load Data */
-    public static synchronized Vector<Election<Person>> loadElections(){
-        return (Vector<Election<Person>>) RmiServer.loadData(electionsPath);
+    public static synchronized Vector<Election<? extends Person>> loadElections(){
+        return (Vector<Election<? extends Person>>) RmiServer.loadData(electionsPath);
     }
 
     public static synchronized Vector<Person> loadPeople() {
@@ -86,6 +97,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
             is.close();
             return data;
         } catch (Exception e) {
+            System.out.println("Could not read from: " + path);
             return new Vector<>();
         }
     }
@@ -111,7 +123,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
         /* Bootloading */
 
         Vector<Person> people = RmiServer.loadPeople();
-        Vector<Election<Person>> elections = RmiServer.loadElections();
+        Vector<Election<? extends Person>> elections = RmiServer.loadElections();
 
         /* Run Server */
         try {
