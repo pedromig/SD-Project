@@ -11,9 +11,9 @@ import java.util.Scanner;
 public abstract class Terminal {
     public final static String ABORT_CODE = "QUIT";
     public final static String DATE_FORMAT = "dd/MM/yyyy";
-    public final static String TIME_FORMAT = "HH:mm";
+    public final static String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm";
     protected Scanner sc;
-    protected SimpleDateFormat sdf, stf;
+    protected SimpleDateFormat sdf, sdtf;
 
     /**
      *  Builder
@@ -22,8 +22,8 @@ public abstract class Terminal {
         this.sc = new Scanner(System.in);
         this.sdf = new SimpleDateFormat(DATE_FORMAT);
         sdf.setLenient(false);
-        this.stf = new SimpleDateFormat(TIME_FORMAT);
-        stf.setLenient(false);
+        this.sdtf = new SimpleDateFormat(DATE_TIME_FORMAT);
+        sdtf.setLenient(false);
     }
 
     /**
@@ -189,20 +189,20 @@ public abstract class Terminal {
      * @param abortFlag boolean that indicates if this procedure should be aborted
      * @return The User inputted Date or null if the abortCode is entered
      */
-    public Date parseTime(String label, boolean abortFlag) {
+    public GregorianCalendar parseDateTime(String label, boolean abortFlag) {
         String input;
         if(!abortFlag) {
             while (true) {
                 try {
-                    System.out.print(label + " [HH:mm]: ");
+                    System.out.print(label + " [dd/MM/yyyy HH:mm]: ");
                     input = sc.nextLine();
 
                     if (input.equals(ABORT_CODE)) {
                         System.out.println("Aborting...");
                         return null;
                     }
-                    stf.parse(input);
-                    return stf.getCalendar().getTime();
+                    sdtf.parse(input);
+                    return (GregorianCalendar) sdtf.getCalendar();
                 } catch (Exception e) {
                     System.out.println("Invalid " + label + "!");
                 }

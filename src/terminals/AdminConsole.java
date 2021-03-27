@@ -1,11 +1,14 @@
 package terminals;
 
 import rmi.interfaces.RmiServerInterface;
-import utils.ElectionList;
+import utils.lists.EmployeeList;
+import utils.lists.List;
 import utils.elections.Election;
 import utils.elections.EmployeeElection;
 import utils.elections.StudentElection;
 import utils.elections.TeacherElection;
+import utils.lists.StudentList;
+import utils.lists.TeacherList;
 import utils.people.Employee;
 import utils.people.Person;
 import utils.people.Student;
@@ -13,8 +16,9 @@ import utils.people.Teacher;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AdminConsole extends Terminal {
 
@@ -133,24 +137,15 @@ public class AdminConsole extends Terminal {
         String description = this.parseString("Description", abortFlag);
         abortFlag = (description == null);
 
-        // Election Start Date
-        GregorianCalendar startDate = this.parseDate("Start Date", abortFlag);
+        // Election Start Date and Time
+        GregorianCalendar startDate = this.parseDateTime("Start Date/Time", abortFlag);
         abortFlag = (startDate == null);
 
         // Election Start Time
-        Date startTime = this.parseTime("Start Time", abortFlag);
-        abortFlag = (startTime == null);
-
-        GregorianCalendar endDate = this.parseDate("End Date", abortFlag);
+        GregorianCalendar endDate = this.parseDateTime("End Date/Time", abortFlag);
         abortFlag = (endDate == null);
 
-        // Election Start Time
-        Date endTime = this.parseTime("End Time", abortFlag);
-        abortFlag = (endTime == null);
-
         if (!abortFlag){
-            startDate.setTime(startTime);
-            endDate.setTime(endTime);
             switch (electionType) {
                 case 1:
                     return new StudentElection(electionName, description, startDate, endDate);
@@ -168,7 +163,7 @@ public class AdminConsole extends Terminal {
         return this.choose("Manage Lists", manageListsOpts);
     }
 
-    public ElectionList<? extends Person> createListMenu(){
+    public List<? extends Person> createListMenu(){
         boolean abortFlag = false;
 
         /* Header */
@@ -190,55 +185,64 @@ public class AdminConsole extends Terminal {
         if (!abortFlag) {
             switch (listType) {
                 case 1:
-                    return new ElectionList<Student>(listName);
+                    return new StudentList(listName);
                 case 2:
-                    return new ElectionList<Teacher>(listName);
+                    return new TeacherList(listName);
                 case 3:
-                    return new ElectionList<Employee>(listName);
+                    return new EmployeeList(listName);
             }
         }
         return null;
     }
 
-    public void addListToElectionMenu() {
+    public int addListToElectionElectionsMenu(CopyOnWriteArrayList<Election<?>> elections) {
+        ArrayList<String> electionNames = new ArrayList<String>();
+        for (Election<?> e: elections){
+            electionNames.add(e.getName());
+        }
+        String[] electionOptionNames = electionNames.toArray(new String[0]);
+        return this.choose("Choose Election", electionOptionNames);
+    }
 
-        //TODO: obter eleições que não tenham começado e mostra-las na launchUI com getOption() para o user escolher a eleição
-
-        //TODO: mostrar listas disponíveis para a eleição em causa (eleição é teacher only -> listas teacher only)
+    public int addListToElectionListsMenu(String electionName, CopyOnWriteArrayList<List<?>> lists){
+        ArrayList<String> listNames = new ArrayList<String>();
+        for (List<?> l: lists){
+            listNames.add(l.getName());
+        }
+        String[] electionOptionNames = listNames.toArray(new String[0]);
+        return this.choose("Choose List", electionOptionNames);
     }
 
     public void sayOlaaaaa(RmiServerInterface server) throws RemoteException {
-        server.print("olaaaaa");
         server.info();
     }
 
     /* ################################################################### */
+
     public static void main(String[] args) {
-        Person person;
-        Election<?> election;
-        ElectionList<?> list;
         AdminConsole admin = new AdminConsole();
         admin.clear();
         RmiServerInterface server = admin.connect();
-        if (server == null)
-            return;
+
+        if (server == null) return;
 
         int optMainMenu = admin.mainMenu();
         while (optMainMenu != 0) {
             admin.clear();
             switch (optMainMenu) {
-
+                /* SIGN UP */
                 case 1:
-                    person = admin.signUpMenu();
-                    while (true) {
-                        try {
-                            if (person != null)
+                    Person person = admin.signUpMenu();
+                    if (person != null) {
+                        while (true) {
+                            try {
                                 server.signUp(person);
-                            break;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            server = admin.connect();
-                            if (server == null) return;
+                                break;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                server = admin.connect();
+                                if (server == null) return;
+                            }
                         }
                     }
                     break;
@@ -256,41 +260,89 @@ public class AdminConsole extends Terminal {
                     }
                     break;
 
+                /* Create Election */
                 case 3:
-                    election = admin.createElectionMenu();
-                    while (true) {
-                        try {
-                            server.createElection(election);
-                            break;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            server = admin.connect();
-                            if (server == null) return;
+                    Election<?> election = admin.createElectionMenu();
+                    if (election != null) {
+                        while (true) {
+                            try {
+                                server.createElection(election);
+                                break;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                server = admin.connect();
+                                if (server == null) return;
+                            }
                         }
                     }
                     break;
 
+                /* Manage Election Lists */
                 case 4:
                     int manageListsOpt = admin.manageListsMenu();
                     while(manageListsOpt != 0) {
                         admin.clear();
                         switch (manageListsOpt){
-
+                            /* Create Election List*/
                             case 1:
-                                list = admin.createListMenu();
-                                while (true) {
-                                    try {
-                                        if (list != null)
-                                            server.addList(list);
-                                        break;
-                                    } catch (Exception e){
-                                        e.printStackTrace();
-                                        server = admin.connect();
-                                        if (server == null) return;
+                                List<?> list = admin.createListMenu();
+                                if (list != null) {
+                                    while (true) {
+                                        try {
+                                            server.createList(list);
+                                            break;
+                                        } catch (Exception e){
+                                            e.printStackTrace();
+                                            server = admin.connect();
+                                            if (server == null) return;
+                                        }
                                     }
                                 }
                                 break;
+                            /* Add Election List to Election */
                             case 2:
+                                CopyOnWriteArrayList<Election<?>> futureElections;
+                                CopyOnWriteArrayList<List<?>> lists;
+
+                                while (true) {
+                                    try {
+                                        futureElections = server.getFutureElections();
+                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
+
+                                int optElection = admin.addListToElectionElectionsMenu(futureElections);
+                                if (optElection == 0) break;
+                                Election<?> selectedElection = futureElections.get(optElection - 1);
+                                while (true) {
+                                    try {
+                                        lists = server.getListsWithoutAssignedElectionNameOfType(selectedElection.getType(), selectedElection.getName());
+                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
+
+                                int optList = admin.addListToElectionListsMenu(selectedElection.getName(), lists);
+                                if (optList == 0) break;
+
+                                while (true) {
+                                    try {
+                                        server.associateElection(selectedElection.getName(), lists.get(optList - 1).getName());
+                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
+
                                 break;
                             case 3:
                                 break;
