@@ -101,12 +101,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
-    public synchronized CopyOnWriteArrayList<List<?>> getListsWithAssignedElectionName(String electionName) throws RemoteException {
+    public synchronized CopyOnWriteArrayList<List<?>> getListsWithAssignedElectionNameOfType(Class<?> type, String electionName) throws RemoteException {
         CopyOnWriteArrayList<List<?>> lists = new CopyOnWriteArrayList<>();
         for (List<?> l : this.lists)
-            if(l.getElectionName() != null && l.getElectionName().equals(electionName))
+            if(l.getType() == type && l.getElectionName() != null && l.getElectionName().equals(electionName))
                 lists.add(l);
-        System.out.println("REQUEST: Lists<Any> electionName == " + electionName);
+        System.out.println("REQUEST: Lists<" + type.getName() + "> electionName == " + electionName);
         return lists;
     }
 

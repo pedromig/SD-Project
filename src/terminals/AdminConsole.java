@@ -220,6 +220,10 @@ public class AdminConsole extends Terminal {
     /* ################################################################### */
 
     public static void main(String[] args) {
+        int optElection;
+        Election<?> selectedElection;
+        CopyOnWriteArrayList<Election<?>> futureElections;
+        CopyOnWriteArrayList<List<?>> lists;
         AdminConsole admin = new AdminConsole();
         admin.clear();
         RmiServerInterface server = admin.connect();
@@ -301,9 +305,6 @@ public class AdminConsole extends Terminal {
                                 break;
                             /* Add Election List to Election */
                             case 2:
-                                CopyOnWriteArrayList<Election<?>> futureElections;
-                                CopyOnWriteArrayList<List<?>> lists;
-
                                 while (true) {
                                     try {
                                         futureElections = server.getFutureElections();
@@ -315,9 +316,9 @@ public class AdminConsole extends Terminal {
                                     }
                                 }
 
-                                int optElection = admin.addListToElectionElectionsMenu(futureElections);
+                                optElection = admin.addListToElectionElectionsMenu(futureElections);
                                 if (optElection == 0) break;
-                                Election<?> selectedElection = futureElections.get(optElection - 1);
+                                selectedElection = futureElections.get(optElection - 1);
                                 while (true) {
                                     try {
                                         lists = server.getListsWithoutAssignedElectionNameOfType(selectedElection.getType(), selectedElection.getName());
@@ -344,7 +345,48 @@ public class AdminConsole extends Terminal {
                                 }
 
                                 break;
+                            /* Remove Election List From Election */
                             case 3:
+                                while (true) {
+                                    try {
+                                        futureElections = server.getFutureElections();
+                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
+
+                                optElection = admin.addListToElectionElectionsMenu(futureElections);
+                                if (optElection == 0) break;
+                                selectedElection = futureElections.get(optElection - 1);
+                                while (true) {
+                                    try {
+                                        lists = server.getListsWithAssignedElectionNameOfType(selectedElection.getType(), selectedElection.getName());
+                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
+
+                                optList = admin.addListToElectionListsMenu(selectedElection.getName(), lists);
+                                if (optList == 0) break;
+
+                                while (true) {
+                                    try {
+                                        server.associateElection(null, lists.get(optList - 1).getName());
+                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
+
+
                                 break;
                             case 4:
                                 break;

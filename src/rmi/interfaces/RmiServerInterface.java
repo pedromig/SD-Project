@@ -40,7 +40,7 @@ public interface RmiServerInterface extends Remote {
 
     public CopyOnWriteArrayList<List<?>> getListsOfType(Class<?> type) throws RemoteException;
 
-    public CopyOnWriteArrayList<List<?>> getListsWithAssignedElectionName(String electionName) throws RemoteException;
+    public CopyOnWriteArrayList<List<?>> getListsWithAssignedElectionNameOfType(Class<?> type, String electionName) throws RemoteException;
 
     public CopyOnWriteArrayList<List<?>> getListsWithoutAssignedElectionNameOfType(Class<?> type, String electionName) throws RemoteException;
 
