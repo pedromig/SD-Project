@@ -178,7 +178,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
     }
 
     public int editElectionsMenu() {
-        String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date"};
+        String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date", "Edit Faculty", "Edit Department"};
         return this.parser.choose("Edit Options", opts);
     }
 
@@ -416,7 +416,47 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
                                             }
                                         }
                                         break;
+
+                                    /* Edit Faculty */
+                                    case 5:
+                                        System.out.println("Enter \"ANY\" to remove any faculty restraint.");
+                                        editString = admin.parser.parseString("Faculty", false);
+                                        if (editString == null) break;
+                                        while (true) {
+                                            try {
+                                                server.editElectionFaculty(election.getName(), editString);
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect();
+                                                if (server == null) return;
+                                            }
+                                        }
+                                        break;
+
+                                    /* Edit Department */
+                                    case 6:
+                                        System.out.println("Enter \"ANY\" to remove any department restraint.");
+                                        editString = admin.parser.parseString("Faculty", false);
+                                        if (editString == null) break;
+                                        while (true) {
+                                            try {
+                                                server.editElectionDepartment(election.getName(), editString);
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect();
+                                                if (server == null) return;
+                                            }
+                                        }
+                                        break;
                                 }
+                                break;
+                            /* Past Election Log */
+                            case 3:
+
                                 break;
                         }
                         admin.parser.clear();

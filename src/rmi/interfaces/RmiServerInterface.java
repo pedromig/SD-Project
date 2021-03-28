@@ -44,6 +44,10 @@ public interface RmiServerInterface extends Remote {
 
     public void editElectionEndDate(String electionName, GregorianCalendar newDate) throws RemoteException;
 
+    public void editElectionFaculty(String electionName, String newFaculty) throws RemoteException;
+
+    public void editElectionDepartment(String electionName, String newDepartment) throws RemoteException;
+
 
     public void createList(List<? extends Person> list) throws RemoteException;
 

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 
 public abstract class Election<T extends Person> implements Serializable {
-    protected String name, description;
+    protected String name, description, faculty, department;
     protected GregorianCalendar startDate, endDate;
 
     public Election(String name, String description, GregorianCalendar startDate, GregorianCalendar endDate) {
@@ -14,6 +14,8 @@ public abstract class Election<T extends Person> implements Serializable {
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.faculty = "ANY";
+        this.department = "ANY";
     }
 
     public abstract Class<T> getType();
@@ -33,6 +35,14 @@ public abstract class Election<T extends Person> implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public String getName() {

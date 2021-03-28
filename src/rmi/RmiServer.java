@@ -113,6 +113,24 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
+    public synchronized void editElectionFaculty(String electionName, String newFaculty) throws RemoteException {
+        Election<?> election = this.getElection(electionName);
+        if (this.compareDates(new GregorianCalendar(), election.getStartDate())) {
+            election.setFaculty(newFaculty);
+            this.saveElections();
+        }
+    }
+
+    @Override
+    public synchronized void editElectionDepartment(String electionName, String newDepartment) throws RemoteException {
+        Election<?> election = this.getElection(electionName);
+        if (this.compareDates(new GregorianCalendar(), election.getStartDate())) {
+            election.setDepartment(newDepartment);
+            this.saveElections();
+        }
+    }
+
+    @Override
     public synchronized void createList(List<? extends Person> list) throws RemoteException {
         for (List<?> l : this.lists) {
             if (l.getName().equals(list.getName())) {
