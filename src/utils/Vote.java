@@ -1,15 +1,19 @@
 package utils;
 
 import java.io.Serializable;
+import java.util.GregorianCalendar;
 
 public class Vote implements Serializable {
-    private int personID;
+    private int personID, votingDeskID;
     private String electionName, votedListName;
+    private GregorianCalendar moment;
 
-    public Vote(int personID, String electionName, String votedListName){
+    public Vote(int personID, String electionName, String votedListName, int votingDeskID){
         this.personID = personID;
         this.electionName = electionName;
         this.votedListName = votedListName;
+        this.votingDeskID = votingDeskID;
+        this.moment = new GregorianCalendar();
     }
 
     public int getPersonID() {
