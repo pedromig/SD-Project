@@ -95,7 +95,8 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     public synchronized void editElectionStartDate(String electionName, GregorianCalendar newDate) throws RemoteException {
         Election<?> election = this.getElection(electionName);
         if (this.compareDates(new GregorianCalendar(), election.getStartDate()) &&
-            this.compareDates(new GregorianCalendar(), newDate)){
+            this.compareDates(new GregorianCalendar(), newDate) &&
+            this.compareDates(newDate, election.getEndDate())){
             election.setStartDate(newDate);
             this.saveElections();
         }

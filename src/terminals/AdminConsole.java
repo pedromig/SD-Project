@@ -141,12 +141,18 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
         abortFlag = (description == null);
 
         // Election Start Date and Time
-        GregorianCalendar startDate = this.parser.parseDateTime("Start Date/Time", abortFlag);
-        abortFlag = (startDate == null);
+        GregorianCalendar startDate;
+        do {
+            startDate = this.parser.parseDateTime("Start Date/Time", abortFlag);
+            abortFlag = (startDate == null);
+        } while ((startDate != null) && (startDate.getTimeInMillis() < new GregorianCalendar().getTimeInMillis()));
 
         // Election Start Time
-        GregorianCalendar endDate = this.parser.parseDateTime("End Date/Time", abortFlag);
-        abortFlag = (endDate == null);
+        GregorianCalendar endDate;
+        do {
+            endDate = this.parser.parseDateTime("End Date/Time", abortFlag);
+            abortFlag = (endDate == null);
+        } while((startDate != null) && (endDate != null) && (endDate.getTimeInMillis() <= startDate.getTimeInMillis()));
 
         if (!abortFlag){
             switch (electionType) {
@@ -344,6 +350,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
                                 if (editOpt == 0) break;
                                 String editString;
                                 GregorianCalendar newDate;
+                                System.out.println("Enter \"QUIT\" to abort the operation at any time.");
                                 switch (editOpt) {
                                     /* Edit Name */
                                     case 1:

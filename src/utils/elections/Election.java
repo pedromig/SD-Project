@@ -44,9 +44,13 @@ public abstract class Election<T extends Person> implements Serializable {
         return this.startDate;
     }
 
+    public GregorianCalendar getEndDate() {
+        return endDate;
+    }
+
     @Override
     public String toString() {
-        return " | [" + this.name + "]";
+        return " | [" + this.name + "] Start Date: " + this.startDate.getTime() + " End: " + this.endDate.getTime() ;
     }
 
 }

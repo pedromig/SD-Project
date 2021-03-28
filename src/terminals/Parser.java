@@ -19,10 +19,6 @@ public class Parser {
      */
     public Parser() {
         this.sc = new Scanner(System.in);
-        this.sdf = new SimpleDateFormat(DATE_FORMAT);
-        sdf.setLenient(false);
-        this.sdtf = new SimpleDateFormat(DATE_TIME_FORMAT);
-        sdtf.setLenient(false);
     }
 
     /**
@@ -170,6 +166,8 @@ public class Parser {
      */
     public GregorianCalendar parseDate(String label, boolean abortFlag) {
         String input;
+        this.sdf = new SimpleDateFormat(DATE_FORMAT);
+        sdf.setLenient(false);
         if(!abortFlag) {
             while (true) {
                 try {
@@ -198,6 +196,8 @@ public class Parser {
      */
     public GregorianCalendar parseDateTime(String label, boolean abortFlag) {
         String input;
+        this.sdtf = new SimpleDateFormat(DATE_TIME_FORMAT);
+        sdtf.setLenient(false);
         if(!abortFlag) {
             while (true) {
                 try {
