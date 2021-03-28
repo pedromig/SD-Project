@@ -17,14 +17,16 @@ import utils.people.Teacher;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class AdminConsole extends Terminal {
-
+public class AdminConsole extends UnicastRemoteObject implements RmiClientInterface {
+    protected Parser parser;
     public AdminConsole() throws RemoteException {
         super();
+        this.parser = new Parser();
     }
 
     public RmiServerInterface connect() {
@@ -51,18 +53,18 @@ public class AdminConsole extends Terminal {
 
     public int mainMenu() {
         String[] mainMenuOpts = {"Sign Up", "Say Olaaaaa", "Create Election", "Manage Lists"};
-        return this.choose("Main Menu", mainMenuOpts);
+        return this.parser.choose("Main Menu", mainMenuOpts);
     }
 
     public Person signUpMenu() {
         boolean abortFlag = false;
 
         /* Header */
-        this.header("Sign Up Menu");
+        this.parser.header("Sign Up Menu");
 
         /* Select Job */
         String[] opts = new String[]{"Student", "Teacher", "Employee"};
-        int personType = this.choose("Select Job", opts);
+        int personType = this.parser.choose("Select Job", opts);
 
         if (personType == 0) abortFlag = true;
 
@@ -70,35 +72,35 @@ public class AdminConsole extends Terminal {
         System.out.println("Enter \"QUIT\" to abort the operation at any time.");
 
         // Username
-        String username = this.parseString("Name", abortFlag);
+        String username = this.parser.parseString("Name", abortFlag);
         abortFlag = (username == null);
 
         // Password
-        String password = this.parseString("Password", abortFlag);
+        String password = this.parser.parseString("Password", abortFlag);
         abortFlag = (password == null);
 
         // Address
-        String address = this.parseString("Address", abortFlag);
+        String address = this.parser.parseString("Address", abortFlag);
         abortFlag = (address == null);
 
         // Faculty
-        String faculty = this.parseString("Faculty", abortFlag);
+        String faculty = this.parser.parseString("Faculty", abortFlag);
         abortFlag = (faculty == null);
 
         // Department
-        String department = this.parseString("Department", abortFlag);
+        String department = this.parser.parseString("Department", abortFlag);
         abortFlag = (department == null);
 
         // Phone Number
-        int phoneNumber = this.parsePositiveInt("Phone Number", abortFlag);
+        int phoneNumber = this.parser.parsePositiveInt("Phone Number", abortFlag);
         abortFlag = (phoneNumber == -1);
 
         // Identity Card Number
-        int identityCardNumber = this.parsePositiveInt("Identity Card Number", abortFlag);
+        int identityCardNumber = this.parser.parsePositiveInt("Identity Card Number", abortFlag);
         abortFlag = (identityCardNumber == -1);
 
         // Identity Card Expiry Date
-        GregorianCalendar identityCardExpiryDate = this.parseDate("Identity Card Expiry Date", abortFlag);
+        GregorianCalendar identityCardExpiryDate = this.parser.parseDate("Identity Card Expiry Date", abortFlag);
         abortFlag = (identityCardExpiryDate == null);
 
         /* Create Person Object */
@@ -119,11 +121,11 @@ public class AdminConsole extends Terminal {
         boolean abortFlag = false;
 
         /* Header */
-        this.header("Create Election");
+        this.parser.header("Create Election");
 
         /* Select Type */
         String[] opts = {"Student Election", "Teacher Election", "Employee Election"};
-        int electionType = this.choose("Election Type", opts);
+        int electionType = this.parser.choose("Election Type", opts);
 
         /* Insert Information */
         System.out.println("Enter \"QUIT\" to abort the operation at any time.");
@@ -131,19 +133,19 @@ public class AdminConsole extends Terminal {
         if (electionType == 0) abortFlag = true;
 
         // Election Name
-        String electionName = this.parseString("Election name", abortFlag);
+        String electionName = this.parser.parseString("Election name", abortFlag);
         abortFlag = (electionName == null);
 
         // Election Description
-        String description = this.parseString("Description", abortFlag);
+        String description = this.parser.parseString("Description", abortFlag);
         abortFlag = (description == null);
 
         // Election Start Date and Time
-        GregorianCalendar startDate = this.parseDateTime("Start Date/Time", abortFlag);
+        GregorianCalendar startDate = this.parser.parseDateTime("Start Date/Time", abortFlag);
         abortFlag = (startDate == null);
 
         // Election Start Time
-        GregorianCalendar endDate = this.parseDateTime("End Date/Time", abortFlag);
+        GregorianCalendar endDate = this.parser.parseDateTime("End Date/Time", abortFlag);
         abortFlag = (endDate == null);
 
         if (!abortFlag){
@@ -161,18 +163,18 @@ public class AdminConsole extends Terminal {
 
     public int manageListsMenu(){
         String[] manageListsOpts = {"Create List", "Add List to Election", "Remove List from Election", "Add People to List", "Remove People from List"};
-        return this.choose("Manage Lists", manageListsOpts);
+        return this.parser.choose("Manage Lists", manageListsOpts);
     }
 
     public List<? extends Person> createListMenu(){
         boolean abortFlag = false;
 
         /* Header */
-        this.header("Create List");
+        this.parser.header("Create List");
 
         /* Select List Type */
         String[] opts = new String[]{"Student List", "Teacher List", "Employee List"};
-        int listType = this.choose("Select List Type", opts);
+        int listType = this.parser.choose("Select List Type", opts);
 
         /* Insert Information */
         System.out.println("Enter \"QUIT\" to abort the operation at any time.");
@@ -180,7 +182,7 @@ public class AdminConsole extends Terminal {
         if (listType == 0) abortFlag = true;
 
         // Name
-        String listName = this.parseString("List Name", abortFlag);
+        String listName = this.parser.parseString("List Name", abortFlag);
         abortFlag = (listName == null);
 
         if (!abortFlag) {
@@ -197,35 +199,35 @@ public class AdminConsole extends Terminal {
     }
 
     public int chooseElectionsMenu(CopyOnWriteArrayList<Election<?>> elections) {
-        ArrayList<String> electionNames = new ArrayList<String>();
+        ArrayList<String> electionNames = new ArrayList<>();
         for (Election<?> e: elections){
             electionNames.add(e.getName());
         }
         String[] electionOptionNames = electionNames.toArray(new String[0]);
-        return this.choose("Choose Election", electionOptionNames);
+        return this.parser.choose("Choose Election", electionOptionNames);
     }
 
     public int chooseListsMenu(CopyOnWriteArrayList<List<?>> lists){
-        ArrayList<String> listNames = new ArrayList<String>();
+        ArrayList<String> listNames = new ArrayList<>();
         for (List<?> l: lists){
             listNames.add(l.getName());
         }
         String[] electionOptionNames = listNames.toArray(new String[0]);
-        return this.choose("Choose List", electionOptionNames);
+        return this.parser.choose("Choose List", electionOptionNames);
     }
 
     public int choosePeopleMenu(CopyOnWriteArrayList<Person> people){
-        ArrayList<String> listNames = new ArrayList<String>();
+        ArrayList<String> listNames = new ArrayList<>();
         for (Person p: people){
             listNames.add(p.getName());
         }
         String[] electionOptionNames = listNames.toArray(new String[0]);
-        return this.choose("Choose Person", electionOptionNames);
+        return this.parser.choose("Choose Person", electionOptionNames);
     }
 
 
-    public void sayOlaaaaa(RmiServerInterface server) throws RemoteException {
-        server.info((RmiClientInterface) this);
+    public void getDatabaseInfo(RmiServerInterface server) throws RemoteException {
+        server.info(this);
     }
 
     /* ################################################################### */
@@ -243,14 +245,14 @@ public class AdminConsole extends Terminal {
             System.out.println("Could not start Admin Console");
             return;
         }
-        admin.clear();
+        admin.parser.clear();
         RmiServerInterface server = admin.connect();
 
         if (server == null) return;
 
         int optMainMenu = admin.mainMenu();
         while (optMainMenu != 0) {
-            admin.clear();
+            admin.parser.clear();
             switch (optMainMenu) {
                 /* SIGN UP */
                 case 1:
@@ -273,7 +275,7 @@ public class AdminConsole extends Terminal {
                 case 2:
                     while (true) {
                         try {
-                            admin.sayOlaaaaa(server);
+                            admin.getDatabaseInfo(server);
                             break;
                         } catch (Exception e) {
                             System.out.println("[DEBUG]");
@@ -282,7 +284,7 @@ public class AdminConsole extends Terminal {
                             if (server == null) return;
                         }
                     }
-                    admin.getEnter();
+                    admin.parser.getEnter();
                     break;
 
                 /* Create Election */
@@ -307,7 +309,7 @@ public class AdminConsole extends Terminal {
                 case 4:
                     int manageListsOpt = admin.manageListsMenu();
                     while(manageListsOpt != 0) {
-                        admin.clear();
+                        admin.parser.clear();
                         switch (manageListsOpt){
                             /* Create Election List*/
                             case 1:
@@ -336,7 +338,7 @@ public class AdminConsole extends Terminal {
                                         System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
-                                        if(server == null) return;
+                                        if (server == null) return;
                                     }
                                 }
 
@@ -511,15 +513,16 @@ public class AdminConsole extends Terminal {
                                 break;
                         }
 
-                        admin.clear();
+                        admin.parser.clear();
                         manageListsOpt = admin.manageListsMenu();
                     }
                     break;
 
             }
-            admin.clear();
+            admin.parser.clear();
             optMainMenu = admin.mainMenu();
         }
+        System.exit(0);
     }
 
 }

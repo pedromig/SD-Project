@@ -1,17 +1,13 @@
 package terminals;
 
-import rmi.interfaces.RmiClientInterface;
-
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 /**
- *  An abstract class for an Terminal
+ *  A class for a Parser
  */
-public abstract class Terminal extends UnicastRemoteObject implements RmiClientInterface {
+public class Parser {
     public final static String ABORT_CODE = "QUIT";
     public final static String DATE_FORMAT = "dd/MM/yyyy";
     public final static String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm";
@@ -21,8 +17,7 @@ public abstract class Terminal extends UnicastRemoteObject implements RmiClientI
     /**
      *  Builder
      */
-    public Terminal() throws RemoteException {
-        super();
+    public Parser() {
         this.sc = new Scanner(System.in);
         this.sdf = new SimpleDateFormat(DATE_FORMAT);
         sdf.setLenient(false);
@@ -44,7 +39,7 @@ public abstract class Terminal extends UnicastRemoteObject implements RmiClientI
      * @param options [Optional] Options for the user to choose
      * @return This Terminal
      */
-    private Terminal launchUI(String title, String[] options) {
+    private Parser launchUI(String title, String[] options) {
         int counter = 0, maxLen = title.length();
         for (String s : options) if (s.length() > maxLen)  maxLen = s.length();
         String repeat = "─".repeat(2 * maxLen + title.length());
@@ -68,7 +63,7 @@ public abstract class Terminal extends UnicastRemoteObject implements RmiClientI
      * @param title String with the menu Title (header)
      * @return This Terminal
      */
-    public Terminal header(String title){
+    public Parser header(String title){
         return this.launchUI(title, new String[]{});
     }
 
@@ -228,7 +223,7 @@ public abstract class Terminal extends UnicastRemoteObject implements RmiClientI
      * #FIXME might be system dependent!
      * @return This Terminal
      */
-    public Terminal clear(){
+    public Parser clear(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
         return this;
