@@ -195,7 +195,7 @@ public class AdminConsole extends Terminal {
         return null;
     }
 
-    public int addListToElectionElectionsMenu(CopyOnWriteArrayList<Election<?>> elections) {
+    public int chooseElectionsMenu(CopyOnWriteArrayList<Election<?>> elections) {
         ArrayList<String> electionNames = new ArrayList<String>();
         for (Election<?> e: elections){
             electionNames.add(e.getName());
@@ -204,7 +204,7 @@ public class AdminConsole extends Terminal {
         return this.choose("Choose Election", electionOptionNames);
     }
 
-    public int addListToElectionListsMenu(String electionName, CopyOnWriteArrayList<List<?>> lists){
+    public int chooseListsMenu(CopyOnWriteArrayList<List<?>> lists){
         ArrayList<String> listNames = new ArrayList<String>();
         for (List<?> l: lists){
             listNames.add(l.getName());
@@ -213,6 +213,16 @@ public class AdminConsole extends Terminal {
         return this.choose("Choose List", electionOptionNames);
     }
 
+    public int choosePeopleMenu(CopyOnWriteArrayList<Person> people){
+        ArrayList<String> listNames = new ArrayList<String>();
+        for (Person p: people){
+            listNames.add(p.getName());
+        }
+        String[] electionOptionNames = listNames.toArray(new String[0]);
+        return this.choose("Choose Person", electionOptionNames);
+    }
+
+
     public void sayOlaaaaa(RmiServerInterface server) throws RemoteException {
         server.info();
     }
@@ -220,10 +230,11 @@ public class AdminConsole extends Terminal {
     /* ################################################################### */
 
     public static void main(String[] args) {
-        int optElection;
+        int optElection, optList, optPeople;
         Election<?> selectedElection;
         CopyOnWriteArrayList<Election<?>> futureElections;
         CopyOnWriteArrayList<List<?>> lists;
+        CopyOnWriteArrayList<Person> people;
         AdminConsole admin = new AdminConsole();
         admin.clear();
         RmiServerInterface server = admin.connect();
@@ -316,12 +327,12 @@ public class AdminConsole extends Terminal {
                                     }
                                 }
 
-                                optElection = admin.addListToElectionElectionsMenu(futureElections);
+                                optElection = admin.chooseElectionsMenu(futureElections);
                                 if (optElection == 0) break;
                                 selectedElection = futureElections.get(optElection - 1);
                                 while (true) {
                                     try {
-                                        lists = server.getListsWithoutAssignedElectionNameOfType(selectedElection.getType(), selectedElection.getName());
+                                        lists = server.getListsUnassignedOfType(selectedElection.getType());
                                         break;
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -330,12 +341,12 @@ public class AdminConsole extends Terminal {
                                     }
                                 }
 
-                                int optList = admin.addListToElectionListsMenu(selectedElection.getName(), lists);
+                                optList = admin.chooseListsMenu(lists);
                                 if (optList == 0) break;
 
                                 while (true) {
                                     try {
-                                        server.associateElection(selectedElection.getName(), lists.get(optList - 1).getName());
+                                        server.associateListToElection(selectedElection.getName(), lists.get(optList - 1).getName());
                                         break;
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -345,6 +356,7 @@ public class AdminConsole extends Terminal {
                                 }
 
                                 break;
+
                             /* Remove Election List From Election */
                             case 3:
                                 while (true) {
@@ -358,12 +370,12 @@ public class AdminConsole extends Terminal {
                                     }
                                 }
 
-                                optElection = admin.addListToElectionElectionsMenu(futureElections);
+                                optElection = admin.chooseElectionsMenu(futureElections);
                                 if (optElection == 0) break;
                                 selectedElection = futureElections.get(optElection - 1);
                                 while (true) {
                                     try {
-                                        lists = server.getListsWithAssignedElectionNameOfType(selectedElection.getType(), selectedElection.getName());
+                                        lists = server.getListsAssignedOfType(selectedElection.getType(), selectedElection.getName());
                                         break;
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -372,12 +384,26 @@ public class AdminConsole extends Terminal {
                                     }
                                 }
 
-                                optList = admin.addListToElectionListsMenu(selectedElection.getName(), lists);
+                                optList = admin.chooseListsMenu(lists);
                                 if (optList == 0) break;
 
                                 while (true) {
                                     try {
-                                        server.associateElection(null, lists.get(optList - 1).getName());
+                                        server.associateListToElection(null, lists.get(optList - 1).getName());
+                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
+                                break;
+
+                            /* Add Person To List*/
+                            case 4:
+                                while (true) {
+                                    try {
+                                        lists = server.getEditableLists();
                                         break;
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -386,11 +412,78 @@ public class AdminConsole extends Terminal {
                                     }
                                 }
 
+                                optList = admin.chooseListsMenu(lists);
+                                if (optList == 0) break;
 
+                                list = lists.get(optList - 1);
+
+                                while (true) {
+                                    try {
+                                        people = server.getPeopleUnassignedOfType(list.getType());
+                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
+
+                                optPeople = admin.choosePeopleMenu(people);
+                                if (optPeople == 0) break;
+                                while (true) {
+                                    try {
+                                        server.associatePersonToList(list.getName(), people.get(optPeople - 1).getIdentityCardNumber());
+                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
                                 break;
-                            case 4:
-                                break;
+
+                            /* Remove Person From List*/
                             case 5:
+                                while (true) {
+                                    try {
+                                        lists = server.getEditableLists();
+                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
+
+                                optList = admin.chooseListsMenu(lists);
+                                if (optList == 0) break;
+
+                                list = lists.get(optList - 1);
+
+                                while (true) {
+                                    try {
+                                        people = server.getPeopleAssignedOfType(list.getType(), list.getName());
+                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
+
+                                optPeople = admin.choosePeopleMenu(people);
+                                if (optPeople == 0) break;
+
+                                while (true) {
+                                    try {
+                                        server.associatePersonToList(null, people.get(optPeople - 1).getIdentityCardNumber());
+                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
                                 break;
                         }
 

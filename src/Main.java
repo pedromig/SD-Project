@@ -10,6 +10,6 @@ public class Main {
 
     public static void main(String[] args) throws ParseException {
         String s = null;
-        System.out.println(s != null);
+        System.out.println(new GregorianCalendar().getTime());
     }
 }

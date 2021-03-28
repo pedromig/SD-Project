@@ -21,8 +21,14 @@ public abstract class Person implements Serializable {
         this.list = null;
     }
 
+    public abstract Class<?> getType();
+
     public void setList(String list) {
         this.list = list;
+    }
+
+    public String getList() {
+        return this.list;
     }
 
     public String getName() {

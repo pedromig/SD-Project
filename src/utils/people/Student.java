@@ -9,6 +9,11 @@ public class Student extends Person {
     }
 
     @Override
+    public Class<Student> getType() {
+        return Student.class;
+    }
+
+    @Override
     public String toString() {
         return " - Student " + super.toString();
     }
