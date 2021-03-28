@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 
 public abstract class Election<T extends Person> implements Serializable {
+    public static final String NO_RESTRAINT = "ANY";
     protected String name, description, faculty, department;
     protected GregorianCalendar startDate, endDate;
 
@@ -14,8 +15,8 @@ public abstract class Election<T extends Person> implements Serializable {
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.faculty = "ANY";
-        this.department = "ANY";
+        this.faculty = NO_RESTRAINT;
+        this.department = NO_RESTRAINT;
     }
 
     public abstract Class<T> getType();
