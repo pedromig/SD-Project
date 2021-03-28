@@ -1,14 +1,17 @@
 package utils.elections;
 
+import utils.Vote;
 import utils.people.Person;
 
 import java.io.Serializable;
 import java.util.GregorianCalendar;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class Election<T extends Person> implements Serializable {
     public static final String NO_RESTRAINT = "ANY";
     protected String name, description, faculty, department;
     protected GregorianCalendar startDate, endDate;
+    protected CopyOnWriteArrayList<Vote> votes;
 
     public Election(String name, String description, GregorianCalendar startDate, GregorianCalendar endDate) {
         this.name = name;
@@ -17,6 +20,7 @@ public abstract class Election<T extends Person> implements Serializable {
         this.endDate = endDate;
         this.faculty = NO_RESTRAINT;
         this.department = NO_RESTRAINT;
+        votes = new CopyOnWriteArrayList<>();
     }
 
     public abstract Class<T> getType();
@@ -50,13 +54,16 @@ public abstract class Election<T extends Person> implements Serializable {
         return this.name;
     }
 
-
     public GregorianCalendar getStartDate() {
         return this.startDate;
     }
 
     public GregorianCalendar getEndDate() {
         return endDate;
+    }
+
+    public void addVote(Vote v) {
+        this.votes.add(v);
     }
 
     @Override
