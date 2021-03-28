@@ -1,5 +1,6 @@
 package rmi;
 
+import rmi.interfaces.RmiClientInterface;
 import rmi.interfaces.RmiServerInterface;
 import utils.lists.List;
 import utils.elections.Election;
@@ -30,15 +31,15 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 
     //TODO: REMOVE THIS FUNC AFTER DEPLOY (its for debug only)
     @Override
-    public synchronized void info() throws RemoteException {
-        System.out.println("\n*************************************************************************");
-        System.out.println("Elections: ");
-        this.elections.forEach(System.out::println);
-        System.out.println("\nLists: ");
-        this.lists.forEach(System.out::println);
-        System.out.println("\nPeople: ");
-        this.people.forEach(System.out::println);
-        System.out.println("\n*************************************************************************");
+    public synchronized void info(RmiClientInterface client) throws RemoteException {
+        client.print("\n*************************************************************************");
+        client.print("Elections: ");
+        for (Election<?> e : this.elections) client.print(e.toString());
+        client.print("\nLists: ");
+        for (List<?> l : this.lists) client.print(l.toString());
+        client.print("\nPeople: ");
+        for (Person p : this.people) client.print(p.toString());
+        client.print("\n*************************************************************************");
     }
 
     @Override

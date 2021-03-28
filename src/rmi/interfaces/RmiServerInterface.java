@@ -6,7 +6,6 @@ import utils.people.Person;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.server.RemoteObject;
 import java.util.GregorianCalendar;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -29,7 +28,7 @@ public interface RmiServerInterface extends Remote {
 
     /* Interface Methods */
 
-    public void info() throws RemoteException;
+    public void info(RmiClientInterface client) throws RemoteException;
 
     public void signUp(Person person) throws RemoteException;
 

@@ -1,5 +1,6 @@
 package terminals;
 
+import rmi.interfaces.RmiClientInterface;
 import rmi.interfaces.RmiServerInterface;
 import utils.lists.EmployeeList;
 import utils.lists.List;
@@ -22,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AdminConsole extends Terminal {
 
-    public AdminConsole() {
+    public AdminConsole() throws RemoteException {
         super();
     }
 
@@ -224,7 +225,7 @@ public class AdminConsole extends Terminal {
 
 
     public void sayOlaaaaa(RmiServerInterface server) throws RemoteException {
-        server.info();
+        server.info((RmiClientInterface) this);
     }
 
     /* ################################################################### */
@@ -235,7 +236,13 @@ public class AdminConsole extends Terminal {
         CopyOnWriteArrayList<Election<?>> futureElections;
         CopyOnWriteArrayList<List<?>> lists;
         CopyOnWriteArrayList<Person> people;
-        AdminConsole admin = new AdminConsole();
+        AdminConsole admin;
+        try {
+            admin = new AdminConsole();
+        } catch (Exception e){
+            System.out.println("Could not start Admin Console");
+            return;
+        }
         admin.clear();
         RmiServerInterface server = admin.connect();
 
@@ -254,6 +261,7 @@ public class AdminConsole extends Terminal {
                                 server.signUp(person);
                                 break;
                             } catch (Exception e) {
+                                System.out.println("[DEBUG]");
                                 e.printStackTrace();
                                 server = admin.connect();
                                 if (server == null) return;
@@ -268,11 +276,13 @@ public class AdminConsole extends Terminal {
                             admin.sayOlaaaaa(server);
                             break;
                         } catch (Exception e) {
+                            System.out.println("[DEBUG]");
                             e.printStackTrace();
                             server = admin.connect();
                             if (server == null) return;
                         }
                     }
+                    admin.getEnter();
                     break;
 
                 /* Create Election */
@@ -284,6 +294,7 @@ public class AdminConsole extends Terminal {
                                 server.createElection(election);
                                 break;
                             } catch (Exception e) {
+                                System.out.println("[DEBUG]");
                                 e.printStackTrace();
                                 server = admin.connect();
                                 if (server == null) return;
@@ -307,6 +318,7 @@ public class AdminConsole extends Terminal {
                                             server.createList(list);
                                             break;
                                         } catch (Exception e){
+                                            System.out.println("[DEBUG]");
                                             e.printStackTrace();
                                             server = admin.connect();
                                             if (server == null) return;
@@ -321,6 +333,7 @@ public class AdminConsole extends Terminal {
                                         futureElections = server.getFutureElections();
                                         break;
                                     } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if(server == null) return;
@@ -335,6 +348,7 @@ public class AdminConsole extends Terminal {
                                         lists = server.getListsUnassignedOfType(selectedElection.getType());
                                         break;
                                     } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if(server == null) return;
@@ -349,6 +363,7 @@ public class AdminConsole extends Terminal {
                                         server.associateListToElection(selectedElection.getName(), lists.get(optList - 1).getName());
                                         break;
                                     } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if(server == null) return;
@@ -364,6 +379,7 @@ public class AdminConsole extends Terminal {
                                         futureElections = server.getFutureElections();
                                         break;
                                     } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if(server == null) return;
@@ -378,6 +394,7 @@ public class AdminConsole extends Terminal {
                                         lists = server.getListsAssignedOfType(selectedElection.getType(), selectedElection.getName());
                                         break;
                                     } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if(server == null) return;
@@ -392,6 +409,7 @@ public class AdminConsole extends Terminal {
                                         server.associateListToElection(null, lists.get(optList - 1).getName());
                                         break;
                                     } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if(server == null) return;
@@ -406,6 +424,7 @@ public class AdminConsole extends Terminal {
                                         lists = server.getEditableLists();
                                         break;
                                     } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if(server == null) return;
@@ -422,6 +441,7 @@ public class AdminConsole extends Terminal {
                                         people = server.getPeopleUnassignedOfType(list.getType());
                                         break;
                                     } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if(server == null) return;
@@ -435,6 +455,7 @@ public class AdminConsole extends Terminal {
                                         server.associatePersonToList(list.getName(), people.get(optPeople - 1).getIdentityCardNumber());
                                         break;
                                     } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if(server == null) return;
@@ -449,6 +470,7 @@ public class AdminConsole extends Terminal {
                                         lists = server.getEditableLists();
                                         break;
                                     } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if(server == null) return;
@@ -465,6 +487,7 @@ public class AdminConsole extends Terminal {
                                         people = server.getPeopleAssignedOfType(list.getType(), list.getName());
                                         break;
                                     } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if(server == null) return;
@@ -479,6 +502,7 @@ public class AdminConsole extends Terminal {
                                         server.associatePersonToList(null, people.get(optPeople - 1).getIdentityCardNumber());
                                         break;
                                     } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if(server == null) return;

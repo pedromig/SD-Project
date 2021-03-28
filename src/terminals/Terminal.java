@@ -1,14 +1,17 @@
 package terminals;
 
+import rmi.interfaces.RmiClientInterface;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 /**
  *  An abstract class for an Terminal
  */
-public abstract class Terminal {
+public abstract class Terminal extends UnicastRemoteObject implements RmiClientInterface {
     public final static String ABORT_CODE = "QUIT";
     public final static String DATE_FORMAT = "dd/MM/yyyy";
     public final static String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm";
@@ -18,12 +21,21 @@ public abstract class Terminal {
     /**
      *  Builder
      */
-    public Terminal(){
+    public Terminal() throws RemoteException {
+        super();
         this.sc = new Scanner(System.in);
         this.sdf = new SimpleDateFormat(DATE_FORMAT);
         sdf.setLenient(false);
         this.sdtf = new SimpleDateFormat(DATE_TIME_FORMAT);
         sdtf.setLenient(false);
+    }
+
+    /**
+     * A function to wait for an ENTER from user
+     */
+    public void getEnter() {
+        System.out.println("Press ENTER to continue");
+        sc.nextLine();
     }
 
     /**
