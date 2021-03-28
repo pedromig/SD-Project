@@ -52,7 +52,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
     /* ############################## Menus ############################## */
 
     public int mainMenu() {
-        String[] mainMenuOpts = {"Sign Up", "Say Olaaaaa", "Create Election", "Manage Lists"};
+        String[] mainMenuOpts = {"Sign Up", "Say Olaaaaa", "Manage Elections", "Manage Lists"};
         return this.parser.choose("Main Menu", mainMenuOpts);
     }
 
@@ -164,6 +164,16 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
     public int manageListsMenu(){
         String[] manageListsOpts = {"Create List", "Add List to Election", "Remove List from Election", "Add People to List", "Remove People from List"};
         return this.parser.choose("Manage Lists", manageListsOpts);
+    }
+
+    public int manageElectionsMenu() {
+        String[] manageElectionsOpts = {"Create Election", "Edit Election"};
+        return this.parser.choose("Manage Elections",manageElectionsOpts);
+    }
+
+    public int editElectionsMenu() {
+        String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date"};
+        return this.parser.choose("Edit Options", opts);
     }
 
     public List<? extends Person> createListMenu(){
@@ -287,21 +297,123 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
                     admin.parser.getEnter();
                     break;
 
-                /* Create Election */
+                /* Manage Election */
                 case 3:
-                    Election<?> election = admin.createElectionMenu();
-                    if (election != null) {
-                        while (true) {
-                            try {
-                                server.createElection(election);
+                    int manageElectionsOpt = admin.manageElectionsMenu();
+                    while (manageElectionsOpt != 0) {
+                        admin.parser.clear();
+                        switch (manageElectionsOpt) {
+
+                            /* Create Election*/
+                            case 1:
+                                Election<?> election = admin.createElectionMenu();
+                                if (election != null) {
+                                    while (true) {
+                                        try {
+                                            server.createElection(election);
+                                            break;
+                                        } catch (Exception e) {
+                                            System.out.println("[DEBUG]");
+                                            e.printStackTrace();
+                                            server = admin.connect();
+                                            if (server == null) return;
+                                        }
+                                    }
+                                }
                                 break;
-                            } catch (Exception e) {
-                                System.out.println("[DEBUG]");
-                                e.printStackTrace();
-                                server = admin.connect();
-                                if (server == null) return;
-                            }
+
+                            /* Edit Election */
+                            case 2:
+                                while (true) {
+                                    try {
+                                        futureElections = server.getFutureElections();
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if (server == null) return;
+                                    }
+                                }
+
+                                optElection = admin.chooseElectionsMenu(futureElections);
+                                if (optElection == 0) break;
+                                election = futureElections.get(optElection - 1);
+
+                                int editOpt = admin.editElectionsMenu();
+                                if (editOpt == 0) break;
+                                String editString;
+                                GregorianCalendar newDate;
+                                switch (editOpt) {
+                                    /* Edit Name */
+                                    case 1:
+                                        editString = admin.parser.parseString("New Name",false);
+                                        if (editString == null) break;
+                                        while (true) {
+                                            try {
+                                                server.editElectionName(election.getName(), editString);
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect();
+                                                if (server == null) return;
+                                            }
+                                        }
+                                        break;
+                                    /* Edit Description*/
+                                    case 2:
+                                        editString = admin.parser.parseString("New Description", false);
+                                        if (editString == null) break;
+                                        while (true) {
+                                            try {
+                                                server.editElectionDescription(election.getName(), editString);
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect();
+                                                if (server == null) return;
+                                            }
+                                        }
+                                        break;
+                                    /* Edit Start Date */
+                                    case 3:
+                                        newDate = admin.parser.parseDateTime("New Start Date/Time", false);
+                                        if (newDate == null) break;
+                                        while (true) {
+                                            try {
+                                                server.editElectionStartDate(election.getName(), newDate);
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect();
+                                                if (server == null) return;
+                                            }
+                                        }
+                                        break;
+                                    /* Edit End Date */
+                                    case 4:
+                                        newDate = admin.parser.parseDateTime("New End Date/Time", false);
+                                        if (newDate == null) break;
+                                        while (true) {
+                                            try {
+                                                server.editElectionEndDate(election.getName(), newDate);
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect();
+                                                if (server == null) return;
+                                            }
+                                        }
+                                        break;
+                                }
+                                break;
                         }
+                        admin.parser.clear();
+                        manageElectionsOpt = admin.manageElectionsMenu();
                     }
                     break;
 

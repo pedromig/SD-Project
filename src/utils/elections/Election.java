@@ -19,6 +19,18 @@ public abstract class Election<T extends Person> implements Serializable {
     public abstract Class<T> getType();
 
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setStartDate(GregorianCalendar startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(GregorianCalendar endDate) {
+        this.endDate = endDate;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

@@ -69,6 +69,49 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
+    public synchronized void editElectionName(String electionName, String newName) throws RemoteException {
+        Election<?> election = this.getElection(electionName);
+        if (this.getElection(newName) == null && this.compareDates(new GregorianCalendar(), election.getStartDate())){
+            election.setName(newName);
+            for (List<?> l : this.lists){
+                if (l.getElectionName() != null && l.getElectionName().equals(electionName)){
+                    l.setElectionName(newName);
+                    this.saveElections();
+                }
+            }
+        }
+    }
+
+    @Override
+    public synchronized void editElectionDescription(String electionName, String newDescription) throws RemoteException {
+        Election<?> election = this.getElection(electionName);
+        if (this.compareDates(new GregorianCalendar(), election.getStartDate())){
+            election.setDescription(newDescription);
+            this.saveElections();
+        }
+    }
+
+    @Override
+    public synchronized void editElectionStartDate(String electionName, GregorianCalendar newDate) throws RemoteException {
+        Election<?> election = this.getElection(electionName);
+        if (this.compareDates(new GregorianCalendar(), election.getStartDate()) &&
+            this.compareDates(new GregorianCalendar(), newDate)){
+            election.setStartDate(newDate);
+            this.saveElections();
+        }
+    }
+
+    @Override
+    public synchronized void editElectionEndDate(String electionName, GregorianCalendar newDate) throws RemoteException {
+        Election<?> election = this.getElection(electionName);
+        if (this.compareDates(new GregorianCalendar(), election.getStartDate()) &&
+         this.compareDates(election.getStartDate(), newDate)){
+            election.setEndDate(newDate);
+            this.saveElections();
+        }
+    }
+
+    @Override
     public synchronized void createList(List<? extends Person> list) throws RemoteException {
         for (List<?> l : this.lists) {
             if (l.getName().equals(list.getName())) {
@@ -94,7 +137,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
-    public void associatePersonToList(String listName, int personID) throws RemoteException {
+    public synchronized void associatePersonToList(String listName, int personID) throws RemoteException {
         for (Person p : this.people) {
             if (p.getIdentityCardNumber() == personID) {
                 p.setList(listName);
@@ -106,7 +149,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
-    public Election<?> getElection(String electionName) throws RemoteException {
+    public synchronized Election<?> getElection(String electionName) throws RemoteException {
         for (Election<?> e : this.elections)
             if (e.getName().equals(electionName))
                 return e;
@@ -142,7 +185,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
-    public CopyOnWriteArrayList<List<?>> getListsUnassigned() throws RemoteException {
+    public synchronized CopyOnWriteArrayList<List<?>> getListsUnassigned() throws RemoteException {
         CopyOnWriteArrayList<List<?>> lists = new CopyOnWriteArrayList<>();
         for (List<?> l : this.lists) {
             if (l.getElectionName() == null)
@@ -161,7 +204,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
-    public CopyOnWriteArrayList<List<?>> getFutureLists() throws RemoteException {
+    public synchronized CopyOnWriteArrayList<List<?>> getFutureLists() throws RemoteException {
         CopyOnWriteArrayList<List<?>> lists = new CopyOnWriteArrayList<>();
         Election<?> election;
         for (List<?> l : this.lists) {
@@ -175,7 +218,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
-    public CopyOnWriteArrayList<List<?>> getEditableLists() throws RemoteException {
+    public synchronized CopyOnWriteArrayList<List<?>> getEditableLists() throws RemoteException {
         CopyOnWriteArrayList<List<?>> futureLists = this.getFutureLists();
         CopyOnWriteArrayList<List<?>> unassignedLists = this.getListsUnassigned();
         futureLists.addAll(unassignedLists);
@@ -183,7 +226,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
-    public CopyOnWriteArrayList<Person> getPeopleOfType(Class<?> type) throws RemoteException {
+    public synchronized CopyOnWriteArrayList<Person> getPeopleOfType(Class<?> type) throws RemoteException {
         CopyOnWriteArrayList<Person> people = new CopyOnWriteArrayList<>();
         for (Person p : this.people){
             if (p.getType() == type)
@@ -193,14 +236,14 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
-    public CopyOnWriteArrayList<Person> getPeopleAssignedOfType(Class<?> type, String listName) throws RemoteException {
+    public synchronized CopyOnWriteArrayList<Person> getPeopleAssignedOfType(Class<?> type, String listName) throws RemoteException {
         CopyOnWriteArrayList<Person> people = this.getPeopleOfType(type);
         people.removeIf(p -> p.getList() == null || !p.getList().equals(listName));
         return people;
     }
 
     @Override
-    public CopyOnWriteArrayList<Person> getPeopleUnassigned() throws RemoteException {
+    public synchronized CopyOnWriteArrayList<Person> getPeopleUnassigned() throws RemoteException {
         CopyOnWriteArrayList<Person> people = new CopyOnWriteArrayList<>();
         for (Person p : this.people) {
             if (p.getList() == null) {
@@ -211,7 +254,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
-    public CopyOnWriteArrayList<Person> getPeopleUnassignedOfType(Class<?> type) throws RemoteException {
+    public synchronized CopyOnWriteArrayList<Person> getPeopleUnassignedOfType(Class<?> type) throws RemoteException {
         CopyOnWriteArrayList<Person> people = this.getPeopleOfType(type);
         people.removeIf(p -> p.getList() != null);
         return people;

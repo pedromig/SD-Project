@@ -30,9 +30,20 @@ public interface RmiServerInterface extends Remote {
 
     public void info(RmiClientInterface client) throws RemoteException;
 
+
     public void signUp(Person person) throws RemoteException;
 
+
     public void createElection(Election<? extends Person> election) throws RemoteException;
+
+    public void editElectionName(String electionName, String newName) throws RemoteException;
+
+    public void editElectionDescription(String electionName, String newDescription) throws RemoteException;
+
+    public void editElectionStartDate(String electionName, GregorianCalendar newDate) throws RemoteException;
+
+    public void editElectionEndDate(String electionName, GregorianCalendar newDate) throws RemoteException;
+
 
     public void createList(List<? extends Person> list) throws RemoteException;
 
