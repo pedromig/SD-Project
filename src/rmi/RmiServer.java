@@ -186,6 +186,17 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
+    public CopyOnWriteArrayList<Election<?>> getEndedElections() throws RemoteException {
+        CopyOnWriteArrayList<Election<?>> endedElections = new CopyOnWriteArrayList<>();
+        for (Election<?> e : this.elections) {
+            if (this.compareDates(e.getEndDate(), new GregorianCalendar())) {
+                endedElections.add(e);
+            }
+        }
+        return endedElections;
+    }
+
+    @Override
     public synchronized CopyOnWriteArrayList<List<?>> getListsOfType(Class<?> type) throws RemoteException {
         CopyOnWriteArrayList<List<?>> lists = new CopyOnWriteArrayList<>();
         for (List<?> l : this.lists)

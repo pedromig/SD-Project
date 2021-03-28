@@ -2,6 +2,7 @@ package terminals;
 
 import rmi.interfaces.RmiClientInterface;
 import rmi.interfaces.RmiServerInterface;
+import utils.Vote;
 import utils.lists.EmployeeList;
 import utils.lists.List;
 import utils.elections.Election;
@@ -20,6 +21,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AdminConsole extends UnicastRemoteObject implements RmiClientInterface {
@@ -173,13 +176,51 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
     }
 
     public int manageElectionsMenu() {
-        String[] manageElectionsOpts = {"Create Election", "Edit Election"};
+        String[] manageElectionsOpts = {"Create Election", "Edit Election", "Ended Elections Log"};
         return this.parser.choose("Manage Elections",manageElectionsOpts);
     }
 
     public int editElectionsMenu() {
         String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date", "Restraint Faculty", "Restraint Department"};
         return this.parser.choose("Edit Options", opts);
+    }
+
+    public void showEndedElectionStatsMenu(CopyOnWriteArrayList<Election<?>> endedElections) {
+        int total;
+        String listName;
+        CopyOnWriteArrayList<Vote> votes;
+        HashMap<String, Integer> results;
+        System.out.println("\n*************************************************************************");
+        for (Election<?> e : endedElections) {
+            /* Reseting */
+            total = 0;
+            results = new HashMap<>();
+            votes = e.getVotes();
+            results.put("whiteVotes", 0);
+
+            /* Counting Votes */
+            for (Vote v : votes) {
+                listName = v.getVotedListName();
+                if (listName != null) {
+                    results.putIfAbsent(listName, 0);
+                    results.put(listName, results.get(listName) + 1);
+                } else {
+                    results.put("whiteVotes", results.get("whiteVotes") + 1);
+                }
+                total++;
+            }
+
+            /* Printing */
+            System.out.println(" - " + e.getName());
+            if (total != 0){
+                int finalTotal = total;
+                results.forEach((key, value) -> System.out.println("\tList: " + key + "\t Votes:" + value + "\t % " + 100 * value / (float) finalTotal));
+            } else {
+                System.out.println("\tNo Votes available");
+            }
+        }
+        System.out.println("\n*************************************************************************");
+
     }
 
     public List<? extends Person> createListMenu(){
@@ -305,6 +346,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
 
                 /* Manage Election */
                 case 3:
+                    admin.parser.header("Manage Elections");
                     int manageElectionsOpt = admin.manageElectionsMenu();
                     while (manageElectionsOpt != 0) {
                         admin.parser.clear();
@@ -330,6 +372,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
 
                             /* Edit Election */
                             case 2:
+                                admin.parser.header("Edit Election");
                                 while (true) {
                                     try {
                                         futureElections = server.getFutureElections();
@@ -456,7 +499,21 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
                                 break;
                             /* Past Election Log */
                             case 3:
-
+                                admin.parser.header("Past Election Log");
+                                CopyOnWriteArrayList<Election<?>> endedElections;
+                                while (true) {
+                                    try {
+                                        endedElections = server.getEndedElections();
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if (server == null) return;
+                                    }
+                                }
+                                admin.showEndedElectionStatsMenu(endedElections);
+                                admin.parser.getEnter();
                                 break;
                         }
                         admin.parser.clear();
@@ -466,6 +523,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
 
                 /* Manage Election Lists */
                 case 4:
+                    admin.parser.header("Manage Election Lists");
                     int manageListsOpt = admin.manageListsMenu();
                     while(manageListsOpt != 0) {
                         admin.parser.clear();
@@ -489,6 +547,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
                                 break;
                             /* Add Election List to Election */
                             case 2:
+                                admin.parser.header("Add Election List to Election");
                                 while (true) {
                                     try {
                                         futureElections = server.getFutureElections();
@@ -535,6 +594,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
 
                             /* Remove Election List From Election */
                             case 3:
+                                admin.parser.header("Remove Election List from Election");
                                 while (true) {
                                     try {
                                         futureElections = server.getFutureElections();
@@ -580,6 +640,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
 
                             /* Add Person To List*/
                             case 4:
+                                admin.parser.header("Add Person to List");
                                 while (true) {
                                     try {
                                         lists = server.getEditableLists();
@@ -626,6 +687,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
 
                             /* Remove Person From List*/
                             case 5:
+                                admin.parser.header("Remove Person from List");
                                 while (true) {
                                     try {
                                         lists = server.getEditableLists();
