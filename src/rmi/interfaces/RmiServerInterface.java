@@ -1,7 +1,5 @@
 package rmi.interfaces;
 
-import multicast.VotingDesk;
-import terminals.AdminConsole;
 import utils.Vote;
 import utils.lists.List;
 import utils.elections.Election;
@@ -31,9 +29,10 @@ public interface RmiServerInterface extends Remote {
 
     /* Interface Methods */
 
-    public void subscribe(RmiClientInterface client, boolean isAdminConsole) throws RemoteException;
+    public void subscribe(RmiAdminConsoleInterface client) throws RemoteException;
+    public void subscribe(RmiMulticastServerInterface client) throws RemoteException;
 
-    public void info(RmiClientInterface client) throws RemoteException;
+    public void info(RmiAdminConsoleInterface client) throws RemoteException;
 
 
     public void signUp(Person person) throws RemoteException;
@@ -94,7 +93,7 @@ public interface RmiServerInterface extends Remote {
 
     public boolean hasVoted(String electionName, int personID) throws RemoteException;
 
-    public void printVotingProcessedData(RmiClientInterface admin, Election<?> election) throws RemoteException;
+    public void printVotingProcessedData(RmiAdminConsoleInterface admin, Election<?> election) throws RemoteException;
 
 
 }

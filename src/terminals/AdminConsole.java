@@ -1,6 +1,6 @@
 package terminals;
 
-import rmi.interfaces.RmiClientInterface;
+import rmi.interfaces.RmiAdminConsoleInterface;
 import rmi.interfaces.RmiServerInterface;
 import utils.lists.EmployeeList;
 import utils.lists.List;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class AdminConsole extends UnicastRemoteObject implements RmiClientInterface, Serializable {
+public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsoleInterface, Serializable {
     protected Parser parser;
     protected boolean realTimeDesks;
     protected String realTimeElectionName;
@@ -52,7 +52,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
         while (true) {
             try {
                 server = (RmiServerInterface) Naming.lookup("RmiServer");
-                server.subscribe((RmiClientInterface) this, true);
+                server.subscribe((RmiAdminConsoleInterface) this);
                 break;
             } catch (Exception e) {
                 System.out.println("[DEBUG]");
@@ -777,7 +777,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
 
                                 while (admin.realTimeElectionName != null) {
                                     try {
-                                        server.printVotingProcessedData((RmiClientInterface) admin, election);
+                                        server.printVotingProcessedData((RmiAdminConsoleInterface) admin, election);
                                         Thread.sleep(1000);
                                     } catch (Exception e) {
                                         System.out.println("[DEBUG]");

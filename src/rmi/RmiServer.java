@@ -1,6 +1,7 @@
 package rmi;
 
-import rmi.interfaces.RmiClientInterface;
+import rmi.interfaces.RmiAdminConsoleInterface;
+import rmi.interfaces.RmiMulticastServerInterface;
 import rmi.interfaces.RmiServerInterface;
 import utils.Vote;
 import utils.lists.List;
@@ -29,22 +30,24 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     private CopyOnWriteArrayList<Election<? extends Person>> elections;
     private CopyOnWriteArrayList<List<? extends Person>> lists;
     private CopyOnWriteArrayList<Person> people;
-    private CopyOnWriteArrayList<RmiClientInterface> adminConsoles;
-    private CopyOnWriteArrayList<RmiClientInterface> multicastServers;
+    private CopyOnWriteArrayList<RmiAdminConsoleInterface> adminConsoles;
+    private CopyOnWriteArrayList<RmiMulticastServerInterface> multicastServers;
 
     /* ################## RmiServerInterface interface methods ######################## */
 
     @Override
-    public synchronized void subscribe(RmiClientInterface client, boolean isAdminConsole) throws RemoteException {
-        if (isAdminConsole)
-            this.adminConsoles.add(client);
-        else
-            this.multicastServers.add(client);
+    public synchronized void subscribe(RmiAdminConsoleInterface client) throws RemoteException {
+        this.adminConsoles.add(client);
+    }
+
+    @Override
+    public synchronized void subscribe(RmiMulticastServerInterface client) throws RemoteException {
+        this.multicastServers.add(client);
     }
 
     //TODO: REMOVE THIS FUNC AFTER DEPLOY (its for debug only)
     @Override
-    public synchronized void info(RmiClientInterface client) throws RemoteException {
+    public synchronized void info(RmiAdminConsoleInterface client) throws RemoteException {
         client.print("\n*************************************************************************");
         client.print("Elections: ");
         for (Election<?> e : this.elections) client.print(e.toString());
@@ -321,7 +324,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
         if (!this.hasVoted(electionName, vote.getPersonID())) {
             election.getVotes().add(vote);
             this.saveElections();
-            for (RmiClientInterface admin : this.adminConsoles){
+            for (RmiAdminConsoleInterface admin : this.adminConsoles){
                 try {
                     if ((admin.getRealTimeElectionName() != null) && (admin.getRealTimeElectionName().equals(electionName))){
                         admin.print("Update");
@@ -347,7 +350,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
-    public synchronized void printVotingProcessedData(RmiClientInterface admin, Election<?> election) throws RemoteException {
+    public synchronized void printVotingProcessedData(RmiAdminConsoleInterface admin, Election<?> election) throws RemoteException {
         int total = 0;
         String listName;
         HashMap<String, Integer> results = new HashMap<>();
