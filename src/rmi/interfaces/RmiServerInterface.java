@@ -62,9 +62,12 @@ public interface RmiServerInterface extends Remote {
 
     public Election<?> getElection(String electionName) throws RemoteException;
 
+
     public CopyOnWriteArrayList<Election<?>> getFutureElections() throws RemoteException;
 
     public CopyOnWriteArrayList<Election<?>> getEndedElections() throws RemoteException;
+
+    public CopyOnWriteArrayList<Election<?>> getRunningElections() throws RemoteException;
 
     public CopyOnWriteArrayList<List<?>> getListsOfType(Class<?> type) throws RemoteException;
 

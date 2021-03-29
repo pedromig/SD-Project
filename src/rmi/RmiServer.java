@@ -199,7 +199,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
-    public CopyOnWriteArrayList<Election<?>> getEndedElections() throws RemoteException {
+    public synchronized CopyOnWriteArrayList<Election<?>> getEndedElections() throws RemoteException {
         CopyOnWriteArrayList<Election<?>> endedElections = new CopyOnWriteArrayList<>();
         for (Election<?> e : this.elections) {
             if (this.compareDates(e.getEndDate(), new GregorianCalendar())) {
@@ -207,6 +207,18 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
             }
         }
         return endedElections;
+    }
+
+    @Override
+    public synchronized CopyOnWriteArrayList<Election<?>> getRunningElections() throws RemoteException {
+        CopyOnWriteArrayList<Election<?>> running = new CopyOnWriteArrayList<>();
+        for (Election<?> e : this.elections ) {
+            if (this.compareDates(e.getStartDate(), new GregorianCalendar()) &&
+                this.compareDates(new GregorianCalendar(), e.getEndDate())){
+                running.add(e);
+            }
+        }
+        return running;
     }
 
     @Override
@@ -309,6 +321,19 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
         if (!this.hasVoted(electionName, vote.getPersonID())) {
             election.getVotes().add(vote);
             this.saveElections();
+            for (RmiClientInterface admin : this.adminConsoles){
+                try {
+                    if ((admin.getRealTimeElectionName() != null) && (admin.getRealTimeElectionName().equals(electionName))){
+                        admin.print("Update");
+                        this.printVotingProcessedData(admin, election);
+                    }
+                } catch (Exception e){
+                    /* In case the admin doesnt respond anymore, to keep iterating over the other ones */
+                    // This might be a bad Idea because the admin console can have a short network failure... might as well just
+                    // keep it all
+                    // this.adminConsoles.remove(admin);
+                }
+            }
         }
     }
 

@@ -25,19 +25,20 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AdminConsole extends UnicastRemoteObject implements RmiClientInterface, Serializable {
     protected Parser parser;
-    protected boolean realTimeVoters, realTimeDesks;
+    protected boolean realTimeDesks;
+    protected String realTimeElectionName;
 
     public AdminConsole() throws RemoteException {
         super();
         this.parser = new Parser();
-        this.realTimeVoters = false;
         this.realTimeDesks = false;
+        this.realTimeElectionName = null;
     }
     /* ############################## Rmi Methods ############################## */
 
     @Override
-    public boolean allowRealTimeVoters() throws RemoteException {
-        return this.realTimeVoters;
+    public String getRealTimeElectionName() throws RemoteException {
+        return this.realTimeElectionName;
     }
 
     @Override
@@ -54,11 +55,13 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
                 server.subscribe((RmiClientInterface) this, true);
                 break;
             } catch (Exception e) {
+                System.out.println("[DEBUG]");
                 e.printStackTrace();
                 try { Thread.sleep(3000);} catch (Exception ignore) {}
                 counter += 3;
                 if (counter == timeout) {
                     System.out.println("RMI Server Timed Out");
+                    System.exit(0);
                     return null;
                 }
             }
@@ -272,6 +275,10 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
         return this.parser.choose("Choose Person", electionOptionNames);
     }
 
+    public int realTimeMenu() {
+        String[] opts = new String[]{"Real Time Elections", "Real Time Voting Desks"};
+        return this.parser.choose("Real Time Menu", opts);
+    }
 
     public void getDatabaseInfo(RmiServerInterface server) throws RemoteException {
         server.info(this);
@@ -282,7 +289,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
     public static void main(String[] args) {
         int optElection, optList, optPeople;
         Election<?> selectedElection;
-        CopyOnWriteArrayList<Election<?>> futureElections;
+        CopyOnWriteArrayList<Election<?>> futureElections, runningElections;
         CopyOnWriteArrayList<List<?>> lists;
         CopyOnWriteArrayList<Person> people;
         AdminConsole admin;
@@ -734,7 +741,63 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
                     break;
                 /* Real Time Data */
                 case 5:
+                    admin.parser.header("Real Time Data");
+                    int realTimeOpt = admin.realTimeMenu();
+                    while (realTimeOpt != 0) {
+                        admin.parser.clear();
+                        switch (realTimeOpt) {
 
+                            /* Real Time Elections */
+                            case 1:
+                                while (true) {
+                                    try {
+                                         runningElections = server.getRunningElections();
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
+                                admin.parser.header("Real Time Elections");
+                                optElection = admin.chooseElectionsMenu(runningElections);
+                                if (optElection == 0) break;
+                                Election<?> election = runningElections.get(optElection - 1);
+                                admin.parser.clear();
+                                admin.parser.header("Real Time [" + election.getName() + "]");
+                                admin.realTimeElectionName = election.getName();
+
+                                Thread realTimeThread = new Thread(() -> {
+                                    admin.parser.getEnter();
+                                    admin.realTimeElectionName = null;
+                                });
+
+                                realTimeThread.start();
+
+                                while (admin.realTimeElectionName != null) {
+                                    try {
+                                        server.printVotingProcessedData((RmiClientInterface) admin, election);
+                                        Thread.sleep(1000);
+                                    } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
+
+                                break;
+
+                            /* Real Time Voting Desks */
+                            case 2:
+
+                                break;
+                        }
+                        admin.parser.clear();
+                        admin.parser.header("Real Time Data");
+                        realTimeOpt = admin.realTimeMenu();
+                    }
                     break;
             }
             admin.parser.clear();
