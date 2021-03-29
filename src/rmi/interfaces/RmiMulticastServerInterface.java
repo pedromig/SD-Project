@@ -9,4 +9,8 @@ public interface RmiMulticastServerInterface extends Remote {
         System.out.println(msg);
     }
 
+    default String ping() throws RemoteException {
+        return "Ping Pong";
+    }
+
 }

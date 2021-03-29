@@ -29,8 +29,10 @@ public interface RmiServerInterface extends Remote {
 
     /* Interface Methods */
 
-    public void subscribe(RmiAdminConsoleInterface client) throws RemoteException;
-    public void subscribe(RmiMulticastServerInterface client) throws RemoteException;
+    public void subscribe(RmiAdminConsoleInterface adminConsole) throws RemoteException;
+    public void subscribe(RmiMulticastServerInterface multicastDesk) throws RemoteException;
+
+    public void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException;
 
     public void info(RmiAdminConsoleInterface client) throws RemoteException;
 

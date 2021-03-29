@@ -36,13 +36,27 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     /* ################## RmiServerInterface interface methods ######################## */
 
     @Override
-    public synchronized void subscribe(RmiAdminConsoleInterface client) throws RemoteException {
-        this.adminConsoles.add(client);
+    public synchronized void subscribe(RmiAdminConsoleInterface adminConsole) throws RemoteException {
+        this.adminConsoles.add(adminConsole);
     }
 
     @Override
-    public synchronized void subscribe(RmiMulticastServerInterface client) throws RemoteException {
-        this.multicastServers.add(client);
+    public synchronized void subscribe(RmiMulticastServerInterface multicastDesk) throws RemoteException {
+        this.multicastServers.add(multicastDesk);
+    }
+
+    @Override
+    public void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException {
+        //FIXME: remove iterator (i)
+        int i = 0;
+        for (RmiMulticastServerInterface multicastServer : this.multicastServers) {
+            try {
+                multicastServer.ping();
+                adminConsole.print("Server[" + i++ + "]: ON" );
+            } catch (Exception e){
+                adminConsole.print("Server[" + i++ + "]: OFF" );
+            }
+        }
     }
 
     //TODO: REMOVE THIS FUNC AFTER DEPLOY (its for debug only)

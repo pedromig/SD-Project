@@ -293,6 +293,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
         CopyOnWriteArrayList<List<?>> lists;
         CopyOnWriteArrayList<Person> people;
         AdminConsole admin;
+        Thread realTimeThread;
         try {
             admin = new AdminConsole();
         } catch (Exception e){
@@ -768,7 +769,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                 admin.parser.header("Real Time [" + election.getName() + "]");
                                 admin.realTimeElectionName = election.getName();
 
-                                Thread realTimeThread = new Thread(() -> {
+                                 realTimeThread = new Thread(() -> {
                                     admin.parser.getEnter();
                                     admin.realTimeElectionName = null;
                                 });
@@ -777,6 +778,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
 
                                 while (admin.realTimeElectionName != null) {
                                     try {
+                                        System.out.println(new GregorianCalendar().getTime());
                                         server.printVotingProcessedData((RmiAdminConsoleInterface) admin, election);
                                         Thread.sleep(1000);
                                     } catch (Exception e) {
@@ -791,6 +793,28 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
 
                             /* Real Time Voting Desks */
                             case 2:
+                                admin.parser.header("Real Time Voting Desks");
+
+                                realTimeThread = new Thread(() -> {
+                                    admin.parser.getEnter();
+                                    admin.realTimeDesks = false;
+                                });
+
+                                admin.realTimeDesks = true;
+                                realTimeThread.start();
+
+                                while (admin.realTimeDesks) {
+                                    try {
+                                        System.out.println(new GregorianCalendar().getTime());
+                                        server.pingDesks(admin);
+                                        Thread.sleep(1000);
+                                    } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if(server == null) return;
+                                    }
+                                }
 
                                 break;
                         }
