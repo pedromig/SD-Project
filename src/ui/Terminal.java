@@ -1,4 +1,4 @@
-package multicast.ui;
+package ui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -8,8 +8,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.*;
 
 public abstract class Terminal extends JFrame {
-
-    private static final long serialVersionUID = 170291899252626982L;
 
     protected final JTextArea terminal;
     protected final String prompt;
@@ -22,6 +20,8 @@ public abstract class Terminal extends JFrame {
         // Terminal Window Setup
         this.setTitle(title);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setSize(700, 700);
+        this.setVisible(true);
 
         // Scroll Pane Setup
         JScrollPane scrollPane = new JScrollPane();
@@ -51,9 +51,6 @@ public abstract class Terminal extends JFrame {
     }
 
     public void open() {
-        this.setSize(700, 700);
-        this.setVisible(true);
-        startText();
         showPrompt();
     }
 

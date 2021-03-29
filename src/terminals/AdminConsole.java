@@ -31,7 +31,10 @@ public class AdminConsole extends Terminal {
                 server.ping();
                 break;
             } catch (Exception e) {
-                try { Thread.sleep(3000);} catch (Exception ignore) {}
+                try {
+                    Thread.sleep(3000);
+                } catch (Exception ignore) {
+                }
                 counter += 3;
                 if (counter == timeout) {
                     System.out.println("RMI Server Timed Out");
@@ -110,7 +113,7 @@ public class AdminConsole extends Terminal {
         return null;
     }
 
-    public Election<? extends Person> createElectionMenu(){
+    public Election<? extends Person> createElectionMenu() {
         boolean abortFlag = false;
 
         /* Header */
@@ -148,7 +151,7 @@ public class AdminConsole extends Terminal {
         Date endTime = this.parseTime("End Time", abortFlag);
         abortFlag = (endTime == null);
 
-        if (!abortFlag){
+        if (!abortFlag) {
             startDate.setTime(startTime);
             endDate.setTime(endTime);
             switch (electionType) {
@@ -163,12 +166,12 @@ public class AdminConsole extends Terminal {
         return null;
     }
 
-    public int manageListsMenu(){
+    public int manageListsMenu() {
         String[] manageListsOpts = {"Create List", "Add List to Election", "Remove List from Election", "Add People to List", "Remove People from List"};
         return this.choose("Manage Lists", manageListsOpts);
     }
 
-    public ElectionList<? extends Person> createListMenu(){
+    public ElectionList<? extends Person> createListMenu() {
         boolean abortFlag = false;
 
         /* Header */
@@ -218,11 +221,12 @@ public class AdminConsole extends Terminal {
         Election<?> election;
         ElectionList<?> list;
         AdminConsole admin = new AdminConsole();
-        admin.clear();
+
         RmiServerInterface server = admin.connect();
         if (server == null)
             return;
 
+        admin.clear();
         int optMainMenu = admin.mainMenu();
         while (optMainMenu != 0) {
             admin.clear();
@@ -272,9 +276,9 @@ public class AdminConsole extends Terminal {
 
                 case 4:
                     int manageListsOpt = admin.manageListsMenu();
-                    while(manageListsOpt != 0) {
+                    while (manageListsOpt != 0) {
                         admin.clear();
-                        switch (manageListsOpt){
+                        switch (manageListsOpt) {
 
                             case 1:
                                 list = admin.createListMenu();
@@ -283,7 +287,7 @@ public class AdminConsole extends Terminal {
                                         if (list != null)
                                             server.addList(list);
                                         break;
-                                    } catch (Exception e){
+                                    } catch (Exception e) {
                                         e.printStackTrace();
                                         server = admin.connect();
                                         if (server == null) return;
