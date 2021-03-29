@@ -1,5 +1,8 @@
 package rmi.interfaces;
 
+import multicast.VotingDesk;
+import terminals.AdminConsole;
+import utils.Vote;
 import utils.lists.List;
 import utils.elections.Election;
 import utils.people.Person;
@@ -27,6 +30,8 @@ public interface RmiServerInterface extends Remote {
 
 
     /* Interface Methods */
+
+    public void subscribe(RmiClientInterface client, boolean isAdminConsole) throws RemoteException;
 
     public void info(RmiClientInterface client) throws RemoteException;
 
@@ -82,6 +87,11 @@ public interface RmiServerInterface extends Remote {
 
     public CopyOnWriteArrayList<Person> getPeopleUnassignedOfType(Class<?> type) throws RemoteException;
 
+    public void vote(String electionName, Vote vote) throws RemoteException;
+
+    public boolean hasVoted(String electionName, int personID) throws RemoteException;
+
+    public void printVotingProcessedData(RmiClientInterface admin, Election<?> election) throws RemoteException;
 
 
 }

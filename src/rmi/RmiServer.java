@@ -2,6 +2,7 @@ package rmi;
 
 import rmi.interfaces.RmiClientInterface;
 import rmi.interfaces.RmiServerInterface;
+import utils.Vote;
 import utils.lists.List;
 import utils.elections.Election;
 import utils.people.Person;
@@ -15,6 +16,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RmiServer extends UnicastRemoteObject implements RmiServerInterface {
@@ -26,8 +29,18 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     private CopyOnWriteArrayList<Election<? extends Person>> elections;
     private CopyOnWriteArrayList<List<? extends Person>> lists;
     private CopyOnWriteArrayList<Person> people;
+    private CopyOnWriteArrayList<RmiClientInterface> adminConsoles;
+    private CopyOnWriteArrayList<RmiClientInterface> multicastServers;
 
     /* ################## RmiServerInterface interface methods ######################## */
+
+    @Override
+    public synchronized void subscribe(RmiClientInterface client, boolean isAdminConsole) throws RemoteException {
+        if (isAdminConsole)
+            this.adminConsoles.add(client);
+        else
+            this.multicastServers.add(client);
+    }
 
     //TODO: REMOVE THIS FUNC AFTER DEPLOY (its for debug only)
     @Override
@@ -290,7 +303,54 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
         return people;
     }
 
-    
+    @Override
+    public synchronized void vote(String electionName, Vote vote) throws RemoteException {
+        Election<?> election = this.getElection(electionName);
+        if (!this.hasVoted(electionName, vote.getPersonID())) {
+            election.getVotes().add(vote);
+            this.saveElections();
+        }
+    }
+
+    @Override
+    public synchronized boolean hasVoted(String electionName, int personID) throws RemoteException {
+        Election<?> election = this.getElection(electionName);
+        for(Vote v : election.getVotes())
+            if (v.getPersonID() == personID)
+                return true;
+        return false;
+    }
+
+    @Override
+    public synchronized void printVotingProcessedData(RmiClientInterface admin, Election<?> election) throws RemoteException {
+        int total = 0;
+        String listName;
+        HashMap<String, Integer> results = new HashMap<>();
+        for (Vote v : election.getVotes()) {
+            listName = v.getVotedListName();
+            if (listName != null) {
+                results.putIfAbsent(listName, 0);
+                results.put(listName, results.get(listName) + 1);
+            } else {
+                results.put("whiteVotes", results.get("whiteVotes") + 1);
+            }
+            total++;
+        }
+
+        /* Printing */
+        admin.print(" - " + election.getName());
+        if (total != 0){
+            for (Map.Entry<String, Integer> entry : results.entrySet()) {
+                String key = entry.getKey();
+                Integer value = entry.getValue();
+                admin.print("\tList: " + key + "\t Votes:" + value + "\t % " + 100 * value / (float) total);
+            }
+        } else {
+           admin.print("\tNo Votes available");
+        }
+    }
+
+
     /* ################################################################################# */
 
     public RmiServer(CopyOnWriteArrayList<Election<? extends Person>> elections,
@@ -300,6 +360,8 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
         this.elections = elections;
         this.lists = lists;
         this.people = people;
+        this.adminConsoles = new CopyOnWriteArrayList<>();
+        this.multicastServers = new CopyOnWriteArrayList<>();
     }
 
     /* Save Data */

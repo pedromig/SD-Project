@@ -8,4 +8,8 @@ public interface RmiClientInterface extends Remote {
         System.out.println(msg);
     }
 
+    boolean allowRealTimeVoters() throws RemoteException;
+
+    boolean allowRealTimeDesks() throws RemoteException;
+
 }

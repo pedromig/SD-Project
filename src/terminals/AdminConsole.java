@@ -2,7 +2,6 @@ package terminals;
 
 import rmi.interfaces.RmiClientInterface;
 import rmi.interfaces.RmiServerInterface;
-import utils.Vote;
 import utils.lists.EmployeeList;
 import utils.lists.List;
 import utils.elections.Election;
@@ -16,20 +15,34 @@ import utils.people.Person;
 import utils.people.Student;
 import utils.people.Teacher;
 
+import java.io.Serializable;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class AdminConsole extends UnicastRemoteObject implements RmiClientInterface {
+public class AdminConsole extends UnicastRemoteObject implements RmiClientInterface, Serializable {
     protected Parser parser;
+    protected boolean realTimeVoters, realTimeDesks;
+
     public AdminConsole() throws RemoteException {
         super();
         this.parser = new Parser();
+        this.realTimeVoters = false;
+        this.realTimeDesks = false;
+    }
+    /* ############################## Rmi Methods ############################## */
+
+    @Override
+    public boolean allowRealTimeVoters() throws RemoteException {
+        return this.realTimeVoters;
+    }
+
+    @Override
+    public boolean allowRealTimeDesks() throws RemoteException {
+        return this.realTimeDesks;
     }
 
     public RmiServerInterface connect() {
@@ -38,9 +51,10 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
         while (true) {
             try {
                 server = (RmiServerInterface) Naming.lookup("RmiServer");
-                server.ping();
+                server.subscribe((RmiClientInterface) this, true);
                 break;
             } catch (Exception e) {
+                e.printStackTrace();
                 try { Thread.sleep(3000);} catch (Exception ignore) {}
                 counter += 3;
                 if (counter == timeout) {
@@ -55,7 +69,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
     /* ############################## Menus ############################## */
 
     public int mainMenu() {
-        String[] mainMenuOpts = {"Sign Up", "Say Olaaaaa", "Manage Elections", "Manage Lists"};
+        String[] mainMenuOpts = {"Sign Up", "Say Olaaaaa", "Manage Elections", "Manage Lists", "Real Time Data"};
         return this.parser.choose("Main Menu", mainMenuOpts);
     }
 
@@ -185,38 +199,14 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
         return this.parser.choose("Edit Options", opts);
     }
 
-    public void showEndedElectionStatsMenu(CopyOnWriteArrayList<Election<?>> endedElections) {
-        int total;
-        String listName;
-        CopyOnWriteArrayList<Vote> votes;
-        HashMap<String, Integer> results;
+    public void showEndedElectionStatsMenu(RmiServerInterface server, CopyOnWriteArrayList<Election<?>> endedElections) {
         System.out.println("\n*************************************************************************");
-        for (Election<?> e : endedElections) {
-            /* Reseting */
-            total = 0;
-            results = new HashMap<>();
-            votes = e.getVotes();
-            results.put("whiteVotes", 0);
-
-            /* Counting Votes */
-            for (Vote v : votes) {
-                listName = v.getVotedListName();
-                if (listName != null) {
-                    results.putIfAbsent(listName, 0);
-                    results.put(listName, results.get(listName) + 1);
-                } else {
-                    results.put("whiteVotes", results.get("whiteVotes") + 1);
-                }
-                total++;
-            }
-
-            /* Printing */
-            System.out.println(" - " + e.getName());
-            if (total != 0){
-                int finalTotal = total;
-                results.forEach((key, value) -> System.out.println("\tList: " + key + "\t Votes:" + value + "\t % " + 100 * value / (float) finalTotal));
-            } else {
-                System.out.println("\tNo Votes available");
+        for (Election<?> election : endedElections) {
+            try {
+                server.printVotingProcessedData(this, election);
+            } catch (Exception e) {
+                System.out.println("[DEBUG]");
+                e.printStackTrace();
             }
         }
         System.out.println("\n*************************************************************************");
@@ -329,6 +319,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
                     }
                     break;
 
+                /* Info */
                 case 2:
                     while (true) {
                         try {
@@ -512,11 +503,13 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
                                         if (server == null) return;
                                     }
                                 }
-                                admin.showEndedElectionStatsMenu(endedElections);
+
+                                admin.showEndedElectionStatsMenu(server, endedElections);
                                 admin.parser.getEnter();
                                 break;
                         }
                         admin.parser.clear();
+                        admin.parser.header("Manage Elections");
                         manageElectionsOpt = admin.manageElectionsMenu();
                     }
                     break;
@@ -735,10 +728,14 @@ public class AdminConsole extends UnicastRemoteObject implements RmiClientInterf
                         }
 
                         admin.parser.clear();
+                        admin.parser.header("Manage Election Lists");
                         manageListsOpt = admin.manageListsMenu();
                     }
                     break;
+                /* Real Time Data */
+                case 5:
 
+                    break;
             }
             admin.parser.clear();
             optMainMenu = admin.mainMenu();
