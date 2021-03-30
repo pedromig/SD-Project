@@ -193,7 +193,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
     }
 
     public int manageElectionsMenu() {
-        String[] manageElectionsOpts = {"Create Election", "Edit Election", "Ended Elections Log"};
+        String[] manageElectionsOpts = {"Create Election", "Edit Election", "Ended Elections Log", "Person Audit"};
         return this.parser.choose("Manage Elections",manageElectionsOpts);
     }
 
@@ -513,6 +513,36 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                 }
 
                                 admin.showEndedElectionStatsMenu(server, endedElections);
+                                admin.parser.getEnter();
+                                break;
+
+                            /* Person Audit */
+                            case 4:
+                                admin.parser.header("Audit Person");
+                                while (true) {
+                                    try {
+                                        people = server.getPeople();
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if (server == null) return;
+                                    }
+                                }
+                                int personOpt = admin.choosePeopleMenu(people);
+                                Person p = people.get(personOpt - 1);
+                                while (true) {
+                                    try {
+                                        server.printElectorVotesInfo(admin, p.getIdentityCardNumber());
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println("[DEBUG]");
+                                        e.printStackTrace();
+                                        server = admin.connect();
+                                        if (server == null) return;
+                                    }
+                                }
                                 admin.parser.getEnter();
                                 break;
                         }

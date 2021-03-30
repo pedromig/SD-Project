@@ -82,6 +82,7 @@ public interface RmiServerInterface extends Remote {
 
     public CopyOnWriteArrayList<List<?>> getEditableLists() throws RemoteException;
 
+    public CopyOnWriteArrayList<Person> getPeople() throws RemoteException;
 
     public CopyOnWriteArrayList<Person> getPeopleOfType(Class<?> type) throws RemoteException;
 
@@ -97,5 +98,6 @@ public interface RmiServerInterface extends Remote {
 
     public void printVotingProcessedData(RmiAdminConsoleInterface admin, Election<?> election) throws RemoteException;
 
+    public void printElectorVotesInfo(RmiAdminConsoleInterface admin, int personID) throws RemoteException;
 
 }

@@ -39,4 +39,12 @@ public class Vote implements Serializable {
     public void setVotedListName(String votedListName) {
         this.votedListName = votedListName;
     }
+
+    public GregorianCalendar getMoment() {
+        return moment;
+    }
+
+    public int getVotingDeskID() {
+        return votingDeskID;
+    }
 }

@@ -46,7 +46,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
-    public void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException {
+    public synchronized void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException {
         //FIXME: remove iterator (i)
         int i = 0;
         for (RmiMulticastServerInterface multicastServer : this.multicastServers) {
@@ -298,6 +298,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     }
 
     @Override
+    public synchronized CopyOnWriteArrayList<Person> getPeople() throws RemoteException {
+        return this.people;
+    }
+
+    @Override
     public synchronized CopyOnWriteArrayList<Person> getPeopleOfType(Class<?> type) throws RemoteException {
         CopyOnWriteArrayList<Person> people = new CopyOnWriteArrayList<>();
         for (Person p : this.people){
@@ -389,6 +394,17 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
             }
         } else {
            admin.print("\tNo Votes available");
+        }
+    }
+
+    @Override
+    public synchronized void printElectorVotesInfo(RmiAdminConsoleInterface admin, int personID) throws RemoteException {
+        for (Election<?> e : this.elections) {
+            for (Vote v : e.getVotes()){
+                if (v.getPersonID() == personID) {
+                    admin.print(" [" + e.getName() + "]\n\tDesk: " + v.getVotingDeskID() + "\n\tTime: " + v.getMoment().getTime().toString());
+                }
+            }
         }
     }
 
