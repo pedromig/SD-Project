@@ -1,4 +1,4 @@
-package ui;
+package multicast.ui;
 
 import java.awt.Color;
 import java.awt.Font;

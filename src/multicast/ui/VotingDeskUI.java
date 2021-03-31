@@ -1,10 +1,8 @@
-package ui;
+package multicast.ui;
 import multicast.VotingDesk;
-import ui.Terminal;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class VotingDeskUI extends Terminal {
@@ -27,6 +25,7 @@ public class VotingDeskUI extends Terminal {
             }
             this.dispose();
         } else {
+            this.app.enqueueVoter(command);
             showNewLine();
         }
     }
@@ -49,24 +48,4 @@ public class VotingDeskUI extends Terminal {
 
 
     }
-
-/*        String title = "Main Menu";
-        String options[] = {"A", "B" ,"C"};
-
-        int counter = 0, maxLen = title.length();
-        for (String s : options) if (s.length() > maxLen)  maxLen = s.length();
-        String repeat = "─".repeat(2 * maxLen + title.length());
-        this.terminal.append("┌" + repeat + "┐\n");
-        this.terminal.append("│" + " ".repeat(maxLen) + title + " ".repeat(maxLen) + "│\n");
-        if (options.length != 0){
-            this.terminal.append("├" + repeat + "┤\n");
-            for (String opt : options){
-                this.terminal.append("│  " + (++counter) + "- " + opt + " ".repeat(2*maxLen + title.length() - opt.length() - 4 - ((int) Math.log10(counter) + 1) ) + "│\n");
-            }
-            this.terminal.append("├" + repeat + "┤\n");
-            this.terminal.append("|  0- Back" + " ".repeat(2*maxLen + title.length() - "Back".length() - 5) + "│\n");
-
-        }
-        this.terminal.append("└" + repeat + "┘\n");
-    }*/
 }

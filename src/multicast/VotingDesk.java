@@ -1,19 +1,24 @@
 package multicast;
 
-import ui.VotingDeskUI;
+import multicast.utils.LoggingFormatter;
+import multicast.protocol.MulticastProtocol;
+import multicast.protocol.MulticastPacket;
+import multicast.ui.VotingDeskUI;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.time.LocalDate;
-import java.util.Date;
-
-import java.util.HashMap;
-
+import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.*;
 
-public class VotingDesk extends Thread {
+public class VotingDesk {
 
+	// Globals / Defaults
 	private static final String DEFAULT_MULTICAST_VOTING_ADDRESS = "224.3.2.1";
 	private static final int DEFAULT_VOTING_MULTICAST_PORT = 6789;
 
@@ -21,170 +26,265 @@ public class VotingDesk extends Thread {
 	private static final int DEFAULT_DISCOVERY_MULTICAST_PORT = 4321;
 
 	private static final Logger LOGGER = Logger.getLogger(VotingDesk.class.getName());
-	private static final Object runningUILock = new Object();
+
+	// Attributes
+	private final String name;
+
+	private MulticastSocket statusSocket;
+	private InetAddress statusGroup;
+	private int statusPort;
+
+	private MulticastSocket votingSocket;
+	private InetAddress votingGroup;
+	private int votingPort;
+
+	private final Hashtable<String, String> terminals;
+	private final BlockingQueue<String> voters;
+	private final BlockingQueue<String> availableTerminals;
 
 	public VotingDesk(String name) {
-		super(name);
+		this.name = name;
+		this.terminals = new Hashtable<>();
+		this.voters = new LinkedBlockingQueue<>();
+		this.availableTerminals = new LinkedBlockingQueue<>();
+	}
+
+	public void enqueueVoter(String voter) {
+		this.voters.add(voter);
+		LOGGER.info("Enqueued voter with Citizen Card ID: " + voter);
 	}
 
 	private void setupLogger() {
-		SimpleFormatter formatter = new SimpleFormatter() {
-			private static final String format = "[%1$tF %1$tT][%2$s]: %3$s %n";
-
-			@Override
-			public synchronized String format(LogRecord record) {
-				return String.format(format,
-						new Date(record.getMillis()),
-						record.getLevel().getLocalizedName(),
-						record.getMessage()
-				);
-			}
-		};
-
-		LOGGER.setUseParentHandlers(false);
 		ConsoleHandler handler = new ConsoleHandler();
-		handler.setFormatter(formatter);
+		handler.setFormatter(new LoggingFormatter.ConsoleFormatter());
+		LOGGER.setUseParentHandlers(false);
 		LOGGER.addHandler(handler);
-
 		try {
 			FileHandler logFile = new FileHandler(this.getName().toLowerCase() + LocalDate.now() + ".log");
-			logFile.setFormatter(formatter);
+			logFile.setFormatter(new LoggingFormatter.FileFormatter());
 			LOGGER.addHandler(logFile);
-
+			logFile.setLevel(Level.WARNING);
 		} catch (IOException e) {
 			LOGGER.severe("Log file creation failed: " + e.getMessage());
 		}
-
 	}
 
-	@Override
-	public void run() {
-		setupLogger();
+	private void votingDeskServerStartup() {
+		try {
+			this.statusSocket = new MulticastSocket(statusPort);
+			this.votingSocket = new MulticastSocket(votingPort);
 
-		int discoveryPort = DEFAULT_DISCOVERY_MULTICAST_PORT;
-		int votingPort = DEFAULT_VOTING_MULTICAST_PORT;
+			statusSocket.joinGroup(statusGroup);
+			votingSocket.joinGroup(votingGroup);
 
-		try (MulticastSocket discovery = new MulticastSocket(discoveryPort);
-			 MulticastSocket voting = new MulticastSocket(votingPort)) {
+			LOGGER.info(this.getName() + " server running on " + statusSocket.getLocalAddress());
+			LOGGER.info(this.getName() + " joined discovery multicast group " + statusGroup.getHostName()
+						+ ", " + "port" + " " + statusPort);
+			LOGGER.info(this.getName() + " joined voting multicast group " + votingGroup.getHostName()
+						+ ", port " + votingPort);
 
-			InetAddress discoveryGroup = InetAddress.getByName(DEFAULT_MULTICAST_DISCOVERY_ADDRESS);
-			InetAddress votingGroup = InetAddress.getByName(DEFAULT_MULTICAST_VOTING_ADDRESS);
-
-			discovery.joinGroup(discoveryGroup);
-			voting.joinGroup(votingGroup);
-
-			LOGGER.info(this.getName() + " server running on " + discovery.getLocalAddress());
-			LOGGER.info(this.getName() + " joined discovery multicast group "
-					+ discoveryGroup.getHostName() + ", " + "port" + " " + discoveryPort);
-			LOGGER.info(this.getName() + " joined voting multicast group "
-					+ votingGroup.getHostName() + ", port " + votingPort);
-
-			String terminalManagerName = this.getName() + "_TerminalManager";
-			VotingDeskTerminalManager terminalManager =
-					new VotingDeskTerminalManager(terminalManagerName, discovery, discoveryGroup, discoveryPort,
-							votingGroup, votingPort);
+			String terminalManagerThread = this.getName() + "_TerminalManager";
+			VotingDeskTerminalManager terminalManager = new VotingDeskTerminalManager(terminalManagerThread);
 			LOGGER.info("Creating VotingDeskTerminalManager thread!");
 
-			String voteManagerName = this.getName() + "_VotingManager";
-			VotingDeskVoteManager voteManager
-					= new VotingDeskVoteManager(voteManagerName, voting, votingGroup, votingPort);
+			String voteManagerThread = this.getName() + "_VotingManager";
+			VotingDeskVotingManager voteManager = new VotingDeskVotingManager(voteManagerThread);
 			LOGGER.info("Creating VotingDeskVoteManager thread!");
+
+			String clientHandlerThread = this.getName() + "_ClientHandler";
+			VotingDeskClientHandler clientHandler = new VotingDeskClientHandler(clientHandlerThread, voteManagerThread);
+			LOGGER.info("Creating VotingDeskClientHandler thread!");
 
 			terminalManager.start();
 			voteManager.start();
+			clientHandler.start();
 
 			LOGGER.info("Starting VotingDesk console");
 			VotingDeskUI console = new VotingDeskUI(this);
 			console.addWindowCloseListener();
 			console.open();
 
-			synchronized (this) {
-				this.wait();
-			}
+			synchronized (this) { this.wait(); }
 
-			terminalManager.interrupt();
 			voteManager.interrupt();
+			clientHandler.interrupt();
+			terminalManager.interrupt();
 
-			voteManager.join();
+			statusSocket.leaveGroup(statusGroup);
+			votingSocket.leaveGroup(votingGroup);
 
-			discovery.leaveGroup(discoveryGroup);
-			voting.leaveGroup(votingGroup);
+			statusSocket.close();
+			votingSocket.close();
 		} catch (IOException e) {
 			LOGGER.severe(this.getName() + " Exception: " + e.getMessage());
 		} catch (InterruptedException e) {
-			LOGGER.info(this.getName() + " server session interrupted!");
+			LOGGER.severe(this.getName() + " server session interrupted!");
 		}
-
 		LOGGER.info(this.getName() + " server session terminated successfully!");
 	}
 
-	private static class VotingDeskTerminalManager extends Thread {
-		private final MulticastSocket socket;
+	public void start() {
+		setupLogger();
 
-		private final InetAddress discoveryGroup;
-		private final int discoveryPort;
+		// TODO: Read config file && setup server (including attributes)
+		try {
+			this.statusGroup = InetAddress.getByName(DEFAULT_MULTICAST_DISCOVERY_ADDRESS);
+			this.statusPort = DEFAULT_DISCOVERY_MULTICAST_PORT;
 
-		private final InetAddress votingGroup;
-		private final int votingPort;
+			this.votingGroup = InetAddress.getByName(DEFAULT_MULTICAST_VOTING_ADDRESS);
+			this.votingPort = DEFAULT_VOTING_MULTICAST_PORT;
 
-		public VotingDeskTerminalManager(String name, MulticastSocket socket, InetAddress group, int port,
-										 InetAddress votingGroup, int votingPort) {
+		} catch (UnknownHostException e) {
+			LOGGER.severe("Unknown Host Exception caught");
+		}
+
+		// TODO: Connect VotingDesk to RMI
+		votingDeskServerStartup();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	// Listen for terminals connecting && status, add them to the hashmap of existing terminals
+	private class VotingDeskTerminalManager extends Thread {
+
+		public VotingDeskTerminalManager(String name) {
 			super(name);
-			this.socket = socket;
-			this.discoveryGroup = group;
-			this.discoveryPort = port;
-			this.votingGroup = votingGroup;
-			this.votingPort = votingPort;
 		}
 
 		@Override
 		public void run() {
 			LOGGER.info(this.getName() + " thread started!");
-			try {
-				while (!this.isInterrupted()) {
-					MulticastPacket request = MulticastPacket.from(socket, this.getName());
+			while (!this.isInterrupted()) {
+				try {
+					MulticastPacket request = MulticastPacket.from(statusSocket, this.getName());
 					String requestType = request.getItem("type");
 
-					if (requestType.equals(MulticastProtocol.GREETING)) {
-						String target = request.getItem("source");
+					switch (requestType) {
 
-						MulticastPacket acknowledge = MulticastProtocol.acknowledge(this.getName(), target);
-						acknowledge.sendTo(socket, discoveryGroup, discoveryPort);
+						case MulticastProtocol.GREETING:
+							String target = request.getItem("source");
 
-						HashMap<String, String> info = new HashMap<>();
-						info.put("MULTICAST_VOTING_ADDRESS", String.valueOf(votingGroup));
-						info.put("MULTICAST_VOTING_PORT", String.valueOf(votingPort));
+							MulticastPacket acknowledge = MulticastProtocol.acknowledge(this.getName(), target);
+							acknowledge.sendTo(statusSocket, statusGroup, statusPort);
 
-						MulticastPacket reply = MulticastProtocol.itemList(this.getName(), target, info);
-						reply.sendTo(socket, discoveryGroup, discoveryPort);
-					} else if (requestType.equals(MulticastProtocol.GOODBYE)) {
-						throw new UnsupportedOperationException("Not implemented yet :)");
+							HashMap<String, String> info = new HashMap<>();
+							info.put("MULTICAST_VOTING_ADDRESS", String.valueOf(votingGroup.getHostName()));
+							info.put("MULTICAST_VOTING_PORT", String.valueOf(votingPort));
+
+							MulticastPacket reply = MulticastProtocol.itemList(this.getName(), target, info);
+							reply.sendTo(statusSocket, statusGroup, statusPort);
+
+							terminals.put(target, "EMPTY");
+							LOGGER.info("Voting terminal " + target + " connected!");
+							availableTerminals.offer(target);
+							LOGGER.info("Voting terminal " + target + " available!");
+							break;
+
+						case MulticastProtocol.GOODBYE:
+							// TODO: Handle terminal shutdown properly
+
+							LOGGER.info("Voting Terminal Disconnected");
+							break;
+
+						case MulticastProtocol.OFFER:
+							// TODO terminal available
+
+							LOGGER.info("Voting Terminal Offer");
+							break;
 					}
+				} catch (IOException e) {
+					LOGGER.info(this.getName() + " thread stopped, socket closed!");
 				}
-			} catch (IOException e) {
-				LOGGER.info(this.getName() + " thread stopped!");
 			}
 		}
 	}
 
-	private static class VotingDeskVoteManager extends Thread {
-		private final MulticastSocket socket;
-		private final InetAddress group;
-		private final int port;
+	// ABOUT: receive voting related info and send back replies according to the message received
+	private class VotingDeskVotingManager extends Thread {
 
-		public VotingDeskVoteManager(String name, MulticastSocket socket, InetAddress group, int port) {
+		public VotingDeskVotingManager(String name) {
 			super(name);
-			this.socket = socket;
-			this.group = group;
-			this.port = port;
 		}
 
 		@Override
 		public void run() {
-
 			LOGGER.info(this.getName() + " thread started!");
-			while (!this.isInterrupted()) ;
-			LOGGER.info(this.getName() + " thread stopped!");
+
+			try {
+				MulticastPacket request = MulticastPacket.from(statusSocket, this.getName());
+				String requestType = request.getItem("type");
+
+
+			} catch (IOException e) {
+				LOGGER.info(this.getName() + " thread stopped, socket closed!");
+			}
+		}
+	}
+
+	// ABOUT: Pop clients from the queue identify them and associate them with a terminal
+	// FIXME: Perhaps try to check if it is alive first and only then remove it. Going to just
+	//  remove it for now.
+	private class VotingDeskClientHandler extends Thread {
+		private static final int ACK_TIMEOUT_MS = 5000;
+
+		private final String handler;
+
+		public VotingDeskClientHandler(String name, String voterHandlerThread) {
+			super(name);
+			this.handler = voterHandlerThread;
+		}
+
+		@Override
+		public void run() {
+			LOGGER.info(this.getName() + " thread started!");
+			try (MulticastSocket ackListenerSocket = new MulticastSocket(votingPort)) {
+				ackListenerSocket.joinGroup(votingGroup);
+				ackListenerSocket.setSoTimeout(ACK_TIMEOUT_MS);
+
+				while (!this.isInterrupted()) {
+					String voter = voters.take();
+					LOGGER.info("Processing voter with Citizen Card ID: " + voter);
+
+					// TODO: identify voter in RMI server
+					boolean userExists = true;
+					LOGGER.info("Voter with Citized Card ID identified");
+
+					boolean timeoutFlag = true;
+					while (!this.isInterrupted() && userExists && timeoutFlag) {
+
+						LOGGER.info("Waiting for terminal to be available");
+						String terminal = availableTerminals.take();
+						LOGGER.info("Terminal " + terminal + " requested by voter with Citizen Card ID: " + voter);
+
+						HashMap<String, String> userItems = new HashMap<>();
+						userItems.put("id", voter);
+						userItems.put("vote-manager", handler);
+
+						MulticastPacket packet = MulticastProtocol.itemList(this.getName(), terminal, userItems);
+						packet.sendTo(votingSocket, votingGroup, votingPort);
+
+						try {
+							MulticastPacket ack = MulticastPacket.from(ackListenerSocket, this.getName());
+							if (ack.getItem("type").equals(MulticastProtocol.ACKNOWLEDGE) &&
+								ack.getItem("target").equals(this.getName())) {
+								terminals.put(terminal, voter);
+								LOGGER.info("Voter with Citizen Card ID: " + voter + " assigned to terminal: " + terminal);
+							}
+							timeoutFlag = false;
+						} catch (SocketTimeoutException e) {
+							LOGGER.warning("Terminal " + terminal + " not responding and is probably down...");
+							LOGGER.warning("Re-rooting voter with Citizen Card ID: " + voter + " to another terminal");
+							terminals.remove(terminal);
+							timeoutFlag = true;
+						}
+					}
+				}
+				ackListenerSocket.leaveGroup(votingGroup);
+			} catch (IOException | InterruptedException e) {
+				LOGGER.info(this.getName() + " thread stopped, socket closed!");
+			}
 		}
 	}
 
