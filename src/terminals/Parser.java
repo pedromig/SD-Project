@@ -1,29 +1,32 @@
 package terminals;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 /**
- *  An abstract class for an Terminal
+ *  A class for a Parser
  */
-public abstract class Terminal {
+public class Parser {
     public final static String ABORT_CODE = "QUIT";
     public final static String DATE_FORMAT = "dd/MM/yyyy";
-    public final static String TIME_FORMAT = "HH:mm";
+    public final static String DATE_TIME_FORMAT = "dd/MM/yyyy HH:mm";
     protected Scanner sc;
-    protected SimpleDateFormat sdf, stf;
+    protected SimpleDateFormat sdf, sdtf;
 
     /**
      *  Builder
      */
-    public Terminal(){
+    public Parser() {
         this.sc = new Scanner(System.in);
-        this.sdf = new SimpleDateFormat(DATE_FORMAT);
-        sdf.setLenient(false);
-        this.stf = new SimpleDateFormat(TIME_FORMAT);
-        stf.setLenient(false);
+    }
+
+    /**
+     * A function to wait for an ENTER from user
+     */
+    public void getEnter() {
+        System.out.println("Press ENTER to continue");
+        sc.nextLine();
     }
 
     /**
@@ -32,7 +35,7 @@ public abstract class Terminal {
      * @param options [Optional] Options for the user to choose
      * @return This Terminal
      */
-    private Terminal launchUI(String title, String[] options) {
+    private Parser launchUI(String title, String[] options) {
         int counter = 0, maxLen = title.length();
         for (String s : options) if (s.length() > maxLen)  maxLen = s.length();
         String repeat = "─".repeat(2 * maxLen + title.length());
@@ -56,7 +59,7 @@ public abstract class Terminal {
      * @param title String with the menu Title (header)
      * @return This Terminal
      */
-    public Terminal header(String title){
+    public Parser header(String title){
         return this.launchUI(title, new String[]{});
     }
 
@@ -163,6 +166,8 @@ public abstract class Terminal {
      */
     public GregorianCalendar parseDate(String label, boolean abortFlag) {
         String input;
+        this.sdf = new SimpleDateFormat(DATE_FORMAT);
+        sdf.setLenient(false);
         if(!abortFlag) {
             while (true) {
                 try {
@@ -189,20 +194,22 @@ public abstract class Terminal {
      * @param abortFlag boolean that indicates if this procedure should be aborted
      * @return The User inputted Date or null if the abortCode is entered
      */
-    public Date parseTime(String label, boolean abortFlag) {
+    public GregorianCalendar parseDateTime(String label, boolean abortFlag) {
         String input;
+        this.sdtf = new SimpleDateFormat(DATE_TIME_FORMAT);
+        sdtf.setLenient(false);
         if(!abortFlag) {
             while (true) {
                 try {
-                    System.out.print(label + " [HH:mm]: ");
+                    System.out.print(label + " [dd/MM/yyyy HH:mm]: ");
                     input = sc.nextLine();
 
                     if (input.equals(ABORT_CODE)) {
                         System.out.println("Aborting...");
                         return null;
                     }
-                    stf.parse(input);
-                    return stf.getCalendar().getTime();
+                    sdtf.parse(input);
+                    return (GregorianCalendar) sdtf.getCalendar();
                 } catch (Exception e) {
                     System.out.println("Invalid " + label + "!");
                 }
@@ -216,7 +223,7 @@ public abstract class Terminal {
      * #FIXME might be system dependent!
      * @return This Terminal
      */
-    public Terminal clear(){
+    public Parser clear(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
         return this;

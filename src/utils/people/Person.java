@@ -5,7 +5,7 @@ import java.util.GregorianCalendar;
 
 public abstract class Person implements Serializable {
     private int phoneNumber, identityCardNumber;
-    private boolean inList;
+    private String list;
     private String name, password, address, faculty, department;
     private GregorianCalendar identityCardExpiryDate;
 
@@ -18,22 +18,32 @@ public abstract class Person implements Serializable {
         this.faculty = faculty;
         this.department = department;
         this.identityCardExpiryDate = identityCardExpiryDate;
-        this.inList = false;
+        this.list = null;
     }
 
-    public void setInList(boolean inList) {
-        this.inList = inList;
+    public abstract Class<?> getType();
+
+    public void setList(String list) {
+        this.list = list;
+    }
+
+    public String getList() {
+        return this.list;
     }
 
     public String getName() {
-        return name;
+        return this.name;
+    }
+
+    public int getIdentityCardNumber() {
+        return this.identityCardNumber;
     }
 
     @Override
     public String toString() {
-        return  "    Name: "    + this.name        +
-                "\tFaculty: "   + this.faculty     +
-                "\tDept: "      + this.department;
+        return  "    Name: "    + this.name                 +
+                "\tID: "        + this.identityCardNumber   +
+                "\tList: "      + this.list;
     }
 
 }

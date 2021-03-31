@@ -12,17 +12,12 @@ public class StudentElection extends Election<Student> {
     }
 
     @Override
-    public void vote(Student p) {
-
-    }
-
-    @Override
     public Class<Student> getType() {
         return Student.class;
     }
 
     @Override
     public String toString() {
-        return " - Student Election " + super.toString();
+        return " - Student Election" + super.toString();
     }
 }

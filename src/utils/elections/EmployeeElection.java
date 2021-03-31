@@ -11,17 +11,12 @@ public class EmployeeElection extends Election<Employee> {
     }
 
     @Override
-    public void vote(Employee p) {
-
-    }
-
-    @Override
     public Class<Employee> getType() {
         return Employee.class;
     }
 
     @Override
     public String toString() {
-        return " - Employee Election " + super.toString();
+        return " - Employee Election" + super.toString();
     }
 }
