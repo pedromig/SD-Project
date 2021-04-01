@@ -397,7 +397,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     public synchronized void vote(String electionName, Vote vote) throws RemoteException {
         Election<?> election = this.getElection(electionName);
         if (this.compareDates(new GregorianCalendar(), election.getEndDate()) && !this.hasVoted(electionName, vote.getPersonID())) {
-            election.getVotes().add(vote);
+            election.addVote(vote);
             this.saveElections();
             for (RmiAdminConsoleInterface admin : this.adminConsoles){
                 try {
