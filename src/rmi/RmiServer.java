@@ -266,7 +266,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     @Override
     public synchronized CopyOnWriteArrayList<Election<?>> getRunningElections() throws RemoteException {
         CopyOnWriteArrayList<Election<?>> running = new CopyOnWriteArrayList<>();
-        for (Election<?> e : this.elections ) {
+        for (Election<?> e : this.elections) {
             if (this.compareDates(e.getStartDate(), new GregorianCalendar()) &&
                 this.compareDates(new GregorianCalendar(), e.getEndDate())){
                 running.add(e);
@@ -377,7 +377,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     @Override
     public synchronized void vote(String electionName, Vote vote) throws RemoteException {
         Election<?> election = this.getElection(electionName);
-        if (!this.hasVoted(electionName, vote.getPersonID())) {
+        if (this.compareDates(new GregorianCalendar(), election.getEndDate()) && !this.hasVoted(electionName, vote.getPersonID())) {
             election.getVotes().add(vote);
             this.saveElections();
             for (RmiAdminConsoleInterface admin : this.adminConsoles){
