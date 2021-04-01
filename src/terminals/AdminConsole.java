@@ -198,7 +198,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
     }
 
     public int editElectionsMenu() {
-        String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date", "Restraint Faculty", "Restraint Department"};
+        String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date"};
         return this.parser.choose("Edit Options", opts);
     }
 
@@ -449,42 +449,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         while (true) {
                                             try {
                                                 server.editElectionEndDate(election.getName(), newDate);
-                                                break;
-                                            } catch (Exception e) {
-                                                System.out.println("[DEBUG]");
-                                                e.printStackTrace();
-                                                server = admin.connect();
-                                                if (server == null) return;
-                                            }
-                                        }
-                                        break;
-
-                                    /* Edit Faculty */
-                                    case 5:
-                                        System.out.println("Enter \"" + Election.NO_RESTRAINT + "\" to remove any faculty restraint.");
-                                        editString = admin.parser.parseString("Faculty", false);
-                                        if (editString == null) break;
-                                        while (true) {
-                                            try {
-                                                server.editElectionFaculty(election.getName(), editString);
-                                                break;
-                                            } catch (Exception e) {
-                                                System.out.println("[DEBUG]");
-                                                e.printStackTrace();
-                                                server = admin.connect();
-                                                if (server == null) return;
-                                            }
-                                        }
-                                        break;
-
-                                    /* Edit Department */
-                                    case 6:
-                                        System.out.println("Enter \"" + Election.NO_RESTRAINT + "\" to remove any department restraint.");
-                                        editString = admin.parser.parseString("Faculty", false);
-                                        if (editString == null) break;
-                                        while (true) {
-                                            try {
-                                                server.editElectionDepartment(election.getName(), editString);
                                                 break;
                                             } catch (Exception e) {
                                                 System.out.println("[DEBUG]");

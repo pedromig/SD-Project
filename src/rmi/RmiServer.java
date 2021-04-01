@@ -18,6 +18,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -26,6 +27,55 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
             electionsPath = "../../../database/elections.obj",
             peoplePath = "../../../database/people.obj",
             listsPath = "../../../database/lists.obj";
+
+    private static final String[] UC_DEPARTMENTS = new String[]{
+            /* Faculdade de Letras */
+
+            "DFCI",             // Departamento de Filosofia, Comunicação e Informação
+            "DEPGEOTUR",        // Departamento de Geografia e Turismo
+            "DHEEAA",           // Departamento de História, Estudos Europeus, Arqueologia e Artes
+            "DLLC",             // Departamento de Linguas, Literaturas e Culturas
+
+            /* Faculdade de Direito */
+
+            "FD",               // Faculdade de Direito (itself)
+
+            /* Faculdade de Medicina */
+
+            "FM - Polo I",      // Faculdade de Medicina (polo 1) (itself)
+            "FM - Polo II",     // Faculdade de Medicina (polo 2) (itself)
+
+            /* Faculdade de Ciências e Tecnologias */
+
+            "DARQ",             // Departamento de Arquitetura
+            "DCT",              // Departamento de Ciências da Terra
+            "DCV",              // Departamento de Ciências da VIda
+            "DEC",              // Departamento de Engenharia Civil
+            "DEEC",             // Departamento de Engenharia Eletrotécnica e de Computadores
+            "DEI",              // Departamento de Engenharia Informática
+            "DEM",              // Departamento de Engenharia Mecânica
+            "DEQ",              // Departamento de Engenharia Química
+            "DF",               // Departamento de Física
+            "DM",               // Departamento de Matemática
+            "DQ",               // Departamento de Química
+
+            /* Faculdade de Farmácia */
+
+            "FF",               // Faculdade de Farmácia (itself)
+
+            /* Faculdade de Economia */
+
+            "FE",               // Faculdade de Economia (itself)
+
+            /* Faculdade de Psicologia e Ciências da Educação */
+
+            "FPCE",             // Faculdade de Psicologia e Ciências da Educação (itself)
+
+            /* Faculdade de Ciências do Desporto e Educação Física */
+
+            "FCDEF"             // Faculdade de Ciências do Desporto e Educação Física (itself)
+
+    };
 
     private CopyOnWriteArrayList<Election<? extends Person>> elections;
     private CopyOnWriteArrayList<List<? extends Person>> lists;
@@ -70,6 +120,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
         client.print("\nPeople: ");
         for (Person p : this.people) client.print(p.toString());
         client.print("\n*************************************************************************");
+    }
+
+    @Override
+    public String[] getDepartments() throws RemoteException {
+        return UC_DEPARTMENTS;
     }
 
     @Override
@@ -138,24 +193,6 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
         if (this.compareDates(new GregorianCalendar(), election.getStartDate()) &&
          this.compareDates(election.getStartDate(), newDate)){
             election.setEndDate(newDate);
-            this.saveElections();
-        }
-    }
-
-    @Override
-    public synchronized void editElectionFaculty(String electionName, String newFaculty) throws RemoteException {
-        Election<?> election = this.getElection(electionName);
-        if (this.compareDates(new GregorianCalendar(), election.getStartDate())) {
-            election.setFaculty(newFaculty);
-            this.saveElections();
-        }
-    }
-
-    @Override
-    public synchronized void editElectionDepartment(String electionName, String newDepartment) throws RemoteException {
-        Election<?> election = this.getElection(electionName);
-        if (this.compareDates(new GregorianCalendar(), election.getStartDate())) {
-            election.setDepartment(newDepartment);
             this.saveElections();
         }
     }
