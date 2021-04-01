@@ -97,7 +97,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 
     @Override
     public synchronized void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException {
-        //FIXME: remove iterator (i)
+        //FIXME: remove iterator (i) and swap by respective multicast server department name
         int i = 0;
         for (RmiMulticastServerInterface multicastServer : this.multicastServers) {
             try {
@@ -158,12 +158,13 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
         Election<?> election = this.getElection(electionName);
         if (this.getElection(newName) == null && this.compareDates(new GregorianCalendar(), election.getStartDate())){
             election.setName(newName);
+            this.saveElections();
             for (List<?> l : this.lists){
                 if (l.getElectionName() != null && l.getElectionName().equals(electionName)){
                     l.setElectionName(newName);
-                    this.saveElections();
                 }
             }
+            this.saveLists();
         }
     }
 
@@ -193,6 +194,24 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
         if (this.compareDates(new GregorianCalendar(), election.getStartDate()) &&
          this.compareDates(election.getStartDate(), newDate)){
             election.setEndDate(newDate);
+            this.saveElections();
+        }
+    }
+
+    @Override
+    public synchronized void addDepartment(String electionName, String departmentName) throws RemoteException {
+        Election<?> election = this.getElection(electionName);
+        if (!election.getDepartments().contains(departmentName)) {
+            election.getDepartments().add(departmentName);
+            this.saveElections();
+        }
+    }
+
+    @Override
+    public synchronized void removeDepartment(String electionName, String departmentName) throws RemoteException {
+        Election<?> election = this.getElection(electionName);
+        if (election.getDepartments().contains(departmentName)) {
+            election.getDepartments().remove(departmentName);
             this.saveElections();
         }
     }

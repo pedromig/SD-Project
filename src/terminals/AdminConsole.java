@@ -198,8 +198,18 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
     }
 
     public int editElectionsMenu() {
-        String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date"};
+        String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date", "Add Department", "Remove Department"};
         return this.parser.choose("Edit Options", opts);
+    }
+
+    public String[] addDepartmentMenu(Election<?> election, String[] departments) {
+        ArrayList<String> selectableDepartments = new ArrayList<>();
+        for (String deptName : departments) {
+            if (!election.getDepartments().contains(deptName)){
+                selectableDepartments.add(deptName);
+            }
+        }
+        return selectableDepartments.toArray(new String[0]);
     }
 
     public void showEndedElectionStatsMenu(RmiServerInterface server, CopyOnWriteArrayList<Election<?>> endedElections) {
@@ -288,6 +298,8 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
 
     public static void main(String[] args) {
         int optElection, optList, optPeople;
+        String deptName;
+        String[] departments;
         Election<?> selectedElection;
         CopyOnWriteArrayList<Election<?>> futureElections, runningElections;
         CopyOnWriteArrayList<List<?>> lists;
@@ -458,6 +470,61 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                             }
                                         }
                                         break;
+
+                                    /* Add Department */
+                                    case 5:
+
+                                        while (true) {
+                                            try {
+                                                departments = server.getDepartments();
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect();
+                                                if (server == null) return;
+                                            }
+                                        }
+                                        departments = admin.addDepartmentMenu(election, departments);
+
+                                        admin.parser.clear();
+                                        admin.parser.header("Add Department");
+                                        int addDeptOpt = admin.parser.choose("Choose a Department", departments);
+                                        if (addDeptOpt == 0) break;
+
+                                        while (true) {
+                                            try {
+                                                server.addDepartment(election.getName(), departments[addDeptOpt - 1]);
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect();
+                                                if (server == null) return;
+                                            }
+                                        }
+                                        break;
+
+                                    /* Remove Department */
+                                    case 6:
+                                        admin.parser.clear();
+                                        admin.parser.header("Remove Department");
+                                        int removeDeptOpt = admin.parser.choose("Choose a Department", election.getDepartments().toArray(new String[0]));
+                                        if (removeDeptOpt == 0) break;
+
+                                        while (true) {
+                                            try {
+                                                server.removeDepartment(election.getName(), election.getDepartments().get(removeDeptOpt - 1));
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect();
+                                                if (server == null) return;
+                                            }
+                                        }
+
+                                        break;
                                 }
                                 break;
                             /* Past Election Log */
@@ -495,6 +562,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                     }
                                 }
                                 int personOpt = admin.choosePeopleMenu(people);
+                                if (personOpt == 0) break;
                                 Person p = people.get(personOpt - 1);
                                 while (true) {
                                     try {

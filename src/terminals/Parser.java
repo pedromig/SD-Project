@@ -35,7 +35,7 @@ public class Parser {
      * @param options [Optional] Options for the user to choose
      * @return This Terminal
      */
-    private Parser launchUI(String title, String[] options) {
+    private Parser launchUI(String title, String[] options, boolean header) {
         int counter = 0, maxLen = title.length();
         for (String s : options) if (s.length() > maxLen)  maxLen = s.length();
         String repeat = "─".repeat(2 * maxLen + title.length());
@@ -46,9 +46,10 @@ public class Parser {
             for (String opt : options){
                 System.out.println("│  " + (++counter) + "- " + opt + " ".repeat(2*maxLen + title.length() - opt.length() - 4 - ((int) Math.log10(counter) + 1) ) + "│");
             }
+        }
+        if (!header) {
             System.out.println("├" + repeat + "┤");
             System.out.println("|  0- Back" + " ".repeat(2*maxLen + title.length() - "Back".length() - 5) + "│");
-
         }
         System.out.println("└" + repeat + "┘");
         return this;
@@ -60,7 +61,7 @@ public class Parser {
      * @return This Terminal
      */
     public Parser header(String title){
-        return this.launchUI(title, new String[]{});
+        return this.launchUI(title, new String[]{}, true);
     }
 
     /**
@@ -70,7 +71,7 @@ public class Parser {
      * @return An int of the option selected
      */
     public int choose(String title, String[] options){
-        return this.launchUI(title, options).getOption(options.length);
+        return this.launchUI(title, options, false).getOption(options.length);
     }
 
     /**

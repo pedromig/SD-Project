@@ -23,6 +23,10 @@ public abstract class Election<T extends Person> implements Serializable {
 
     public abstract Class<T> getType();
 
+    public CopyOnWriteArrayList<String> getDepartments() {
+        return this.departments;
+    }
+
     public CopyOnWriteArrayList<Vote> getVotes() {
         return this.votes;
     }
