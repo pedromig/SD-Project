@@ -23,11 +23,18 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * An implementation of an Administrator Console
+ */
 public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsoleInterface, Serializable {
-    protected Parser parser;
     protected boolean realTimeDesks;
     protected String realTimeElectionName;
+    protected Parser parser;
 
+    /**
+     * Builder
+     * @throws RemoteException
+     */
     public AdminConsole() throws RemoteException {
         super();
         this.parser = new Parser();
@@ -298,7 +305,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
 
     public static void main(String[] args) {
         int optElection, optList, optPeople;
-        String deptName;
         String[] departments;
         Election<?> selectedElection;
         CopyOnWriteArrayList<Election<?>> futureElections, runningElections;
