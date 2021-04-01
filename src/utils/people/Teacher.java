@@ -2,6 +2,9 @@ package utils.people;
 
 import java.util.GregorianCalendar;
 
+/**
+ * A class for a Teacher
+ */
 public class Teacher extends Person {
 
     /**
@@ -21,7 +24,7 @@ public class Teacher extends Person {
 
     /**
      * The getType implementation of the super Class
-     * @return Teacher's class type
+     * @return Teacher class type
      */
     @Override
     public Class<Teacher> getType() {

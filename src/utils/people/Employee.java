@@ -3,7 +3,7 @@ package utils.people;
 import java.util.GregorianCalendar;
 
 /**
- * A class for the Employee type Person
+ * A class for a Employee
  */
 public class Employee extends Person {
 
@@ -24,7 +24,7 @@ public class Employee extends Person {
 
     /**
      * The getType implementation of the super Class
-     * @return Employee's class type
+     * @return Employee class type
      */
     @Override
     public Class<Employee> getType() {

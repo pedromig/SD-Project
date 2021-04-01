@@ -44,7 +44,7 @@ public abstract class Person implements Serializable {
 
     /**
      * Setter for the list attribute
-     * @param list The replace value
+     * @param list The new list value
      */
     public void setList(String list) {
         this.list = list;
