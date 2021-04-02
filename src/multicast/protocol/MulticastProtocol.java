@@ -11,13 +11,15 @@ public interface MulticastProtocol {
 	String VOTE = "VOTE";
 	String OFFER = "OFFER";
 	String STATUS = "STATUS";
+	String LOGIN = "LOGIN";
+	String READY = "READY";
 
 	// PROTOCOL HEADER
 
 	static MulticastPacket header(String source, String type) {
 		MulticastPacket packet = new MulticastPacket();
-		packet.addItem("type", type);
-		packet.addItem("source", source);
+		packet.put("type", type);
+		packet.put("source", source);
 		return packet;
 	}
 
@@ -25,13 +27,15 @@ public interface MulticastProtocol {
 
 	static MulticastPacket vote(String source, String option) {
 		MulticastPacket packet = MulticastProtocol.header(source, VOTE);
-		packet.addItem("option", option);
+		packet.put("option", option);
 		return packet;
 	}
 
 	static MulticastPacket greeting(String source) {
 		return MulticastProtocol.header(source, GREETING);
 	}
+
+	static MulticastPacket ready(String source) {return MulticastProtocol.header(source, READY);}
 
 	static MulticastPacket bye(String source) {
 		return MulticastProtocol.header(source, GOODBYE);
@@ -45,24 +49,32 @@ public interface MulticastProtocol {
 
 	static <K, V> MulticastPacket itemList(String source, String target, HashMap<K, V> items) {
 		MulticastPacket packet = MulticastProtocol.header(source, LIST);
-		packet.addItem("target", target);
-		packet.addItem("ITEM_COUNT", String.valueOf(items.size()));
+		packet.put("target", target);
+		packet.put("ITEM_COUNT", String.valueOf(items.size()));
 		for (K key : items.keySet()) {
-			packet.addItem(key.toString(), items.get(key).toString());
+			packet.put(key.toString(), items.get(key).toString());
 		}
+		return packet;
+	}
+
+	static MulticastPacket login(String source, String target, String userID, String pass){
+		MulticastPacket packet = MulticastProtocol.header(source, LOGIN);
+		packet.put("target", target);
+		packet.put("id", userID);
+		packet.put("password", pass);
 		return packet;
 	}
 
 	static MulticastPacket status(String source, String target, String status) {
 		MulticastPacket packet = MulticastProtocol.header(source, STATUS);
-		packet.addItem("target", target);
-		packet.addItem("status", status);
+		packet.put("target", target);
+		packet.put("status", status);
 		return packet;
 	}
 
 	static MulticastPacket acknowledge(String source, String target) {
 		MulticastPacket packet = MulticastProtocol.header(source, ACKNOWLEDGE);
-		packet.addItem("target", target);
+		packet.put("target", target);
 		return packet;
 	}
 

@@ -7,14 +7,12 @@ import java.net.MulticastSocket;
 import java.util.HashMap;
 
 public class MulticastPacket {
-	private static final int PACKET_SIZE = 1000;
+	private static final int PACKET_SIZE = 5000;
 
 	private final HashMap<String, String> items;
-	private boolean isComplete;
 
 	public MulticastPacket() {
 		this.items = new HashMap<>();
-		this.isComplete = false;
 	}
 
 	public static MulticastPacket from(MulticastSocket socket, String self) throws IOException {
@@ -25,13 +23,7 @@ public class MulticastPacket {
 			socket.receive(datagram);
 
 			packet = MulticastPacket.parse(datagram);
-			while (!packet.isComplete) {
-				System.out.println("here");
-				MulticastPacket concat = MulticastPacket.from(socket, self);
-				packet.items.putAll(concat.items);
-			}
-			packet.isComplete = true;
-		} while (packet.getItem("source").equals(self));
+		} while (packet.get("source").equals(self));
 		return packet;
 	}
 
@@ -39,29 +31,31 @@ public class MulticastPacket {
 		MulticastPacket packet = new MulticastPacket();
 		String data = new String(datagramPacket.getData());
 
-		if (data.lastIndexOf('\n') != -1)
-			packet.isComplete = true;
-
 		String[] tokens = data.trim().split("(\\W?;\\W?)");
 		for (String token : tokens) {
 			String[] pair = token.split("(\\W?\\|\\W?)");
-			packet.addItem(pair[0], pair[1]);
+			packet.put(pair[0], pair[1]);
 		}
 		return packet;
 	}
 
 	public void sendTo(MulticastSocket socket, InetAddress address, int port) throws IOException {
 		byte[] data = this.getPacketBytes();
+		assert(data.length <= PACKET_SIZE) : "Packet size may not exceed " + PACKET_SIZE + " bytes!!";
 		DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
 		socket.send(packet);
 	}
 
-	public void addItem(String key, String value) {
+	public void put(String key, String value) {
 		this.items.put(key, value);
 	}
 
-	public String getItem(String key) {
+	public String get(String key) {
 		return items.get(key);
+	}
+
+	public HashMap<String, String> getItems() {
+		return items;
 	}
 
 	private byte[] getPacketBytes() {

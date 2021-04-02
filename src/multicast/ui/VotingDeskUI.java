@@ -9,14 +9,12 @@ public class VotingDeskUI extends Terminal {
     private final VotingDesk app;
 
     public VotingDeskUI(VotingDesk app) {
-        super(app.getName());
+        super("VotingDesk@" + app.getName());
         this.app = app;
-
     }
 
     @Override
     public void execute(String command) {
-        System.out.println("Command: " + command);
         if (command.equals("clear")) {
             terminal.setText("");
         } else if (command.equals("exit")) {

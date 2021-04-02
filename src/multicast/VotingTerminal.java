@@ -3,18 +3,33 @@ package multicast;
 import multicast.protocol.MulticastProtocol;
 import multicast.protocol.MulticastPacket;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
-import java.util.HashMap;
+import java.util.Properties;
+import java.util.Scanner;
+import java.util.concurrent.*;
 
 public class VotingTerminal implements MulticastProtocol {
 
-	private static final String DEFAULT_MULTICAST_DISCOVERY_ADDRESS = "224.3.2.2";
-	private static final int DEFAULT_DISCOVERY_MULTICAST_PORT = 4321;
+	// Globals / Defaults
+	private static final String DEFAULT_MULTICAST_CLIENT_NAME =
+			"VT-" + VotingTerminal.class.hashCode();
 
-	private final String name;
+	private static final String DEFAULT_MULTICAST_DISCOVERY_ADDRESS = "224.3.2.1";
+	private static final String DEFAULT_DISCOVERY_MULTICAST_PORT = "6789";
+
+	private static final int MAX_PASSWORD_ATTEMPTS = 3;
+	private static final int VOTING_TIMEOUT_MS = 120000;
+	private static final int AUTH_TIMEOUT_MS = 60000;
+
+	private final String config;
+
+	// Attributes
+	private String name;
 
 	private MulticastSocket statusSocket;
 	private InetAddress statusGroup;
@@ -24,29 +39,92 @@ public class VotingTerminal implements MulticastProtocol {
 	private InetAddress votingGroup;
 	private int votingPort;
 
-	public VotingTerminal(String name) {
-		this.name = name;
+	public VotingTerminal(String configPath) {
+		this.config = configPath;
+	}
+
+	public static void main(String[] args) {
+		if (args.length != 1) {
+			System.out.println("Usage: java " + VotingTerminal.class.getName() + " {PROPERTIES_FILE}");
+			return;
+		}
+		VotingTerminal terminal = new VotingTerminal(args[0]);
+		terminal.start();
+	}
+
+	public Properties readPropertiesFile(String path) {
+		Properties config = new Properties();
+		try (InputStream is = new FileInputStream(path)) {
+			config.load(is);
+		} catch (IOException e) {
+			System.err.println("Could not read configurations file: " + e.getMessage());
+			System.err.println("Running server with default configs");
+		}
+		return config;
 	}
 
 	public void start() {
 
-		// TODO: parsing and client setup;
+		Properties configs = readPropertiesFile(this.config);
+		this.name = (String) configs.getOrDefault(
+				"terminal.id",
+				DEFAULT_MULTICAST_CLIENT_NAME
+		);
+
 		try {
-			this.statusGroup = InetAddress.getByName(DEFAULT_MULTICAST_DISCOVERY_ADDRESS);
-			this.statusPort = DEFAULT_DISCOVERY_MULTICAST_PORT;
+			this.statusGroup = InetAddress.getByName(
+					(String) configs.getOrDefault(
+							"multicast.discovery.group",
+							DEFAULT_MULTICAST_DISCOVERY_ADDRESS
+					)
+			);
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			System.err.println("Unknown Host: " + e.getMessage());
 		}
 
-		connectToVotingDesk();
-		votingService();
+		this.statusPort = Integer.parseInt((String) configs.getOrDefault(
+				"multicast.discovery.port",
+				DEFAULT_DISCOVERY_MULTICAST_PORT
+				)
+		);
+
+		// TODO: Listener service to automatically connect if server is on
+
+		MulticastPacket connection;
+		if ((connection = connectToVotingDesk()) != null) {
+			try (Scanner sc = new Scanner(System.in)) {
+
+				// Handle client crash (reconnect)
+				if (Integer.parseInt(connection.get("ITEM_COUNT")) > 2) {
+					System.err.println("Hello " + connection.get("username") + " ready to vote?");
+					registerVote(sc, connection.get("id"), connection.get("vote-manager"));
+				}
+
+				System.out.print("\033[H\033[2J");
+				System.out.flush();
+
+				votingService(sc);
+
+			} catch (IOException e) {
+				System.out.println("Exception: " + e.getMessage());
+			} catch (TimeoutException e) {
+				System.out.println("\nVoting Timeout");
+				// TODO: Handle server response on TIMEOUT
+				try {
+					Thread.sleep(2000); // TODO: Take this out
+				} catch (InterruptedException interruptedException) {
+					interruptedException.printStackTrace();
+				}
+			}
+		}
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	private void connectToVotingDesk() {
+	private MulticastPacket connectToVotingDesk() {
+		MulticastPacket infoList = null;
 		try {
 			this.statusSocket = new MulticastSocket(this.statusPort);
 			this.statusSocket.joinGroup(this.statusGroup);
@@ -55,52 +133,130 @@ public class VotingTerminal implements MulticastProtocol {
 			greeting.sendTo(statusSocket, statusGroup, statusPort);
 
 			MulticastPacket reply = MulticastPacket.from(this.statusSocket, this.getName());
-			if (reply.getItem("type").equals(MulticastProtocol.ACKNOWLEDGE) &&
-				reply.getItem("target").equals(this.getName())) {
+			if (reply.get("type").equals(MulticastProtocol.ACKNOWLEDGE) &&
+				reply.get("target").equals(this.getName())) {
 
-				MulticastPacket infoList = MulticastPacket.from(this.statusSocket, this.getName());
-				this.votingGroup = InetAddress.getByName(infoList.getItem("MULTICAST_VOTING_ADDRESS"));
-				this.votingPort = Integer.parseInt(infoList.getItem("MULTICAST_VOTING_PORT"));
+				infoList = MulticastPacket.from(this.statusSocket, this.getName());
+				this.votingGroup = InetAddress.getByName(infoList.get("MULTICAST_VOTING_ADDRESS"));
+				this.votingPort = Integer.parseInt(infoList.get("MULTICAST_VOTING_PORT"));
 
 				this.votingSocket = new MulticastSocket(votingPort);
 				this.votingSocket.joinGroup(votingGroup);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Exception: " + e.getMessage());
 		}
+		return infoList;
 	}
 
+	private void votingService(Scanner sc) throws IOException {
 
-	private void votingService() {
-		try {
+		MulticastPacket ready = MulticastProtocol.ready(this.getName());
+		ready.sendTo(statusSocket, statusGroup, statusPort);
+
+		while (true) {
+			System.out.println(this.getName() + " Blocked and Waiting!");
+
 			MulticastPacket voter = MulticastPacket.from(votingSocket, this.getName());
-			String requestSource = voter.getItem("source");
-			String voterID = voter.getItem("id");
-			String voteRecipient = voter.getItem("vote-manager");
+			String requestSource = voter.get("source");
+			String voterID = voter.get("id");
+			String username = voter.get("username");
+			String voteRecipient = voter.get("vote-manager");
 
 			MulticastPacket acknowledge = MulticastProtocol.acknowledge(this.getName(), requestSource);
 			acknowledge.sendTo(votingSocket, votingGroup, votingPort);
 
-			System.out.println("Hello " + voterID + " ready to vote?");
-			String username = "hello", password = "world";
+			try {
+				System.err.println("Hello " + username + " ready to vote?");
+				registerVote(sc, voterID, voteRecipient);
 
-			HashMap<String, String> userAuthInfo = new HashMap<>();
-			userAuthInfo.put("username", username);
-			userAuthInfo.put("password", password);
+				System.out.print("\033[H\033[2J");
+				System.out.flush();
 
-			MulticastPacket auth = MulticastProtocol.itemList(this.getName(), voteRecipient, userAuthInfo);
-			auth.sendTo(votingSocket, votingGroup, votingPort);
+			} catch (TimeoutException e) {
+				System.out.println("Voting Timeout");
+				try {
+					Thread.sleep(2000); // TODO: Take this out
+				} catch (InterruptedException interruptedException) {
+					interruptedException.printStackTrace();
+				}
+			}
 
 			MulticastPacket packet = MulticastProtocol.offer(this.getName());
 			packet.sendTo(statusSocket, statusGroup, statusPort);
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
-	public static void main(String[] args) {
-		VotingTerminal terminal = new VotingTerminal(args[0]);
-		terminal.start();
+	private void registerVote(Scanner sc, String voterID, String voteRecipient) throws TimeoutException {
+		try {
+			String option = null;
+			if (authenticateVoter(sc, voterID, voteRecipient)) {
+				votingForm();
+				System.out.println("You have " + VOTING_TIMEOUT_MS / 1000 + " seconds to vote!");
+
+				while (option == null || option.length() == 0) {
+					FutureTask<String> task = new FutureTask<>(sc::nextLine);
+					new Thread(task).start();
+					System.out.print("Option: ");
+					option = task.get(VOTING_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+				}
+
+				MulticastPacket vote = MulticastProtocol.vote(this.getName(), option);
+				vote.sendTo(votingSocket, votingGroup, votingPort);
+
+				MulticastPacket confirmation = MulticastPacket.from(votingSocket, this.getName());
+				System.out.println("Done!! " + confirmation);
+
+			}
+		} catch (InterruptedException | ExecutionException | IOException e) {
+			System.err.println("Exception: " + e.getMessage());
+		}
 	}
+
+	private boolean authenticateVoter(Scanner sc, String voterID, String voteRecipient) throws TimeoutException {
+		int attempts = MAX_PASSWORD_ATTEMPTS;
+
+		MulticastPacket authStatus;
+		try {
+			System.out.println("You have " + AUTH_TIMEOUT_MS / 1000 + " seconds to authenticate!");
+			do {
+				String password = null;
+				while (password == null || password.length() == 0) {
+					System.out.print("Password: ");
+					FutureTask<String> task = new FutureTask<>(sc::nextLine);
+					new Thread(task).start();
+					password = task.get(AUTH_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+				}
+				MulticastPacket auth = MulticastProtocol.login(this.getName(), voteRecipient, voterID, password);
+				auth.sendTo(votingSocket, votingGroup, votingPort);
+
+				authStatus = MulticastPacket.from(votingSocket, this.getName());
+			} while (!authStatus.get("status").equals("logged-in") && attempts-- != 0);
+
+			if (attempts == 0)
+				System.err.println("Failed after 3 attempts, blocking terminal");
+		} catch (IOException | InterruptedException | ExecutionException e) {
+			System.err.println("Exception: " + e.getMessage());
+		}
+		return attempts != 0;
+	}
+
+	private void votingForm() {
+		try {
+			// TODO: Select election / Show lists;
+			MulticastPacket lists = MulticastPacket.from(votingSocket, this.getName());
+			System.out.println("############ VOTING FORM ###########");
+			for (String key : lists.getItems().keySet()) {
+				if (!key.matches("target|source|type|ITEM_COUNT")) {
+					System.out.println(key + " - " + lists.get(key));
+				}
+			}
+			System.out.println("####################################");
+		} catch (IOException e) {
+			System.err.println("Exception: " + e.getMessage());
+		}
+	}
+
+
 }
 
