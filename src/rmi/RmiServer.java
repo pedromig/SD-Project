@@ -12,7 +12,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -535,7 +537,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
     /* ################################################################################# */
 
     public static void main(String[] args) {
-        RmiServerInterface server;
+        RmiServerInterface server = null;
         /* Failover */
         try {
             server = (RmiServerInterface) Naming.lookup("RmiServer");
@@ -549,6 +551,16 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
             System.out.println("Starting Server");
         } catch (Exception e) {
             System.out.println("Exception @ RmiServer.main.failover");
+        }
+
+        /* STONITH */
+        try {
+            System.out.println("Trying to remove:");
+            System.out.println(server);
+            Naming.unbind("RmiServer");
+            System.out.println("STONITH Success");
+        } catch (Exception e) {
+            System.out.println("STONITH Failed: No name in RMI matches the specified one");
         }
 
         /* Bootloading */
