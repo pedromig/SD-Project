@@ -67,7 +67,7 @@ public class VotingDesk {
 
 	public Properties readPropertiesFile(String path) {
 		Properties config = new Properties();
-		try (InputStream is = new FileInputStream(path);) {
+		try (InputStream is = new FileInputStream(path)) {
 			config.load(is);
 		} catch (IOException e) {
 			LOGGER.severe("Could not read configurations file: " + e.getMessage());
@@ -217,6 +217,14 @@ public class VotingDesk {
 		@Override
 		public void run() {
 			LOGGER.info(this.getName() + " thread started!");
+
+			try {
+				MulticastPacket probe = MulticastProtocol.probe(this.getName());
+				probe.sendTo(statusSocket, statusGroup, statusPort);
+			} catch (IOException e) {
+				LOGGER.info(this.getName() + " thread stopped, socket closed!");
+			}
+
 			while (!this.isInterrupted()) {
 				try {
 					MulticastPacket request = MulticastPacket.from(statusSocket, this.getName());
@@ -234,10 +242,8 @@ public class VotingDesk {
 							info.put("MULTICAST_VOTING_PORT", String.valueOf(votingPort));
 
 							boolean reconnected = false;
-							System.out.println(terminals.get(target));
 							if (terminals.get(target) != null && !terminals.get(target).equals("EMPTY")) {
 								// TODO: fetch RMI info about this client
-								System.out.println("Here");
 								String username = "Jarvardoc";
 								info.put("id", terminals.get(target));
 								info.put("username", username);
@@ -303,6 +309,7 @@ public class VotingDesk {
 
 						MulticastPacket ack = MulticastProtocol.acknowledge(this.getName(), requestSource);
 						ack.sendTo(votingSocket, votingGroup, votingPort);
+						System.out.println(ack);
 						// TODO transmit vote to RMI server
 
 					} else if (request.get("target").equals(this.getName()) &&
@@ -311,8 +318,8 @@ public class VotingDesk {
 						// TODO: authenticate in RMI server
 						boolean loggedIn = true;
 
-						MulticastPacket status = MulticastProtocol.status(this.getName(), requestSource,
-								"logged-in");
+						MulticastPacket status =
+								MulticastProtocol.status(this.getName(), requestSource, "logged-in");
 						status.sendTo(votingSocket, votingGroup, votingPort);
 						System.out.println(status);
 
@@ -387,7 +394,6 @@ public class VotingDesk {
 							if (ack.get("type").equals(MulticastProtocol.ACKNOWLEDGE) &&
 								ack.get("target").equals(this.getName())) {
 								terminals.put(terminal, voter);
-								System.out.println(terminal + " " + voter);
 								LOGGER.info("Voter with Citizen Card ID: " + voter + " assigned to terminal: " + terminal);
 							}
 							timeoutFlag = false;

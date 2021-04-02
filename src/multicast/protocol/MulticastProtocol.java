@@ -4,15 +4,24 @@ import java.util.HashMap;
 
 public interface MulticastProtocol {
 
+	// DISCOVERY RELATED ADVERTISEMENTS
 	String GREETING = "GREET";
-	String ACKNOWLEDGE = "ACK";
-	String GOODBYE = "BYE";
-	String LIST = "ITEM_LIST";
-	String VOTE = "VOTE";
+	String READY = "READY";
 	String OFFER = "OFFER";
+	String PROBE = "PROBE";
+
+	// COMMUNICATION TERMINATION ADVERTISEMENT
+	String GOODBYE = "BYE";
+
+	// VOTING ADVERTISEMENT
+	String VOTE = "VOTE";
+
+	// INFORMATIONAL MESSAGES
+	String ACKNOWLEDGE = "ACK";
 	String STATUS = "STATUS";
 	String LOGIN = "LOGIN";
-	String READY = "READY";
+	String LIST = "ITEM_LIST";
+
 
 	// PROTOCOL HEADER
 
@@ -45,6 +54,8 @@ public interface MulticastProtocol {
 		return MulticastProtocol.header(source, OFFER);
 	}
 
+	static MulticastPacket probe(String source) {return MulticastProtocol.header(source, PROBE);}
+
 	// INFORMATIONAL / COMMUNICATION MESSAGES
 
 	static <K, V> MulticastPacket itemList(String source, String target, HashMap<K, V> items) {
@@ -57,7 +68,7 @@ public interface MulticastProtocol {
 		return packet;
 	}
 
-	static MulticastPacket login(String source, String target, String userID, String pass){
+	static MulticastPacket login(String source, String target, String userID, String pass) {
 		MulticastPacket packet = MulticastProtocol.header(source, LOGIN);
 		packet.put("target", target);
 		packet.put("id", userID);
