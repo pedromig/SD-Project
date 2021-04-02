@@ -23,11 +23,18 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * An implementation of an Administrator Console
+ */
 public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsoleInterface, Serializable {
-    protected Parser parser;
     protected boolean realTimeDesks;
     protected String realTimeElectionName;
+    protected Parser parser;
 
+    /**
+     * Builder
+     * @throws RemoteException
+     */
     public AdminConsole() throws RemoteException {
         super();
         this.parser = new Parser();
@@ -198,8 +205,18 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
     }
 
     public int editElectionsMenu() {
-        String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date", "Restraint Faculty", "Restraint Department"};
+        String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date", "Add Department", "Remove Department"};
         return this.parser.choose("Edit Options", opts);
+    }
+
+    public String[] addDepartmentMenu(Election<?> election, String[] departments) {
+        ArrayList<String> selectableDepartments = new ArrayList<>();
+        for (String deptName : departments) {
+            if (!election.getDepartments().contains(deptName)){
+                selectableDepartments.add(deptName);
+            }
+        }
+        return selectableDepartments.toArray(new String[0]);
     }
 
     public void showEndedElectionStatsMenu(RmiServerInterface server, CopyOnWriteArrayList<Election<?>> endedElections) {
@@ -288,6 +305,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
 
     public static void main(String[] args) {
         int optElection, optList, optPeople;
+        String[] departments;
         Election<?> selectedElection;
         CopyOnWriteArrayList<Election<?>> futureElections, runningElections;
         CopyOnWriteArrayList<List<?>> lists;
@@ -459,14 +477,30 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         }
                                         break;
 
-                                    /* Edit Faculty */
+                                    /* Add Department */
                                     case 5:
-                                        System.out.println("Enter \"" + Election.NO_RESTRAINT + "\" to remove any faculty restraint.");
-                                        editString = admin.parser.parseString("Faculty", false);
-                                        if (editString == null) break;
+
                                         while (true) {
                                             try {
-                                                server.editElectionFaculty(election.getName(), editString);
+                                                departments = server.getDepartments();
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect();
+                                                if (server == null) return;
+                                            }
+                                        }
+                                        departments = admin.addDepartmentMenu(election, departments);
+
+                                        admin.parser.clear();
+                                        admin.parser.header("Add Department");
+                                        int addDeptOpt = admin.parser.choose("Choose a Department", departments);
+                                        if (addDeptOpt == 0) break;
+
+                                        while (true) {
+                                            try {
+                                                server.addDepartment(election.getName(), departments[addDeptOpt - 1]);
                                                 break;
                                             } catch (Exception e) {
                                                 System.out.println("[DEBUG]");
@@ -477,14 +511,16 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         }
                                         break;
 
-                                    /* Edit Department */
+                                    /* Remove Department */
                                     case 6:
-                                        System.out.println("Enter \"" + Election.NO_RESTRAINT + "\" to remove any department restraint.");
-                                        editString = admin.parser.parseString("Faculty", false);
-                                        if (editString == null) break;
+                                        admin.parser.clear();
+                                        admin.parser.header("Remove Department");
+                                        int removeDeptOpt = admin.parser.choose("Choose a Department", election.getDepartments().toArray(new String[0]));
+                                        if (removeDeptOpt == 0) break;
+
                                         while (true) {
                                             try {
-                                                server.editElectionDepartment(election.getName(), editString);
+                                                server.removeDepartment(election.getName(), election.getDepartments().get(removeDeptOpt - 1));
                                                 break;
                                             } catch (Exception e) {
                                                 System.out.println("[DEBUG]");
@@ -493,6 +529,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                                 if (server == null) return;
                                             }
                                         }
+
                                         break;
                                 }
                                 break;
@@ -531,6 +568,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                     }
                                 }
                                 int personOpt = admin.choosePeopleMenu(people);
+                                if (personOpt == 0) break;
                                 Person p = people.get(personOpt - 1);
                                 while (true) {
                                     try {
