@@ -529,6 +529,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 			objOs.close();
 			os.close();
 		} catch (Exception e) {
+			System.out.println("DEBUG: Could not write to: " + path);
 			e.printStackTrace();
 			return false;
 		}
@@ -557,7 +558,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 			is.close();
 			return data;
 		} catch (Exception e) {
-			System.out.println("Could not read from: " + path);
+			System.out.println("DEBUG: Could not read from: " + path);
 			return new CopyOnWriteArrayList<>();
 		}
 	}
