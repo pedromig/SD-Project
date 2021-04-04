@@ -565,10 +565,20 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	/* ################################################################################# */
 
 	public static void main(String[] args) {
+		final String IP, PORT;
+		if  (args.length != 2) {
+			System.out.println("java RmiServer <IP ADDRESS> <PORT>");
+			return;
+		} else {
+			IP = args[0];
+			PORT = args[1];
+		}
+
 		RmiServerInterface server = null;
+
 		/* Failover */
 		try {
-			server = (RmiServerInterface) Naming.lookup("RmiServer");
+			server = (RmiServerInterface) Naming.lookup("rmi://" + IP + ":" + PORT  + "/RmiServer");
 			server.ping();
 			System.out.println("Waiting for primary crash.");
 			while (true) {
@@ -585,7 +595,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		try {
 			System.out.println("Trying to remove:");
 			System.out.println(server);
-			Naming.unbind("RmiServer");
+			Naming.unbind("rmi://" + IP + ":" + PORT  + "/RmiServer");
 			System.out.println("STONITH Success");
 		} catch (Exception e) {
 			System.out.println("STONITH Failed: No name in RMI matches the specified one");
@@ -600,8 +610,8 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		/* Run Server */
 		try {
 			server = new RmiServer(elections, lists, people);
-			Naming.rebind("RmiServer", server);
-			System.out.println("RmiServer ready!");
+			Naming.rebind("rmi://" + IP + ":" + PORT  + "/RmiServer", server);
+			System.out.println("RmiServer ready! - Running on " + IP + ":" + PORT);
 		} catch (Exception e) {
 			System.out.println("[DEBUG] Exception in RMI Server: " + e);
 		}
