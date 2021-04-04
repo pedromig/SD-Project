@@ -74,7 +74,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
     /* ############################## Menus ############################## */
 
     public int mainMenu() {
-        String[] mainMenuOpts = {"Sign Up", "Say Olaaaaa", "Manage Elections", "Manage Lists", "Real Time Data"};
+        String[] mainMenuOpts = {"Sign Up", "Database Info", "Manage Elections", "Manage Lists", "Real Time Data"};
         return this.parser.choose("Main Menu", mainMenuOpts);
     }
 
