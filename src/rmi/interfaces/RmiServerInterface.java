@@ -12,94 +12,98 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public interface RmiServerInterface extends Remote {
 
-    /* Default Methods */
+	/* Default Methods */
 
-    default void print(String msg) throws RemoteException {
-        System.out.println(msg);
-    }
+	default void print(String msg) throws RemoteException {
+		System.out.println(msg);
+	}
 
-    default String ping() throws RemoteException {
-        return "Ping Pong";
-    }
+	default String ping() throws RemoteException {
+		return "Ping Pong";
+	}
 
-    public default boolean compareDates(GregorianCalendar date1, GregorianCalendar date2) throws RemoteException{
-        return date1.getTimeInMillis() < date2.getTimeInMillis();
-    }
+	default boolean compareDates(GregorianCalendar date1, GregorianCalendar date2) throws RemoteException {
+		return date1.getTimeInMillis() < date2.getTimeInMillis();
+	}
 
+	/* Interface Methods */
 
-    /* Interface Methods */
+	void subscribe(RmiAdminConsoleInterface adminConsole) throws RemoteException;
 
-    void subscribe(RmiAdminConsoleInterface adminConsole) throws RemoteException;
-    void subscribe(RmiMulticastServerInterface multicastDesk) throws RemoteException;
+	void subscribe(RmiMulticastServerInterface multicastDesk) throws RemoteException;
 
-    void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException;
+	void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException;
 
-    void info(RmiAdminConsoleInterface client) throws RemoteException;
+	void info(RmiAdminConsoleInterface client) throws RemoteException;
 
-    String[] getDepartments() throws RemoteException;
+	String[] getDepartments() throws RemoteException;
 
-    void signUp(Person person) throws RemoteException;
-
-
-    void createElection(Election<? extends Person> election) throws RemoteException;
-
-    void editElectionName(String electionName, String newName) throws RemoteException;
-
-    void editElectionDescription(String electionName, String newDescription) throws RemoteException;
-
-    void editElectionStartDate(String electionName, GregorianCalendar newDate) throws RemoteException;
-
-    void editElectionEndDate(String electionName, GregorianCalendar newDate) throws RemoteException;
-
-    void addDepartment(String electionName, String departmentName) throws RemoteException;
-
-    void removeDepartment(String electionName, String departmentName) throws RemoteException;
-
-    void createList(List<? extends Person> list) throws RemoteException;
-
-    void associateListToElection(String electionName, String listName) throws RemoteException;
-
-    void associatePersonToList(String listName, int personID) throws RemoteException;
-
-    Election<?> getElection(String electionName) throws RemoteException;
+	void signUp(Person person) throws RemoteException;
 
 
-    CopyOnWriteArrayList<Election<?>> getFutureElections() throws RemoteException;
+	void createElection(Election<? extends Person> election) throws RemoteException;
 
-    CopyOnWriteArrayList<Election<?>> getEndedElections() throws RemoteException;
+	void editElectionName(String electionName, String newName) throws RemoteException;
 
-    CopyOnWriteArrayList<Election<?>> getRunningElections() throws RemoteException;
+	void editElectionDescription(String electionName, String newDescription) throws RemoteException;
 
-    CopyOnWriteArrayList<List<?>> getListsOfType(Class<?> type) throws RemoteException;
+	void editElectionStartDate(String electionName, GregorianCalendar newDate) throws RemoteException;
 
-    CopyOnWriteArrayList<List<?>> getListsAssignedOfType(Class<?> type, String electionName) throws RemoteException;
+	void editElectionEndDate(String electionName, GregorianCalendar newDate) throws RemoteException;
 
-    CopyOnWriteArrayList<List<?>> getListsUnassigned() throws RemoteException;
+	void addDepartment(String electionName, String departmentName) throws RemoteException;
 
-    CopyOnWriteArrayList<List<?>> getListsUnassignedOfType(Class<?> type) throws RemoteException;
+	void removeDepartment(String electionName, String departmentName) throws RemoteException;
 
-    CopyOnWriteArrayList<List<?>> getFutureLists() throws RemoteException;
+	void createList(List<? extends Person> list) throws RemoteException;
 
-    CopyOnWriteArrayList<List<?>> getEditableLists() throws RemoteException;
+	void associateListToElection(String electionName, String listName) throws RemoteException;
 
-    CopyOnWriteArrayList<Person> getPeople() throws RemoteException;
+	void associatePersonToList(String listName, int personID) throws RemoteException;
 
-    CopyOnWriteArrayList<Person> getPeopleOfType(Class<?> type) throws RemoteException;
-
-    CopyOnWriteArrayList<Person> getPeopleAssignedOfType(Class<?> type, String listName) throws RemoteException;
-
-    CopyOnWriteArrayList<Person> getPeopleUnassigned() throws RemoteException;
-
-    CopyOnWriteArrayList<Person> getPeopleUnassignedOfType(Class<?> type) throws RemoteException;
+	Election<?> getElection(String electionName) throws RemoteException;
 
 
-    void vote(String electionName, Vote vote) throws RemoteException;
+	CopyOnWriteArrayList<Election<?>> getFutureElections() throws RemoteException;
 
-    boolean hasVoted(String electionName, int personID) throws RemoteException;
+	CopyOnWriteArrayList<Election<?>> getEndedElections() throws RemoteException;
+
+	CopyOnWriteArrayList<Election<?>> getRunningElections() throws RemoteException;
+
+	CopyOnWriteArrayList<Election<?>> getRunningElectionsByDepartment(String department) throws RemoteException;
+
+	CopyOnWriteArrayList<List<?>> getListsOfType(Class<?> type) throws RemoteException;
+
+	CopyOnWriteArrayList<List<?>> getListsAssignedOfType(Class<?> type, String electionName) throws RemoteException;
+
+	CopyOnWriteArrayList<List<?>> getListsUnassigned() throws RemoteException;
+
+	CopyOnWriteArrayList<List<?>> getListsUnassignedOfType(Class<?> type) throws RemoteException;
+
+	CopyOnWriteArrayList<List<?>> getFutureLists() throws RemoteException;
+
+	CopyOnWriteArrayList<List<?>> getEditableLists() throws RemoteException;
+
+	CopyOnWriteArrayList<Person> getPeople() throws RemoteException;
+
+	Person getPerson(int personId) throws RemoteException;
+
+	CopyOnWriteArrayList<Person> getPeopleOfType(Class<?> type) throws RemoteException;
+
+	CopyOnWriteArrayList<Person> getPeopleAssignedOfType(Class<?> type, String listName) throws RemoteException;
+
+	CopyOnWriteArrayList<Person> getPeopleUnassigned() throws RemoteException;
+
+	CopyOnWriteArrayList<Person> getPeopleUnassignedOfType(Class<?> type) throws RemoteException;
 
 
-    void printVotingProcessedData(RmiAdminConsoleInterface admin, Election<?> election) throws RemoteException;
+	void vote(Vote vote) throws RemoteException;
 
-    void printElectorVotesInfo(RmiAdminConsoleInterface admin, int personID) throws RemoteException;
+	boolean hasVoted(String electionName, int personID) throws RemoteException;
+
+
+	void printVotingProcessedData(RmiAdminConsoleInterface admin, Election<?> election) throws RemoteException;
+
+	void printElectorVotesInfo(RmiAdminConsoleInterface admin, int personID) throws RemoteException;
 
 }

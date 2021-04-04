@@ -67,6 +67,14 @@ public abstract class Person implements Serializable {
     }
 
     /**
+     * Getter for the name attribute
+     * @return this password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
      * Getter for the identityCardNumber attribute
      * @return this identityCardNumber
      */
@@ -84,5 +92,4 @@ public abstract class Person implements Serializable {
                 "\tID: "        + this.identityCardNumber   +
                 "\tList: "      + this.list;
     }
-
 }

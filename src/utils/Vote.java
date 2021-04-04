@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 
 public class Vote implements Serializable {
-    private int personID, votingDeskID;
+    private int personID;
+    private final String votingDeskID;
     private String electionName, votedListName;
-    private GregorianCalendar moment;
+    private final GregorianCalendar moment;
 
-    public Vote(int personID, String electionName, String votedListName, int votingDeskID){
+    public Vote(int personID, String electionName, String votedListName, String votingDeskID){
         this.personID = personID;
         this.electionName = electionName;
         this.votedListName = votedListName;
@@ -16,7 +17,11 @@ public class Vote implements Serializable {
         this.moment = new GregorianCalendar();
     }
 
-    public int getPersonID() {
+	public String getElectionName() {
+		return electionName;
+	}
+
+	public int getPersonID() {
         return personID;
     }
 
@@ -24,7 +29,7 @@ public class Vote implements Serializable {
         this.personID = personID;
     }
 
-    public String getElectionName() {
+    public String setElectionName() {
         return electionName;
     }
 
@@ -44,7 +49,7 @@ public class Vote implements Serializable {
         return moment;
     }
 
-    public int getVotingDeskID() {
+    public String getVotingDeskID() {
         return votingDeskID;
     }
 }

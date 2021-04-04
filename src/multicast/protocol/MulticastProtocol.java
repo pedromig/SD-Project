@@ -34,9 +34,10 @@ public interface MulticastProtocol {
 
 	// ADVERTISEMENT MESSAGES
 
-	static MulticastPacket vote(String source, String option) {
+	static MulticastPacket vote(String source, String election, String list) {
 		MulticastPacket packet = MulticastProtocol.header(source, VOTE);
-		packet.put("option", option);
+		packet.put("election", election);
+		packet.put("list", list);
 		return packet;
 	}
 

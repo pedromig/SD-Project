@@ -5,20 +5,37 @@ import multicast.protocol.MulticastProtocol;
 import multicast.protocol.MulticastPacket;
 import multicast.ui.VotingDeskUI;
 
+import rmi.interfaces.RmiMulticastServerInterface;
+import rmi.interfaces.RmiServerInterface;
+import utils.Vote;
+import utils.elections.Election;
+import utils.lists.List;
+import utils.people.Person;
+
 import java.io.*;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.*;
 
 // FIXME: If client sends greeting in the wrong group it will not work and the server will throw and exception
+// FIXME: @Override RMI MulticastInterface and implement ping message -> put the terminal status hashtable there
+// FIXME: If terminals start and server dies when he goes back up the terminals will not listen to the
+//  MulticastProtocol.probe cause they are already blocked and waiting (associated with the last instance of the
+//  multicast server
+// FIXME: Dont forget to change hardcoded
+// FIXME: Wrap persons in try catch
+// FIXME: Check rmi reconnect;
+// FIXME: Check if person is already voting (do not allow same person at the same time)
 
-public class VotingDesk {
+public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol, RmiMulticastServerInterface {
 
 	// Globals / Defaults
 	private static final String DEFAULT_MULTICAST_SERVER_NAME = "department";
@@ -29,11 +46,16 @@ public class VotingDesk {
 	private static final String DEFAULT_MULTICAST_VOTING_ADDRESS = "224.3.2.2";
 	private static final String DEFAULT_VOTING_MULTICAST_PORT = "4321";
 
+	private static final int RMI_RECONNECT_ATTEMPTS = 5;
+	private static final int RMI_RECONNECT_TIMEOUT_MS = 30000 / RMI_RECONNECT_ATTEMPTS;
+
 	private static final Logger LOGGER = Logger.getLogger(VotingDesk.class.getName());
 	private final String config;
 
 	// Attributes
 	private String name;
+
+	private RmiServerInterface rmiServer;
 
 	private MulticastSocket statusSocket;
 	private InetAddress statusGroup;
@@ -47,9 +69,9 @@ public class VotingDesk {
 	private final BlockingQueue<String> voters;
 	private final BlockingQueue<String> availableTerminals;
 
-
-	public VotingDesk(String configPath) {
-		this.config = configPath;
+	public VotingDesk(String configFilePath) throws RemoteException {
+		super();
+		this.config = configFilePath;
 		this.terminals = new Hashtable<>();
 		this.voters = new LinkedBlockingQueue<>();
 		this.availableTerminals = new LinkedBlockingQueue<>();
@@ -58,14 +80,21 @@ public class VotingDesk {
 	public static void main(String[] args) {
 		if (args.length != 1) {
 			System.out.println("Usage: java " + VotingDesk.class.getName() + " {PROPERTIES_FILE}");
-			return;
+			System.exit(0);
 		}
-		VotingDesk server = new VotingDesk(args[0]);
-		server.start();
+
+		VotingDesk server;
+		try {
+			server = new VotingDesk(args[0]);
+			server.start();
+		} catch (RemoteException e) {
+			LOGGER.severe(e.getMessage());
+			System.exit(-1);
+		}
 	}
 
 
-	public Properties readPropertiesFile(String path) {
+	private Properties readPropertiesFile(String path) {
 		Properties config = new Properties();
 		try (InputStream is = new FileInputStream(path)) {
 			config.load(is);
@@ -76,52 +105,83 @@ public class VotingDesk {
 		return config;
 	}
 
+	private RmiServerInterface connectRMIServer(String url) {
+		int attempt = 0;
+		RmiServerInterface server = null;
+
+		while (attempt++ != RMI_RECONNECT_ATTEMPTS) {
+			try {
+				server = (RmiServerInterface) Naming.lookup(url);
+				server.subscribe(this);
+				return server;
+			} catch (RemoteException e) {
+				LOGGER.warning("RMI server connection failed, retrying in "
+							   + RMI_RECONNECT_TIMEOUT_MS / 1000 + " seconds... " +
+							   "(" + attempt + "/" + RMI_RECONNECT_ATTEMPTS + ")"
+				);
+				try {
+					Thread.sleep(RMI_RECONNECT_TIMEOUT_MS);
+				} catch (InterruptedException e1) {
+					LOGGER.severe("RMI timeout error: " + e1.getMessage());
+				}
+			} catch (NotBoundException | MalformedURLException e) {
+				LOGGER.severe("Exception caught during RMI server connection: " + e.getMessage());
+				return null;
+			}
+		}
+		LOGGER.severe("RMI server connection timed out!");
+		return server;
+	}
+
 	public void start() {
 		setupLogger();
+		String url = "RmiServer";
 
-		Properties configs = readPropertiesFile(this.config);
-		this.name = (String) configs.getOrDefault(
-				"server.department.name",
-				DEFAULT_MULTICAST_SERVER_NAME
-		);
+		if ((this.rmiServer = connectRMIServer(url)) != null) {
 
-		try {
-			this.statusGroup = InetAddress.getByName((String)
+			Properties configs = readPropertiesFile(this.config);
+			this.name = (String) configs.getOrDefault(
+					"server.department.name",
+					DEFAULT_MULTICAST_SERVER_NAME
+			);
+
+			try {
+				this.statusGroup = InetAddress.getByName((String)
+						configs.getOrDefault(
+								"multicast.discovery.group",
+								DEFAULT_MULTICAST_DISCOVERY_ADDRESS
+						)
+				);
+			} catch (UnknownHostException e) {
+				LOGGER.severe("Unknown Host: " + e.getMessage());
+			}
+
+			this.statusPort = Integer.parseInt((String)
 					configs.getOrDefault(
-							"multicast.discovery.group",
-							DEFAULT_MULTICAST_DISCOVERY_ADDRESS
+							"multicast.discovery.port",
+							DEFAULT_DISCOVERY_MULTICAST_PORT
 					)
 			);
-		} catch (UnknownHostException e) {
-			LOGGER.severe("Unknown Host: " + e.getMessage());
-		}
 
-		this.statusPort = Integer.parseInt((String)
-				configs.getOrDefault(
-						"multicast.discovery.port",
-						DEFAULT_DISCOVERY_MULTICAST_PORT
-				)
-		);
+			try {
+				this.votingGroup = InetAddress.getByName((String)
+						configs.getOrDefault(
+								"multicast.voting.group",
+								DEFAULT_MULTICAST_VOTING_ADDRESS
+						)
+				);
+			} catch (UnknownHostException e) {
+				LOGGER.severe("Unknown Host: " + e.getMessage());
+			}
 
-		try {
-			this.votingGroup = InetAddress.getByName((String)
-					configs.getOrDefault(
-							"multicast.voting.group",
-							DEFAULT_MULTICAST_VOTING_ADDRESS
+			this.votingPort = Integer.parseInt((String) configs.getOrDefault(
+					"multicast.voting.port",
+					DEFAULT_VOTING_MULTICAST_PORT
 					)
 			);
-		} catch (UnknownHostException e) {
-			LOGGER.severe("Unknown Host: " + e.getMessage());
+			votingDeskServerStartup();
 		}
-
-		this.votingPort = Integer.parseInt((String) configs.getOrDefault(
-				"multicast.voting.port",
-				DEFAULT_VOTING_MULTICAST_PORT
-				)
-		);
-
-		// TODO: Connect VotingDesk to RMI
-		votingDeskServerStartup();
+		System.exit(0);
 	}
 
 
@@ -197,6 +257,11 @@ public class VotingDesk {
 
 			statusSocket.close();
 			votingSocket.close();
+
+			voteManager.join();
+			clientHandler.join();
+			terminalManager.join();
+
 		} catch (IOException e) {
 			LOGGER.severe(this.getName() + " Exception: " + e.getMessage());
 		} catch (InterruptedException e) {
@@ -205,7 +270,7 @@ public class VotingDesk {
 		LOGGER.info(this.getName() + " server session terminated successfully!");
 	}
 
-	// Listen for terminals connecting && status, add them to the hashmap of existing terminals
+
 	private class VotingDeskTerminalManager extends Thread {
 		private final String handler;
 
@@ -243,10 +308,12 @@ public class VotingDesk {
 
 							boolean reconnected = false;
 							if (terminals.get(target) != null && !terminals.get(target).equals("EMPTY")) {
-								// TODO: fetch RMI info about this client
-								String username = "Jarvardoc";
+								Person user = rmiServer.getPerson(Integer.parseInt(terminals.get(target)));
+								assert user != null :
+										"No such user in the RMI database. (Please verify database integrity)";
+
 								info.put("id", terminals.get(target));
-								info.put("username", username);
+								info.put("username", user.getName());
 								info.put("vote-manager", handler);
 								reconnected = true;
 							}
@@ -288,7 +355,6 @@ public class VotingDesk {
 		}
 	}
 
-	// ABOUT: receive voting related info and send back replies according to the message received
 	private class VotingDeskVotingManager extends Thread {
 
 		public VotingDeskVotingManager(String name) {
@@ -307,37 +373,64 @@ public class VotingDesk {
 					if (requestType.equals(MulticastProtocol.VOTE)) {
 						System.out.println(request);
 
+						String election = request.get("election");
+						String list = request.get("list");
+
+						Person user = rmiServer.getPerson(Integer.parseInt(terminals.get(requestSource)));
+						assert user != null : "No such user in the RMI database. (Please verify database integrity)";
+
+						Vote vote = new Vote(user.getIdentityCardNumber(), election, list, this.getName());
+						rmiServer.vote(vote);
+
 						MulticastPacket ack = MulticastProtocol.acknowledge(this.getName(), requestSource);
 						ack.sendTo(votingSocket, votingGroup, votingPort);
 						System.out.println(ack);
-						// TODO transmit vote to RMI server
+						// FIXME: remove person from terminal in hashtable
 
 					} else if (request.get("target").equals(this.getName()) &&
 							   requestType.equals(MulticastProtocol.LOGIN)) {
 
-						// TODO: authenticate in RMI server
-						boolean loggedIn = true;
+						MulticastPacket status;
+						Person user = rmiServer.getPerson(Integer.parseInt(terminals.get(requestSource).trim()));
 
-						MulticastPacket status =
-								MulticastProtocol.status(this.getName(), requestSource, "logged-in");
+						if (user.getPassword().equals(request.get("password"))) {
+							status = MulticastProtocol.status(this.getName(), requestSource, "logged-in");
+						} else {
+							status = MulticastProtocol.status(this.getName(), requestSource, "invalid-password");
+							status.sendTo(votingSocket, votingGroup, votingPort);
+							continue;
+						}
 						status.sendTo(votingSocket, votingGroup, votingPort);
-						System.out.println(status);
 
-						// TODO: fetch elections
-						// TODO: get lists from RMI server
-						HashMap<String, String> lists = new HashMap<>();
-						lists.put("Are you blind?", "Choose one option");
-						lists.put("1", "Yes");
-						lists.put("2", "No");
-						lists.put("3", "Perhaps");
-						lists.put("4", "I am going to buy a brand new car");
+						CopyOnWriteArrayList<Election<?>> elections = rmiServer.getRunningElectionsByDepartment(name);
+						System.out.println(elections);
+						elections.removeIf(election -> !election.getType().equals(user.getType()));
 
-						MulticastPacket options =
-								MulticastProtocol.itemList(this.getName(), requestSource, lists);
-						options.sendTo(votingSocket, votingGroup, votingPort);
 
+						for (Election<?> election : elections) {
+							if (!rmiServer.hasVoted(election.getName(), user.getIdentityCardNumber())) {
+								HashMap<String, String> packetInfo = new HashMap<>();
+								packetInfo.put("election-name", election.getName());
+
+								System.out.println(election.getName());
+								CopyOnWriteArrayList<List<?>> lists =
+										rmiServer.getListsAssignedOfType(user.getType(), election.getName());
+
+								int opt = 1;
+								for (List<?> l : lists) {
+									packetInfo.put(String.valueOf(opt++), l.getName());
+									System.out.println(l.getName());
+								}
+
+								MulticastPacket options =
+										MulticastProtocol.itemList(this.getName(), requestSource, packetInfo);
+								options.sendTo(votingSocket, votingGroup, votingPort);
+							}
+						}
+						MulticastPacket confirmation =
+								MulticastProtocol.status(this.getName(), requestSource, "info-sent");
+						confirmation.sendTo(votingSocket, votingGroup, votingPort);
 					}
-
 				} catch (IOException e) {
 					LOGGER.info(this.getName() + " thread stopped, socket closed!");
 				}
@@ -345,9 +438,6 @@ public class VotingDesk {
 		}
 	}
 
-	// ABOUT: Pop clients from the queue identify them and associate them with a terminal
-// FIXME: Perhaps try to check if it is alive first and only then remove it. Going to just
-//  remove it for now.
 	private class VotingDeskClientHandler extends Thread {
 		private static final int ACK_TIMEOUT_MS = 5000;
 
@@ -361,6 +451,7 @@ public class VotingDesk {
 		@Override
 		public void run() {
 			LOGGER.info(this.getName() + " thread started!");
+
 			try (MulticastSocket ackListenerSocket = new MulticastSocket(votingPort)) {
 				ackListenerSocket.joinGroup(votingGroup);
 				ackListenerSocket.setSoTimeout(ACK_TIMEOUT_MS);
@@ -369,13 +460,20 @@ public class VotingDesk {
 					String voter = voters.take();
 					LOGGER.info("Processing voter with Citizen Card ID: " + voter);
 
-					// TODO: identify voter in RMI server
-					boolean userExists = true;
-					String username = "Jarvardoc";
+					Person user = rmiServer.getPerson(Integer.parseInt(voter));
+					if (user == null) {
+						LOGGER.warning("Voter with Citizen Card ID not found!!");
+						LOGGER.info("Removed voter with Citizen Card ID: " + voter);
+						continue;
+					}
 
-					LOGGER.info("Voter with Citizen Card ID identified");
+					// TODO: check if he is eligible to vote
+
+
 					boolean timeoutFlag = true;
-					while (!this.isInterrupted() && userExists && timeoutFlag) {
+					LOGGER.info("Voter with Citizen Card ID identified");
+
+					while (!this.isInterrupted() && timeoutFlag) {
 
 						LOGGER.info("Waiting for terminal to be available");
 						String terminal = availableTerminals.take();
@@ -383,7 +481,7 @@ public class VotingDesk {
 
 						HashMap<String, String> userItems = new HashMap<>();
 						userItems.put("id", voter);
-						userItems.put("username", username);
+						userItems.put("username", user.getName());
 						userItems.put("vote-manager", handler);
 
 						MulticastPacket packet = MulticastProtocol.itemList(this.getName(), terminal, userItems);
@@ -397,6 +495,7 @@ public class VotingDesk {
 								LOGGER.info("Voter with Citizen Card ID: " + voter + " assigned to terminal: " + terminal);
 							}
 							timeoutFlag = false;
+
 						} catch (SocketTimeoutException e) {
 							LOGGER.warning("Terminal " + terminal + " not responding and is probably down...");
 							LOGGER.warning("Re-rooting voter with Citizen Card ID: " + voter + " to another terminal");
@@ -412,3 +511,4 @@ public class VotingDesk {
 		}
 	}
 }
+

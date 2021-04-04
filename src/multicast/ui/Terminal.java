@@ -52,6 +52,7 @@ public abstract class Terminal extends JFrame {
 
     public void open() {
         showPrompt();
+        this.terminal.setCaretPosition(terminal.getCaretPosition() + this.prompt.length());
     }
 
     public void showPrompt() {

@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.*;
@@ -119,6 +120,12 @@ public class VotingTerminal implements MulticastProtocol {
 		return name;
 	}
 
+	private boolean isNotSelfAddressed(MulticastPacket packet, String senderID) {
+		return !packet.get("source").equals(senderID) &&
+			   packet.get("target") != null &&
+			   !packet.get("target").equals(this.getName());
+	}
+
 	private MulticastPacket connectToVotingDesk() {
 		MulticastPacket infoList = null;
 		try {
@@ -221,16 +228,14 @@ public class VotingTerminal implements MulticastProtocol {
 					option = task.get(VOTING_TIMEOUT_MS, TimeUnit.MILLISECONDS).trim();
 				}
 
-				MulticastPacket vote = MulticastProtocol.vote(this.getName(), option);
+				String election = "Lol"; // FIXME: select election
+				MulticastPacket vote = MulticastProtocol.vote(this.getName(), election, option);
 				vote.sendTo(votingSocket, votingGroup, votingPort);
 
 				MulticastPacket confirmation;
 				do {
 					confirmation = MulticastPacket.from(votingSocket, this.getName());
-				} while (!confirmation.get("source").equals(voteRecipient) &&
-						 confirmation.get("target") != null &&
-						 !confirmation.get("target").equals(this.getName())
-				);
+				} while (isNotSelfAddressed(confirmation, voteRecipient));
 
 			}
 		} catch (InterruptedException | ExecutionException | IOException e) {
@@ -245,6 +250,7 @@ public class VotingTerminal implements MulticastProtocol {
 			System.out.println("You have " + AUTH_TIMEOUT_MS / 1000 + " seconds to authenticate!");
 			MulticastPacket authStatus;
 			do {
+				System.out.println(attempts);
 				String password = null;
 				while (password == null || password.length() == 0) {
 					System.out.print("Password: ");
@@ -252,19 +258,16 @@ public class VotingTerminal implements MulticastProtocol {
 					new Thread(task).start();
 					password = task.get(AUTH_TIMEOUT_MS, TimeUnit.MILLISECONDS).trim();
 				}
+				attempts--;
 
 				MulticastPacket auth = MulticastProtocol.login(this.getName(), voteRecipient, voterID, password);
 				auth.sendTo(votingSocket, votingGroup, votingPort);
 
 				do {
 					authStatus = MulticastPacket.from(votingSocket, this.getName());
-				} while (!authStatus.get("source").equals(voteRecipient) &&
-						 authStatus.get("target") != null &&
-						 !authStatus.get("target").equals(this.getName())
-				);
+				} while (isNotSelfAddressed(authStatus, voteRecipient));
 
-
-			} while (!authStatus.get("status").equals("logged-in") && attempts-- != 0);
+			} while (attempts > 0 && !authStatus.get("status").equals("logged-in"));
 
 			if (attempts == 0)
 				System.err.println("Failed after 3 attempts, blocking terminal");
@@ -277,21 +280,26 @@ public class VotingTerminal implements MulticastProtocol {
 	private void votingForm(String voteRecipient) {
 		try {
 			// TODO: Select election / Show lists;
-			MulticastPacket lists;
-			do {
-				lists = MulticastPacket.from(votingSocket, this.getName());
-			} while (!lists.get("source").equals(voteRecipient) &&
-					 lists.get("target") != null &&
-					 !lists.get("target").equals(this.getName())
-			);
+			MulticastPacket l;
+			ArrayList<MulticastPacket> lists = new ArrayList<>();
+			while (true) {
+				l = MulticastPacket.from(votingSocket, this.getName());
+				if (l.get("type").equals(MulticastProtocol.STATUS) &&
+					l.get("status").equals("info-sent") && !isNotSelfAddressed(l, voteRecipient)) {
+					break;
+				} else if (!isNotSelfAddressed(l, voteRecipient)) {
+					lists.add(l);
+				}
+				System.out.println(l);
+			}
 
-			System.out.println("############ VOTING FORM ###########");
-			for (String key : lists.getItems().keySet()) {
-				if (!key.matches("target|source|type|ITEM_COUNT")) {
-					System.out.println(key + " - " + lists.get(key));
+			for (MulticastPacket packet : lists) {
+				System.out.println("Election name: " + packet.get("election-name"));
+				for (String key : packet.getItems().keySet()) {
+					System.out.println(key + " - " + packet.get(key));
 				}
 			}
-			System.out.println("####################################");
+
 		} catch (IOException e) {
 			System.err.println("Exception: " + e.getMessage());
 		}
