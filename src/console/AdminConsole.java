@@ -41,13 +41,24 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
         this.realTimeDesks = false;
         this.realTimeElectionName = null;
     }
-    /* ############################## Rmi Methods ############################## */
 
+    /* ############################## Rmi Related Methods ############################## */
+
+    /**
+     * A remote getter implementation for the realTimeElectionName attribute
+     * @return this realTimeElectionName
+     * @throws RemoteException
+     */
     @Override
     public String getRealTimeElectionName() throws RemoteException {
         return this.realTimeElectionName;
     }
 
+    /**
+     * A function to connect the Administrator console to the running RMI server.
+     * It tries to connect to a running RMI server within a gap of 3s repeatedly
+     * @return RmiServerInterface object if connection is successful (reconnection < 30s), null otherwise
+     */
     public RmiServerInterface connect() {
         RmiServerInterface server;
         long counter = 0, timeout = 30;
@@ -71,13 +82,49 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
         return server;
     }
 
+    /**
+     * A RMI callback for listing the database information
+     * @param server RMI server interface object
+     * @throws RemoteException
+     */
+    public void getDatabaseInfo(RmiServerInterface server) throws RemoteException {
+        server.info(this);
+    }
+
+    /**
+     * A RMI callback to get the results of all ended elections
+     * @param server RmiServerInterface object corresponding to the primary RMI server
+     * @param endedElections CopyOnWriteArrayList of all ended Elections
+     */
+    public void showEndedElectionStatsMenu(RmiServerInterface server, CopyOnWriteArrayList<Election<?>> endedElections) {
+        System.out.println("\n*************************************************************************");
+        for (Election<?> election : endedElections) {
+            try {
+                server.printVotingProcessedData(this, election);
+            } catch (Exception e) {
+                System.out.println("[DEBUG]");
+                e.printStackTrace();
+            }
+        }
+        System.out.println("\n*************************************************************************");
+
+    }
+
     /* ############################## Menus ############################## */
 
+    /**
+     * Main Menu of the Administrator Console
+     * @return Option Selected
+     */
     public int mainMenu() {
         String[] mainMenuOpts = {"Sign Up", "Database Info", "Manage Elections", "Manage Lists", "Real Time Data"};
         return this.parser.choose("Main Menu", mainMenuOpts);
     }
 
+    /**
+     * Sign Up Menu of the Administrator Console
+     * @return Person object with the respective attributes, null if the operation is cancelled
+     */
     public Person signUpMenu() {
         boolean abortFlag = false;
 
@@ -139,6 +186,10 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
         return null;
     }
 
+    /**
+     * Create Election Menu of the Administrator Console
+     * @return Election object with the respective type and attributes, null if the operation is cancelled
+     */
     public Election<? extends Person> createElectionMenu(){
         boolean abortFlag = false;
 
@@ -189,21 +240,40 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
         return null;
     }
 
+    /**
+     * Manage Lists Menu of the Administrator Console
+     * @return Option Selected
+     */
     public int manageListsMenu(){
         String[] manageListsOpts = {"Create List", "Add List to Election", "Remove List from Election", "Add People to List", "Remove People from List"};
         return this.parser.choose("Manage Lists", manageListsOpts);
     }
 
+    /**
+     * Manage Elections Menu of the Administrator Console
+     * @return Option Selected
+     */
     public int manageElectionsMenu() {
         String[] manageElectionsOpts = {"Create Election", "Edit Election", "Ended Elections Log", "Person Audit"};
         return this.parser.choose("Manage Elections",manageElectionsOpts);
     }
 
+    /**
+     * Edit Elections Menu of the Administrator Console
+     * @return Option Selected
+     */
     public int editElectionsMenu() {
         String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date", "Add Department", "Remove Department"};
         return this.parser.choose("Edit Options", opts);
     }
 
+    /**
+     * List of departments available to be added on the add Department Menu
+     * Shows all departments except the ones already associated with the given election
+     * @param election respective Election object
+     * @param departments String array of all departments
+     * @return String array of the available department names
+     */
     public String[] addDepartmentMenu(Election<?> election, String[] departments) {
         ArrayList<String> selectableDepartments = new ArrayList<>();
         for (String deptName : departments) {
@@ -214,20 +284,10 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
         return selectableDepartments.toArray(new String[0]);
     }
 
-    public void showEndedElectionStatsMenu(RmiServerInterface server, CopyOnWriteArrayList<Election<?>> endedElections) {
-        System.out.println("\n*************************************************************************");
-        for (Election<?> election : endedElections) {
-            try {
-                server.printVotingProcessedData(this, election);
-            } catch (Exception e) {
-                System.out.println("[DEBUG]");
-                e.printStackTrace();
-            }
-        }
-        System.out.println("\n*************************************************************************");
-
-    }
-
+    /**
+     * Create List Menu of the Administrator Console
+     * @return List object with the respective type and attributes, null if the operation is cancelled
+     */
     public List<? extends Person> createListMenu(){
         boolean abortFlag = false;
 
@@ -260,6 +320,11 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
         return null;
     }
 
+    /**
+     * Choose elections Sub-Menu
+     * @param elections CopyOnWriteArrayList of the options
+     * @return Option Selected
+     */
     public int chooseElectionsMenu(CopyOnWriteArrayList<Election<?>> elections) {
         ArrayList<String> electionNames = new ArrayList<>();
         for (Election<?> e: elections){
@@ -269,6 +334,11 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
         return this.parser.choose("Choose Election", electionOptionNames);
     }
 
+    /**
+     * Choose lists Sub-Menu
+     * @param lists CopyOnWriteArrayList of the options
+     * @return Option Selected
+     */
     public int chooseListsMenu(CopyOnWriteArrayList<List<?>> lists){
         ArrayList<String> listNames = new ArrayList<>();
         for (List<?> l: lists){
@@ -278,6 +348,11 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
         return this.parser.choose("Choose List", electionOptionNames);
     }
 
+    /**
+     * Choose people Sub-Menu
+     * @param people CopyOnWriteArrayList of the options
+     * @return Option Selected
+     */
     public int choosePeopleMenu(CopyOnWriteArrayList<Person> people){
         ArrayList<String> listNames = new ArrayList<>();
         for (Person p: people){
@@ -287,17 +362,23 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
         return this.parser.choose("Choose Person", electionOptionNames);
     }
 
+    /**
+     * Real Time Menu
+     * @return Option Selected
+     */
     public int realTimeMenu() {
         String[] opts = new String[]{"Real Time Elections", "Real Time Voting Desks"};
         return this.parser.choose("Real Time Menu", opts);
     }
 
-    public void getDatabaseInfo(RmiServerInterface server) throws RemoteException {
-        server.info(this);
-    }
 
     /* ################################################################### */
 
+    /**
+     * Main static method - Instance of an Administrator Console
+     * Controls the whole flow on the Administrator Console
+     * @param args socket: arg#1 = IP arg#2 = port
+     */
     public static void main(String[] args) {
         int optElection, optList, optPeople;
         String[] departments;
