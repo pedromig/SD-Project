@@ -48,11 +48,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
         return this.realTimeElectionName;
     }
 
-    @Override
-    public boolean allowRealTimeDesks() throws RemoteException {
-        return this.realTimeDesks;
-    }
-
     public RmiServerInterface connect() {
         RmiServerInterface server;
         long counter = 0, timeout = 30;
