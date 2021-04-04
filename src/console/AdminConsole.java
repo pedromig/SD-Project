@@ -1,4 +1,4 @@
-package terminals;
+package console;
 
 import rmi.interfaces.RmiAdminConsoleInterface;
 import rmi.interfaces.RmiServerInterface;

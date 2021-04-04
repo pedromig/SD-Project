@@ -95,7 +95,16 @@ public class VotingTerminal implements MulticastProtocol {
 
 				if (Integer.parseInt(connection.get("ITEM_COUNT")) > 2) {
 					System.err.println("Hello " + connection.get("username") + " ready to vote?");
-					registerVote(sc, connection.get("id"), connection.get("vote-manager"));
+					try {
+						registerVote(sc, connection.get("id"), connection.get("vote-manager"));
+					} catch (TimeoutException e) {
+						System.out.println("\nVoting Timeout");
+						try {
+							Thread.sleep(2000);
+						} catch (InterruptedException interruptedException) {
+							interruptedException.printStackTrace();
+						}
+					}
 				}
 
 				System.out.print("\033[H\033[2J");
@@ -104,14 +113,6 @@ public class VotingTerminal implements MulticastProtocol {
 
 			} catch (IOException e) {
 				System.out.println("Exception: " + e.getMessage());
-			} catch (TimeoutException e) {
-				System.out.println("\nVoting Timeout");
-				// TODO: Handle server response on TIMEOUT
-				try {
-					Thread.sleep(2000); // TODO: Take this out
-				} catch (InterruptedException interruptedException) {
-					interruptedException.printStackTrace();
-				}
 			}
 		}
 	}
@@ -119,9 +120,6 @@ public class VotingTerminal implements MulticastProtocol {
 	public String getName() {
 		return name;
 	}
-
-	// target != self
-	// source != votingDesk
 
 	private boolean isNotSelfAddressed(MulticastPacket packet, String senderID) {
 		return (packet.get("target") != null && !packet.get("target").equals(this.getName())) ||
@@ -204,7 +202,7 @@ public class VotingTerminal implements MulticastProtocol {
 				} catch (TimeoutException e) {
 					System.out.println("Voting Timeout");
 					try {
-						Thread.sleep(2000); // TODO: Take this out
+						Thread.sleep(2000);
 					} catch (InterruptedException interruptedException) {
 						interruptedException.printStackTrace();
 					}
@@ -297,7 +295,6 @@ public class VotingTerminal implements MulticastProtocol {
 	private MulticastPacket selectElection(Scanner sc, String voteRecipient) throws TimeoutException {
 		MulticastPacket selected = null;
 		try {
-			// TODO: Select election / Show lists;
 			ArrayList<MulticastPacket> elections = new ArrayList<>();
 			while (true) {
 				MulticastPacket e = MulticastPacket.from(votingSocket, this.getName());

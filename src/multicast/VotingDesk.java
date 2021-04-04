@@ -87,16 +87,33 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		}
 	}
 
+	@Override
+	public void print(String msg) throws RemoteException {
+		System.out.println("[VotingDesk@" + name + "]: " + msg);
+	}
+
+	@Override
+	public String ping() throws RemoteException {
+		StringBuilder sb = new StringBuilder();
+		sb.append("VotingDesk@").append(name);
+		for (String terminal : terminals.keySet()) {
+			sb.append("Terminal: ")
+			  .append(terminal)
+			  .append("\t User: ")
+			  .append(terminals.get(terminal))
+			  .append("\n");
+		}
+		return sb.toString();
+	}
+
 	private <V> V rmiServerRemoteExceptionHandler(Callable<V> function) {
-		V result = null;
-		boolean tryConnect = true;
-		while (tryConnect) {
+		V result;
+		while (true) {
 			try {
 				result = function.call();
 				break;
 			} catch (Exception e) {
-				tryConnect = (rmiServer = this.connectRMIServer()) == null;
-				e.printStackTrace();
+				rmiServer = this.connectRMIServer();
 			}
 		}
 		return result;
@@ -489,6 +506,12 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 					if (user == null) {
 						LOGGER.warning("Voter with Citizen Card ID not found!!");
 						LOGGER.info("Removed voter with Citizen Card ID: " + voter);
+						continue;
+					}
+
+					if (terminals.containsValue(String.valueOf(user.getIdentityCardNumber()))) {
+						LOGGER.warning("Voter with Citizen Card ID: " + user.getIdentityCardNumber() +
+									   " is already voting (there is an impostor among us)");
 						continue;
 					}
 

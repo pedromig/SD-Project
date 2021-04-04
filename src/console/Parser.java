@@ -1,4 +1,4 @@
-package terminals;
+package console;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
