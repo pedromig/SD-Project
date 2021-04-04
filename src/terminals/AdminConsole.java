@@ -847,6 +847,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                 while (admin.realTimeElectionName != null) {
                                     try {
                                         System.out.println(new GregorianCalendar().getTime());
+                                        election = server.getElection(election.getName());
                                         server.printVotingProcessedData((RmiAdminConsoleInterface) admin, election);
                                         Thread.sleep(1000);
                                     } catch (Exception e) {

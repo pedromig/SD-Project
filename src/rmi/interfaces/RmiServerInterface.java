@@ -97,7 +97,7 @@ public interface RmiServerInterface extends Remote {
 	CopyOnWriteArrayList<Person> getPeopleUnassignedOfType(Class<?> type) throws RemoteException;
 
 
-	void vote(Vote vote) throws RemoteException;
+	boolean vote(Vote vote) throws RemoteException;
 
 	boolean hasVoted(String electionName, int personID) throws RemoteException;
 

@@ -414,11 +414,14 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	}
 
 	@Override
-	public synchronized void vote(Vote vote) throws RemoteException {
+	public synchronized boolean vote(Vote vote) throws RemoteException {
+		boolean status = false;
 		Election<?> election = this.getElection(vote.getElectionName());
 		if (this.compareDates(new GregorianCalendar(), election.getEndDate()) &&
 			!this.hasVoted(vote.getElectionName(), vote.getPersonID())) {
 			election.addVote(vote);
+			status = true;
+
 			this.saveElections();
 			for (RmiAdminConsoleInterface admin : this.adminConsoles) {
 				try {
@@ -427,6 +430,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 						this.printVotingProcessedData(admin, election);
 					}
 				} catch (Exception e) {
+					status = false;
 					/* In case the admin doesnt respond anymore, to keep iterating over the other ones */
 					// This might be a bad Idea because the admin console can have a short network failure... might as
 					// well just
@@ -435,6 +439,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 				}
 			}
 		}
+		return status;
 	}
 
 	@Override
@@ -449,27 +454,30 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	@Override
 	public synchronized void printVotingProcessedData(RmiAdminConsoleInterface admin, Election<?> election) throws RemoteException {
 		int total = 0;
+		int nullVotes = 0;
 		String listName;
 		HashMap<String, Integer> results = new HashMap<>();
 		for (Vote v : election.getVotes()) {
 			listName = v.getVotedListName();
-			if (listName != null) {
+
+			if (!listName.equals(Vote.NULL_VOTE)) {
 				results.putIfAbsent(listName, 0);
 				results.put(listName, results.get(listName) + 1);
+				total++;
 			} else {
-				results.put("whiteVotes", results.get("whiteVotes") + 1);
+				nullVotes++;
 			}
-			total++;
 		}
 
 		/* Printing */
 		admin.print(" - " + election.getName());
-		if (total != 0) {
+		if (total + nullVotes != 0) {
 			for (Map.Entry<String, Integer> entry : results.entrySet()) {
 				String key = entry.getKey();
 				Integer value = entry.getValue();
 				admin.print("\tList: " + key + "\t Votes:" + value + "\t % " + 100 * value / (float) total);
 			}
+			admin.print("\tNull Votes: " + nullVotes);
 		} else {
 			admin.print("\tNo Votes available");
 		}

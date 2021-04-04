@@ -120,10 +120,13 @@ public class VotingTerminal implements MulticastProtocol {
 		return name;
 	}
 
+	// target != self
+	// source != votingDesk
+
 	private boolean isNotSelfAddressed(MulticastPacket packet, String senderID) {
-		return !packet.get("source").equals(senderID) &&
-			   packet.get("target") != null &&
-			   !packet.get("target").equals(this.getName());
+		return (packet.get("target") != null && !packet.get("target").equals(this.getName())) ||
+			   (packet.get("target") != null && packet.get("target").equals(this.getName()) &&
+				!packet.get("source").equals(senderID));
 	}
 
 	private MulticastPacket connectToVotingDesk() {
@@ -218,25 +221,39 @@ public class VotingTerminal implements MulticastProtocol {
 		try {
 			String option = null;
 			if (authenticateVoter(sc, voterID, voteRecipient)) {
-				votingForm(voteRecipient);
-
+				MulticastPacket election;
 				System.out.println("You have " + VOTING_TIMEOUT_MS / 1000 + " seconds to vote!");
-				while (option == null || option.length() == 0) {
-					FutureTask<String> task = new FutureTask<>(sc::nextLine);
-					new Thread(task).start();
-					System.out.print("Option: ");
-					option = task.get(VOTING_TIMEOUT_MS, TimeUnit.MILLISECONDS).trim();
+
+				if ((election = selectElection(sc, voteRecipient)) != null) {
+
+					for (String key : election.getItems().keySet()) {
+						if (!key.matches("source|ITEM_COUNT|ITEM_LIST|target|election-name|type")) {
+							System.out.println(key + " - " + election.get(key));
+						}
+					}
+
+					while (election.get(option) == null) {
+						FutureTask<String> task = new FutureTask<>(sc::nextLine);
+						new Thread(task).start();
+						System.out.print("Option: ");
+						option = task.get(VOTING_TIMEOUT_MS, TimeUnit.MILLISECONDS).trim();
+					}
+
+					MulticastPacket vote =
+							MulticastProtocol.vote(this.getName(),
+									election.get("election-name"),
+									election.get(option)
+							);
+					vote.sendTo(votingSocket, votingGroup, votingPort);
+
+					MulticastPacket confirmation;
+					do {
+						confirmation = MulticastPacket.from(votingSocket, this.getName());
+					} while (isNotSelfAddressed(confirmation, voteRecipient));
+
+					System.out.println("Vote was registered successfully!");
+					Thread.sleep(2000); // TODO: remove this
 				}
-
-				String election = "Lol"; // FIXME: select election
-				MulticastPacket vote = MulticastProtocol.vote(this.getName(), election, option);
-				vote.sendTo(votingSocket, votingGroup, votingPort);
-
-				MulticastPacket confirmation;
-				do {
-					confirmation = MulticastPacket.from(votingSocket, this.getName());
-				} while (isNotSelfAddressed(confirmation, voteRecipient));
-
 			}
 		} catch (InterruptedException | ExecutionException | IOException e) {
 			System.err.println("Exception: " + e.getMessage());
@@ -277,32 +294,40 @@ public class VotingTerminal implements MulticastProtocol {
 		return attempts != 0;
 	}
 
-	private void votingForm(String voteRecipient) {
+	private MulticastPacket selectElection(Scanner sc, String voteRecipient) throws TimeoutException {
+		MulticastPacket selected = null;
 		try {
 			// TODO: Select election / Show lists;
-			MulticastPacket l;
-			ArrayList<MulticastPacket> lists = new ArrayList<>();
+			ArrayList<MulticastPacket> elections = new ArrayList<>();
 			while (true) {
-				l = MulticastPacket.from(votingSocket, this.getName());
-				if (l.get("type").equals(MulticastProtocol.STATUS) &&
-					l.get("status").equals("info-sent") && !isNotSelfAddressed(l, voteRecipient)) {
+				MulticastPacket e = MulticastPacket.from(votingSocket, this.getName());
+				if (isNotSelfAddressed(e, voteRecipient))
+					continue;
+				if (e.get("type").equals(MulticastProtocol.STATUS))
 					break;
-				} else if (!isNotSelfAddressed(l, voteRecipient)) {
-					lists.add(l);
-				}
-				System.out.println(l);
+				elections.add(e);
 			}
 
-			for (MulticastPacket packet : lists) {
-				System.out.println("Election name: " + packet.get("election-name"));
-				for (String key : packet.getItems().keySet()) {
-					System.out.println(key + " - " + packet.get(key));
-				}
+			System.out.println("################ AVAILABLE ELECTIONS ################");
+			int opt = 1;
+			for (MulticastPacket packet : elections) {
+				System.out.println(opt++ + " - " + packet.get("election-name"));
 			}
+			System.out.println("#####################################################");
 
-		} catch (IOException e) {
+			int election = -1;
+			while (election <= 0 || election > elections.size()) {
+				System.out.print("Choose Election: ");
+				FutureTask<Integer> task = new FutureTask<>(sc::nextInt);
+				new Thread(task).start();
+				election = task.get(VOTING_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+			}
+			selected = elections.get(election - 1);
+
+		} catch (IOException | InterruptedException | ExecutionException e) {
 			System.err.println("Exception: " + e.getMessage());
 		}
+		return selected;
 	}
 }
 

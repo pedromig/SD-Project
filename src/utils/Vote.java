@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 
 public class Vote implements Serializable {
+    public static final String NULL_VOTE = "NULL";
+    public static final String WHITE_VOTE = "WHITE";
+
     private int personID;
     private final String votingDeskID;
     private String electionName, votedListName;
@@ -25,24 +28,8 @@ public class Vote implements Serializable {
         return personID;
     }
 
-    public void setPersonID(int personID) {
-        this.personID = personID;
-    }
-
-    public String setElectionName() {
-        return electionName;
-    }
-
-    public void setElectionName(String electionName) {
-        this.electionName = electionName;
-    }
-
     public String getVotedListName() {
         return votedListName;
-    }
-
-    public void setVotedListName(String votedListName) {
-        this.votedListName = votedListName;
     }
 
     public GregorianCalendar getMoment() {

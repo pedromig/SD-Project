@@ -7,6 +7,7 @@ import multicast.ui.VotingDeskUI;
 
 import rmi.interfaces.RmiMulticastServerInterface;
 import rmi.interfaces.RmiServerInterface;
+
 import utils.Vote;
 import utils.elections.Election;
 import utils.lists.List;
@@ -21,19 +22,11 @@ import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.*;
 
-// FIXME: If client sends greeting in the wrong group it will not work and the server will throw and exception
-// FIXME: @Override RMI MulticastInterface and implement ping message -> put the terminal status hashtable there
-// FIXME: If terminals start and server dies when he goes back up the terminals will not listen to the
-//  MulticastProtocol.probe cause they are already blocked and waiting (associated with the last instance of the
-//  multicast server
-// FIXME: Dont forget to change hardcoded
-// FIXME: Wrap persons in try catch
-// FIXME: Check rmi reconnect;
-// FIXME: Check if person is already voting (do not allow same person at the same time)
 
 public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol, RmiMulticastServerInterface {
 
@@ -55,6 +48,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	// Attributes
 	private String name;
 
+	private static final String rmiServerUrl = "RmiServer";
 	private RmiServerInterface rmiServer;
 
 	private MulticastSocket statusSocket;
@@ -88,11 +82,25 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 			server = new VotingDesk(args[0]);
 			server.start();
 		} catch (RemoteException e) {
-			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Could not found entry on rmi registry (probably its down...) : " + e.getMessage());
 			System.exit(-1);
 		}
 	}
 
+	private <V> V rmiServerRemoteExceptionHandler(Callable<V> function) {
+		V result = null;
+		boolean tryConnect = true;
+		while (tryConnect) {
+			try {
+				result = function.call();
+				break;
+			} catch (Exception e) {
+				tryConnect = (rmiServer = this.connectRMIServer()) == null;
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 
 	private Properties readPropertiesFile(String path) {
 		Properties config = new Properties();
@@ -105,13 +113,13 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		return config;
 	}
 
-	private RmiServerInterface connectRMIServer(String url) {
+	private RmiServerInterface connectRMIServer() {
 		int attempt = 0;
 		RmiServerInterface server = null;
 
 		while (attempt++ != RMI_RECONNECT_ATTEMPTS) {
 			try {
-				server = (RmiServerInterface) Naming.lookup(url);
+				server = (RmiServerInterface) Naming.lookup(rmiServerUrl);
 				server.subscribe(this);
 				return server;
 			} catch (RemoteException e) {
@@ -135,9 +143,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 	public void start() {
 		setupLogger();
-		String url = "RmiServer";
-
-		if ((this.rmiServer = connectRMIServer(url)) != null) {
+		if ((this.rmiServer = connectRMIServer()) != null) {
 
 			Properties configs = readPropertiesFile(this.config);
 			this.name = (String) configs.getOrDefault(
@@ -308,7 +314,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 							boolean reconnected = false;
 							if (terminals.get(target) != null && !terminals.get(target).equals("EMPTY")) {
-								Person user = rmiServer.getPerson(Integer.parseInt(terminals.get(target)));
+								Person user = rmiServerRemoteExceptionHandler(
+										() -> rmiServer.getPerson(Integer.parseInt(terminals.get(target)))
+								);
 								assert user != null :
 										"No such user in the RMI database. (Please verify database integrity)";
 
@@ -343,7 +351,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 							break;
 
 						case MulticastProtocol.GOODBYE:
-							// TODO: Handle terminal shutdown properly
+							// Perhaps Handle terminal shutdown properly
 							LOGGER.info("Voting Terminal Disconnected");
 							break;
 
@@ -371,28 +379,32 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 					String requestType = request.get("type");
 
 					if (requestType.equals(MulticastProtocol.VOTE)) {
-						System.out.println(request);
 
 						String election = request.get("election");
 						String list = request.get("list");
 
-						Person user = rmiServer.getPerson(Integer.parseInt(terminals.get(requestSource)));
+						Person user = rmiServerRemoteExceptionHandler(
+								() -> rmiServer.getPerson(Integer.parseInt(terminals.get(requestSource)))
+						);
 						assert user != null : "No such user in the RMI database. (Please verify database integrity)";
 
-						Vote vote = new Vote(user.getIdentityCardNumber(), election, list, this.getName());
-						rmiServer.vote(vote);
+						Vote vote = new Vote(user.getIdentityCardNumber(), election, list, name);
+						rmiServerRemoteExceptionHandler(() -> rmiServer.vote(vote));
 
 						MulticastPacket ack = MulticastProtocol.acknowledge(this.getName(), requestSource);
 						ack.sendTo(votingSocket, votingGroup, votingPort);
-						System.out.println(ack);
-						// FIXME: remove person from terminal in hashtable
+
+						terminals.put(requestSource, "EMPTY");
 
 					} else if (request.get("target").equals(this.getName()) &&
 							   requestType.equals(MulticastProtocol.LOGIN)) {
 
 						MulticastPacket status;
-						Person user = rmiServer.getPerson(Integer.parseInt(terminals.get(requestSource).trim()));
+						Person user = rmiServerRemoteExceptionHandler(
+								() -> rmiServer.getPerson(Integer.parseInt(terminals.get(requestSource).trim()))
+						);
 
+						assert user != null;
 						if (user.getPassword().equals(request.get("password"))) {
 							status = MulticastProtocol.status(this.getName(), requestSource, "logged-in");
 						} else {
@@ -402,31 +414,41 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 						}
 						status.sendTo(votingSocket, votingGroup, votingPort);
 
-						CopyOnWriteArrayList<Election<?>> elections = rmiServer.getRunningElectionsByDepartment(name);
-						System.out.println(elections);
+						CopyOnWriteArrayList<Election<?>> elections = rmiServerRemoteExceptionHandler(
+								() -> rmiServer.getRunningElectionsByDepartment(name)
+						);
+						assert elections != null;
 						elections.removeIf(election -> !election.getType().equals(user.getType()));
 
-
 						for (Election<?> election : elections) {
-							if (!rmiServer.hasVoted(election.getName(), user.getIdentityCardNumber())) {
+
+							Boolean hasVoted = rmiServerRemoteExceptionHandler(
+									() -> rmiServer.hasVoted(election.getName(), user.getIdentityCardNumber())
+							);
+							assert hasVoted != null : "Unexpected handling remote exception";
+
+							if (!hasVoted) {
 								HashMap<String, String> packetInfo = new HashMap<>();
 								packetInfo.put("election-name", election.getName());
 
-								System.out.println(election.getName());
-								CopyOnWriteArrayList<List<?>> lists =
-										rmiServer.getListsAssignedOfType(user.getType(), election.getName());
+								CopyOnWriteArrayList<List<?>> lists = rmiServerRemoteExceptionHandler(() ->
+										rmiServer.getListsAssignedOfType(user.getType(), election.getName())
+								);
 
 								int opt = 1;
-								for (List<?> l : lists) {
+								assert lists != null : "Unexpected handling remote exception";
+								for (List<?> l : lists)
 									packetInfo.put(String.valueOf(opt++), l.getName());
-									System.out.println(l.getName());
-								}
+
+								packetInfo.put(String.valueOf(opt++), Vote.WHITE_VOTE);
+								packetInfo.put(String.valueOf(opt), Vote.NULL_VOTE);
 
 								MulticastPacket options =
 										MulticastProtocol.itemList(this.getName(), requestSource, packetInfo);
 								options.sendTo(votingSocket, votingGroup, votingPort);
 							}
 						}
+
 						MulticastPacket confirmation =
 								MulticastProtocol.status(this.getName(), requestSource, "info-sent");
 						confirmation.sendTo(votingSocket, votingGroup, votingPort);
@@ -460,15 +482,42 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 					String voter = voters.take();
 					LOGGER.info("Processing voter with Citizen Card ID: " + voter);
 
-					Person user = rmiServer.getPerson(Integer.parseInt(voter));
+					Person user = rmiServerRemoteExceptionHandler(
+							() -> rmiServer.getPerson(Integer.parseInt(voter))
+					);
+
 					if (user == null) {
 						LOGGER.warning("Voter with Citizen Card ID not found!!");
 						LOGGER.info("Removed voter with Citizen Card ID: " + voter);
 						continue;
 					}
 
-					// TODO: check if he is eligible to vote
+					boolean canVote = false;
+					CopyOnWriteArrayList<Election<?>> elections = rmiServerRemoteExceptionHandler(
+							() -> rmiServer.getRunningElectionsByDepartment(name)
+					);
+					assert elections != null : "Unexpected error handling remote exception";
+					elections.removeIf(election -> !election.getType().equals(user.getType()));
 
+					for (Election<?> election : elections) {
+
+						Boolean hasVoted = rmiServerRemoteExceptionHandler(
+								() -> rmiServer.hasVoted(election.getName(), user.getIdentityCardNumber())
+						);
+						assert hasVoted != null : "Unexpected error handling remote exception";
+
+						if (!hasVoted) {
+							canVote = true;
+							break;
+						}
+					}
+
+					if (!canVote || elections.isEmpty()) {
+						LOGGER.warning("Voter with Citizen Card ID: " + voter +
+									   " is not eligible to vote in any election!");
+						LOGGER.info("Removed voter with Citizen Card ID: " + voter);
+						continue;
+					}
 
 					boolean timeoutFlag = true;
 					LOGGER.info("Voter with Citizen Card ID identified");
@@ -477,7 +526,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 						LOGGER.info("Waiting for terminal to be available");
 						String terminal = availableTerminals.take();
+
 						LOGGER.info("Terminal " + terminal + " requested by voter with Citizen Card ID: " + voter);
+						terminals.put(terminal, voter);
 
 						HashMap<String, String> userItems = new HashMap<>();
 						userItems.put("id", voter);
@@ -491,11 +542,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 							MulticastPacket ack = MulticastPacket.from(ackListenerSocket, this.getName());
 							if (ack.get("type").equals(MulticastProtocol.ACKNOWLEDGE) &&
 								ack.get("target").equals(this.getName())) {
-								terminals.put(terminal, voter);
 								LOGGER.info("Voter with Citizen Card ID: " + voter + " assigned to terminal: " + terminal);
 							}
 							timeoutFlag = false;
-
 						} catch (SocketTimeoutException e) {
 							LOGGER.warning("Terminal " + terminal + " not responding and is probably down...");
 							LOGGER.warning("Re-rooting voter with Citizen Card ID: " + voter + " to another terminal");
