@@ -18,6 +18,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -80,7 +81,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	private CopyOnWriteArrayList<List<? extends Person>> lists;
 	private CopyOnWriteArrayList<Person> people;
 	private CopyOnWriteArrayList<RmiAdminConsoleInterface> adminConsoles;
-	private CopyOnWriteArrayList<RmiMulticastServerInterface> multicastServers;
+	private Hashtable<String, RmiMulticastServerInterface> multicastServers;
 
 	/* ################## RmiServerInterface interface methods ######################## */
 
@@ -91,19 +92,22 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 
 	@Override
 	public synchronized void subscribe(RmiMulticastServerInterface multicastDesk, String name) throws RemoteException {
-		this.multicastServers.add(multicastDesk);
+		System.out.println("Name: " + name);
+		System.out.println("msi: "+ multicastDesk);
+		this.multicastServers.put(name, multicastDesk);
 	}
 
 	@Override
 	public synchronized void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException {
-		//FIXME: remove iterator (i) and swap by respective multicast server department name
-		int i = 0;
-		for (RmiMulticastServerInterface multicastServer : this.multicastServers) {
+		for (Map.Entry<String, RmiMulticastServerInterface> entry : this.multicastServers.entrySet()) {
+			String name = entry.getKey();
+			RmiMulticastServerInterface msi = entry.getValue();
 			try {
-				multicastServer.ping();
-				adminConsole.print("Server[" + i++ + "]: ON");
+				String additionalInfo = msi.ping();
+				adminConsole.print("Server[" + name + "]: ON");
+				adminConsole.print(additionalInfo);
 			} catch (Exception e) {
-				adminConsole.print("Server[" + i++ + "]: OFF");
+				adminConsole.print("Server[" + name + "]: OFF");
 			}
 		}
 	}
@@ -523,7 +527,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		this.lists = lists;
 		this.people = people;
 		this.adminConsoles = new CopyOnWriteArrayList<>();
-		this.multicastServers = new CopyOnWriteArrayList<>();
+		this.multicastServers = new Hashtable<>();
 	}
 
 	/* Save Data */
@@ -612,7 +616,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 
 		/* STONITH */
 		try {
-			System.out.println("Trying to remove:");
+			System.out.print("Trying to remove: ");
 			System.out.println(server);
 			Naming.unbind("rmi://" + IP + ":" + PORT  + "/RmiServer");
 			System.out.println("STONITH Success");

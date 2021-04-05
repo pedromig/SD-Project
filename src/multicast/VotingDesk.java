@@ -317,12 +317,12 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		));
 
 
-		if ((this.rmiServer = connectRMIServer()) != null) {
+		this.name = (String) configs.getOrDefault(
+				"server.department.name",
+				DEFAULT_MULTICAST_SERVER_NAME
+		);
 
-			this.name = (String) configs.getOrDefault(
-					"server.department.name",
-					DEFAULT_MULTICAST_SERVER_NAME
-			);
+		if ((this.rmiServer = connectRMIServer()) != null) {
 
 			try {
 				this.statusGroup = InetAddress.getByName((String)
