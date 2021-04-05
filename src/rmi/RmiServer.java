@@ -86,11 +86,22 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 
 	/* ################## RmiServerInterface interface methods ######################## */
 
+	/**
+	 * A method to save the Administrator Consoles that connect to the RMI Server
+	 * @param adminConsole The Remote Administrator Console Interface
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void subscribe(RmiAdminConsoleInterface adminConsole) throws RemoteException {
 		this.adminConsoles.add(adminConsole);
 	}
 
+	/**
+	 *  method to save the Voting Desks that connect to the RMI Server
+	 * @param multicastDesk The remote Voting Desk Interface
+	 * @param name identification of the department that this voting desk is in
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void subscribe(RmiMulticastServerInterface multicastDesk, String name) throws RemoteException {
 		System.out.println("Name: " + name);
@@ -98,6 +109,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		this.multicastServers.put(name, multicastDesk);
 	}
 
+	/**
+	 * Callback where the RMI server gets a request from an Administrator Console about the state of the voting desks
+	 * and their respective terminals, pings all the desks subscribed to him, and prints the replies on the requester
+	 * @param adminConsole admin console that requested the information
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException {
 		for (Map.Entry<String, RmiMulticastServerInterface> entry : this.multicastServers.entrySet()) {
@@ -113,6 +130,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
+	/**
+	 * Callback to get an overview of the objects in the database
+	 * @param client AdminConsole that requested the information
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void info(RmiAdminConsoleInterface client) throws RemoteException {
 		client.print("\n*************************************************************************");
@@ -125,11 +147,21 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		client.print("\n*************************************************************************");
 	}
 
+	/**
+	 * Getter for all available Departments
+	 * @return String array of all available departments
+	 * @throws RemoteException
+	 */
 	@Override
 	public String[] getDepartments() throws RemoteException {
 		return UC_DEPARTMENTS;
 	}
 
+	/**
+	 * A method to sign up a person in the database
+	 * @param person the Person object to be saved
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void signUp(Person person) throws RemoteException {
 		for (Person p : this.people) {
@@ -143,6 +175,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		System.out.println("[" + person.getName() + "] SIGNED UP");
 	}
 
+	/**
+	 * A method to create an election in the database
+	 * @param election Election object to be saved
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void createElection(Election<? extends Person> election) throws RemoteException {
 		for (Election<?> e : this.elections) {
@@ -156,6 +193,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		System.out.println("CREATED: Election [" + election.getName() + "] ");
 	}
 
+	/**
+	 * Method to Edit an Election Name
+	 * @param electionName election name of the target Election object
+	 * @param newName replace name
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void editElectionName(String electionName, String newName) throws RemoteException {
 		Election<?> election = this.getElection(electionName);
@@ -171,6 +214,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
+	/**
+	 * Method to Edit an Election Description
+	 * @param electionName election name of the target Election object
+	 * @param newDescription replace description
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void editElectionDescription(String electionName, String newDescription) throws RemoteException {
 		Election<?> election = this.getElection(electionName);
@@ -180,6 +229,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
+	/**
+	 * Method to Edit an Election Start Date
+	 * @param electionName election name of the target Election object
+	 * @param newDate replace date
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void editElectionStartDate(String electionName, GregorianCalendar newDate) throws RemoteException {
 		Election<?> election = this.getElection(electionName);
@@ -191,6 +246,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
+	/**
+	 * Method to Edit an Election End Date
+	 * @param electionName election name of the target Election object
+	 * @param newDate replace date
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void editElectionEndDate(String electionName, GregorianCalendar newDate) throws RemoteException {
 		Election<?> election = this.getElection(electionName);
@@ -201,6 +262,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
+	/**
+	 * Method to associate an election to a certain department
+	 * @param electionName election name of the target Election object
+	 * @param departmentName department name of the target Department object
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void addDepartment(String electionName, String departmentName) throws RemoteException {
 		Election<?> election = this.getElection(electionName);
@@ -210,6 +277,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
+	/**
+	 * Method to dissociate an election of a certain department
+	 * @param electionName election name of the target Election object
+	 * @param departmentName department name of the target Department object
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void removeDepartment(String electionName, String departmentName) throws RemoteException {
 		Election<?> election = this.getElection(electionName);
@@ -219,6 +292,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
+	/**
+	 * Method to add a department restriction to a given election
+	 * @param electionName election name of the target Election object
+	 * @param departmentName department name of the target Department object
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void addRestriction(String electionName, String departmentName) throws RemoteException {
 		Election<?> election = this.getElection(electionName);
@@ -228,6 +307,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
+	/**
+	 * Method to remove a department restriction of a given election
+	 * @param electionName election name of the target Election object
+	 * @param departmentName department name of the target Department object
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void removeRestriction(String electionName, String departmentName) throws RemoteException {
 		Election<?> election = this.getElection(electionName);
@@ -237,6 +322,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
+	/**
+	 * Method to create a List in the database
+	 * @param list List object to be saved
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void createList(List<? extends Person> list) throws RemoteException {
 		for (List<?> l : this.lists) {
@@ -250,6 +340,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		System.out.println("CREATE: List [" + list.getName() + "]");
 	}
 
+	/**
+	 * A method to associate a List to an Election
+	 * @param electionName election name of the target Election object
+	 * @param listName list name of the target List object
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void associateListToElection(String electionName, String listName) throws RemoteException {
 		for (List<?> l : this.lists) {
@@ -262,6 +358,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
+	/**
+	 * A method to associate a Person to a List
+	 * @param listName list name of the target List object
+	 * @param personID ID of the target Person object
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void associatePersonToList(String listName, int personID) throws RemoteException {
 		for (Person p : this.people) {
@@ -274,6 +376,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
+	/**
+	 * Search method for an Election object given an election name
+	 * @param electionName the name of the election to search by
+	 * @return an Election object if found, else null
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized Election<?> getElection(String electionName) throws RemoteException {
 		for (Election<?> e : this.elections)
@@ -282,6 +390,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return null;
 	}
 
+	/**
+	 * Getter for Elections that did not start yet
+	 * @return CopyOnWriteArrayList with all the elections that did not start yet
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<Election<?>> getFutureElections() throws RemoteException {
 		CopyOnWriteArrayList<Election<?>> futureElections = new CopyOnWriteArrayList<>();
@@ -292,6 +405,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return futureElections;
 	}
 
+	/**
+	 * Getter for Elections that have ended
+	 * @return CopyOnWriteArrayList of all the elections that have ended
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<Election<?>> getEndedElections() throws RemoteException {
 		CopyOnWriteArrayList<Election<?>> endedElections = new CopyOnWriteArrayList<>();
@@ -303,6 +421,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return endedElections;
 	}
 
+	/**
+	 * Getter for Elections that are currently running
+	 * @return CopyOnWriteArrayList with all the elections that are currently running
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<Election<?>> getRunningElections() throws RemoteException {
 		CopyOnWriteArrayList<Election<?>> running = new CopyOnWriteArrayList<>();
@@ -315,6 +438,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return running;
 	}
 
+	/**
+	 * Getter for Elections that are currently running on a given department
+	 * @param department name of the department
+	 * @return CopyOnWriteArrayList with all running elections in the given department
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<Election<?>> getRunningElectionsByDepartment(String department) throws RemoteException {
 		CopyOnWriteArrayList<Election<?>> elections = new CopyOnWriteArrayList<>();
@@ -326,6 +455,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return elections;
 	}
 
+	/**
+	 * Getter for Lists of a given Type
+	 * @param type type of the People allowed to vote and to be a part of the list
+	 * @return CopyOnWriteArrayList with all the lists of the given type
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<List<?>> getListsOfType(Class<?> type) throws RemoteException {
 		CopyOnWriteArrayList<List<?>> lists = new CopyOnWriteArrayList<>();
@@ -336,6 +471,13 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return lists;
 	}
 
+	/**
+	 * Getter for Lists assigned to a given election of a given type
+	 * @param type type of the People allowed to vote and to be a part of the list
+	 * @param electionName the name of the election to search by
+	 * @return CopyOnWriteArrayList with all the lists assigned to a given election of the given type
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<List<?>> getListsAssignedOfType(Class<?> type, String electionName) throws RemoteException {
 		CopyOnWriteArrayList<List<?>> lists = this.getListsOfType(type);
@@ -344,6 +486,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return lists;
 	}
 
+	/**
+	 * Getter for Lists unassigned to any election
+	 * @return CopyOnWriteArrayList of all the lists that are unassigned to any election
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<List<?>> getListsUnassigned() throws RemoteException {
 		CopyOnWriteArrayList<List<?>> lists = new CopyOnWriteArrayList<>();
@@ -355,6 +502,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return lists;
 	}
 
+	/**
+	 * Getter for Lists unassigned to any election of a given type
+	 * @param type type of the People allowed to vote and to be a part of the list
+	 * @return CopyOnWriteArrayList of all the lists that are unassigned to any election of the given type
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<List<?>> getListsUnassignedOfType(Class<?> type) throws RemoteException {
 		CopyOnWriteArrayList<List<?>> listsOfType = getListsOfType(type);
@@ -363,6 +516,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return listsOfType;
 	}
 
+	/**
+	 * Getter for assigned Lists which election has not yet started
+	 * @return CopyOnWriteArrayList with all of the Lists which election has not yet started
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<List<?>> getFutureLists() throws RemoteException {
 		CopyOnWriteArrayList<List<?>> lists = new CopyOnWriteArrayList<>();
@@ -377,6 +535,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return lists;
 	}
 
+	/**
+	 * Getter for the Lists that are not assigned or which election has not yet started
+	 * @return CopyOnWriteArrayList with all of the Lists that are not assigned or which election has not yet started
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<List<?>> getEditableLists() throws RemoteException {
 		CopyOnWriteArrayList<List<?>> futureLists = this.getFutureLists();
@@ -385,11 +548,22 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return futureLists;
 	}
 
+	/**
+	 * Getter for all of the People in the database
+	 * @return CopyOnWriteArrayList with all of the People in the database
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<Person> getPeople() throws RemoteException {
 		return this.people;
 	}
 
+	/**
+	 * Search method to get a Person given his ID
+	 * @param personId id of the Person object
+	 * @return a Person object if the given ID matches, null otherwise
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized Person getPerson(int personId) throws RemoteException {
 		for (Person p : this.people) {
@@ -400,6 +574,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return null;
 	}
 
+	/**
+	 * Getter for people of a given type
+	 * @param type type of a Person Object
+	 * @return CopyOnWriteArrayList with all the people of the given type
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<Person> getPeopleOfType(Class<?> type) throws RemoteException {
 		CopyOnWriteArrayList<Person> people = new CopyOnWriteArrayList<>();
@@ -410,6 +590,13 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return people;
 	}
 
+	/**
+	 * Getter for people Assigned to a list and of a given type
+	 * @param type type of a Person object
+	 * @param listName name of the List target object
+	 * @return CopyOnWriteArrayList of People who are assigned to the given list name and are of the given type
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<Person> getPeopleAssignedOfType(Class<?> type, String listName) throws RemoteException {
 		CopyOnWriteArrayList<Person> people = this.getPeopleOfType(type);
@@ -417,17 +604,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return people;
 	}
 
-	@Override
-	public synchronized CopyOnWriteArrayList<Person> getPeopleUnassigned() throws RemoteException {
-		CopyOnWriteArrayList<Person> people = new CopyOnWriteArrayList<>();
-		for (Person p : this.people) {
-			if (p.getList() == null) {
-				people.add(p);
-			}
-		}
-		return people;
-	}
-
+	/**
+	 * Getter for people unassigned of the given type
+	 * @param type type of a Person object
+	 * @return CopyOnWriteArrayList of People who are unassigned and of the given type
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized CopyOnWriteArrayList<Person> getPeopleUnassignedOfType(Class<?> type) throws RemoteException {
 		CopyOnWriteArrayList<Person> people = this.getPeopleOfType(type);
@@ -435,6 +617,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return people;
 	}
 
+	/**
+	 * A method to add a vote to an election the in the database
+	 * @param vote Vote Object that contains the voting details
+	 * @return true if the message is communicated to all the subscribed administrator consoles, false otherwise
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized boolean vote(Vote vote) throws RemoteException {
 		boolean status = false;
@@ -464,6 +652,13 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return status;
 	}
 
+	/**
+	 * A method to check if a Person has already voted on a given Election
+	 * @param electionName election name of the target Election object
+	 * @param personID id of the Person object
+	 * @return true if the person has already voted on the given election, false otherwise
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized boolean hasVoted(String electionName, int personID) throws RemoteException {
 		Election<?> election = this.getElection(electionName);
@@ -473,6 +668,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return false;
 	}
 
+	/**
+	 * Method to process and then print the voting details on an Administrator console
+	 * @param admin the administrator console that made the request
+	 * @param election The Election object to retrieve the details
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void printVotingProcessedData(RmiAdminConsoleInterface admin, Election<?> election) throws RemoteException {
 		int total = 0;
@@ -505,6 +706,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
+	/**
+	 * Method to print the voting acts of a given person
+	 * @param admin the administrator console that made the request
+	 * @param personID the ID of the target Person
+	 * @throws RemoteException
+	 */
 	@Override
 	public synchronized void printElectorVotesInfo(RmiAdminConsoleInterface admin, int personID) throws RemoteException {
 		for (Election<?> e : this.elections) {
@@ -519,6 +726,14 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 
 	/* ################################################################################# */
 
+	/**
+	 * Builder
+	 * @param elections elections CopyOnWriteArrayList
+	 * @param lists lists CopyOnWriteArrayList
+	 * @param people people CopyOnWriteArrayList
+	 * @param dirPath path of the database directory
+	 * @throws RemoteException
+	 */
 	public RmiServer(CopyOnWriteArrayList<Election<? extends Person>> elections,
 					 CopyOnWriteArrayList<List<? extends Person>> lists,
 					 CopyOnWriteArrayList<Person> people,
@@ -533,18 +748,37 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	}
 
 	/* Save Data */
+
+	/**
+	 * Method to save all elections
+	 * @return
+	 */
 	public synchronized boolean saveElections() {
-		return RmiServer.saveData(electionsFilePath, this.elections);
+		return RmiServer.saveData(dirPath + electionsFilePath, this.elections);
 	}
 
+	/**
+	 * Method to save all lists
+	 * @return
+	 */
 	public synchronized boolean saveLists() {
-		return RmiServer.saveData(listsFilePath, this.lists);
+		return RmiServer.saveData(dirPath + listsFilePath, this.lists);
 	}
 
+	/**
+	 * Method to save all people
+	 * @return
+	 */
 	public synchronized boolean savePeople() {
-		return RmiServer.saveData(peopleFilePath, this.people);
+		return RmiServer.saveData(dirPath + peopleFilePath, this.people);
 	}
 
+	/**
+	 * Method to save Objects on a obj File
+	 * @param path path of the obj file
+	 * @param object object to be stored
+	 * @return true in case of success, false otherwise
+	 */
 	public synchronized static boolean saveData(String path, Object object) {
 		try {
 			FileOutputStream os = new FileOutputStream(path);
@@ -560,18 +794,39 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	}
 
 	/* Load Data */
+
+	/**
+	 * Method to load all elections from an obj file
+	 * @param dirPath path to the obj file
+	 * @return CopyOnWriteArrayList with all elections
+	 */
 	public static synchronized CopyOnWriteArrayList<Election<? extends Person>> loadElections(String dirPath) {
 		return (CopyOnWriteArrayList<Election<? extends Person>>) RmiServer.loadData(dirPath + electionsFilePath);
 	}
 
+	/**
+	 * Method to load all lists from an obj file
+	 * @param dirPath path to the obj file
+	 * @return CopyOnWriteArrayList with all lists
+	 */
 	public static synchronized CopyOnWriteArrayList<List<? extends Person>> loadLists(String dirPath) {
 		return (CopyOnWriteArrayList<List<? extends Person>>) RmiServer.loadData(dirPath + listsFilePath);
 	}
 
+	/**
+	 * Method to load every person from an obj file
+	 * @param dirPath path to the obj file
+	 * @return CopyOnWriteArrayList with every person
+	 */
 	public static synchronized CopyOnWriteArrayList<Person> loadPeople(String dirPath) {
 		return (CopyOnWriteArrayList<Person>) RmiServer.loadData(dirPath + peopleFilePath);
 	}
 
+	/**
+	 * Method to load an Object from a obj file
+	 * @param path path to the obj file
+	 * @return true if data is loaded from the files, false otherwise
+	 */
 	public static synchronized Object loadData(String path) {
 		try {
 			FileInputStream is = new FileInputStream(path);
@@ -588,6 +843,11 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 
 	/* ################################################################################# */
 
+	/**
+	 * Main static method - Instance of a RMI Server
+	 * Controls Failover, STONITH and the RMI itself
+	 * @param args socket: arg#1 = IP | arg#2 = port | arg#3 = database directory
+	 */
 	public static void main(String[] args) {
 		final String IP, PORT, DIR;
 		if  (args.length != 3) {
