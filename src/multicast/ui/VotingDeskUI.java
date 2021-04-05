@@ -6,16 +6,31 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 
+/**
+ * A simple implementation of a GUI that is used to display a console like environment in the multicast
+ * server. This console allows members of the table to enqueue new users so they can go vote.
+ *
+ * @author Pedro Rodrigues
+ * @author Miguel Rabuge
+ * @version 1.0
+ */
 public class VotingDeskUI extends Terminal {
 	private final VotingDesk app;
 
+	/**
+	 * The default constructor for this GUI
+	 * @param app The backend for the {@code VotingDeskUI} app
+	 */
 	public VotingDeskUI(VotingDesk app) {
 		super("VotingDesk@" + app.getName());
 		this.app = app;
 	}
 
-
-	// FIXME: Enter in this makes the boys go wild
+	/**
+	 * A implementation of the command parser used by the {@code VotingDeskUI}
+	 *
+	 * @param command The command that is to be executed by this class
+	 */
 	@Override
 	public void execute(String command) {
 
@@ -37,6 +52,9 @@ public class VotingDeskUI extends Terminal {
 		}
 	}
 
+	/**
+	 * A implementation of the action that occurs when the console window is closed by the user
+	 */
 	public void addWindowCloseListener() {
 		this.addWindowListener(new WindowAdapter() {
 			@Override
@@ -48,11 +66,5 @@ public class VotingDeskUI extends Terminal {
 				}
 			}
 		});
-	}
-
-	@Override
-	public void startText() {
-
-
 	}
 }
