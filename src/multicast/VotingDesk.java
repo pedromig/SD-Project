@@ -272,7 +272,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		while (attempt++ != RMI_RECONNECT_ATTEMPTS) {
 			try {
 				server = (RmiServerInterface)
-						Naming.lookup("rmi://" + this.rmiAddress.getHostName() + ":" + this.rmiPort + "/RmiServer");
+						Naming.lookup("rmi://" + this.rmiAddress.getHostAddress() + ":" + this.rmiPort + "/RmiServer");
 				server.subscribe(this, this.getName());
 				return server;
 			} catch (RemoteException e) {
@@ -286,6 +286,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 					LOGGER.severe("RMI timeout error: " + e1.getMessage());
 				}
 			} catch (NotBoundException | MalformedURLException e) {
+				// FIXME: Look at this!
 				LOGGER.severe("Exception caught during RMI server connection: " + e.getMessage());
 				return null;
 			}
@@ -296,9 +297,28 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 	public void start() {
 		setupLogger();
+
+		Properties configs = readPropertiesFile(this.config);
+		try {
+			this.rmiAddress = InetAddress.getByName((String)
+					configs.getOrDefault(
+							"rmi.server.ip",
+							DEFAULT_RMI_SERVER_IP
+					)
+			);
+
+		} catch (UnknownHostException e) {
+			LOGGER.severe("Unknown Host: " + e.getMessage());
+		}
+
+		this.rmiPort = Integer.parseInt((String) configs.getOrDefault(
+				"rmi.server.port",
+				DEFAULT_RMI_SERVER_PORT
+		));
+
+
 		if ((this.rmiServer = connectRMIServer()) != null) {
 
-			Properties configs = readPropertiesFile(this.config);
 			this.name = (String) configs.getOrDefault(
 					"server.department.name",
 					DEFAULT_MULTICAST_SERVER_NAME
@@ -338,22 +358,6 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 					DEFAULT_VOTING_MULTICAST_PORT
 					)
 			);
-
-			try {
-				this.rmiAddress = InetAddress.getByName((String)
-						configs.getOrDefault(
-								"rmi.server.ip",
-								DEFAULT_RMI_SERVER_IP
-						)
-				);
-			} catch (UnknownHostException e) {
-				LOGGER.severe("Unknown Host: " + e.getMessage());
-			}
-
-			this.rmiPort = Integer.parseInt((String) configs.getOrDefault(
-					"rmi.server.port",
-					DEFAULT_RMI_SERVER_PORT
-			));
 
 			votingDeskServerStartup();
 		}
