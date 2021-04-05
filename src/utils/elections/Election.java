@@ -17,6 +17,7 @@ public abstract class Election<T extends Person> implements Serializable {
     protected GregorianCalendar startDate, endDate;
     protected CopyOnWriteArrayList<Vote> votes;
     protected CopyOnWriteArrayList<String> departments;
+    protected CopyOnWriteArrayList<String> restrictions;
 
     /**
      * Builder
@@ -32,6 +33,7 @@ public abstract class Election<T extends Person> implements Serializable {
         this.endDate = endDate;
         this.votes = new CopyOnWriteArrayList<>();
         this.departments = new CopyOnWriteArrayList<>();
+        this.restrictions = new CopyOnWriteArrayList<>();
     }
 
     /**
@@ -39,6 +41,30 @@ public abstract class Election<T extends Person> implements Serializable {
      * @return a class type
      */
     public abstract Class<T> getType();
+
+    /**
+     * Getter for the restrictions attribute
+     * @return this restrictions
+     */
+    public CopyOnWriteArrayList<String> getRestrictions() {
+        return this.restrictions;
+    }
+
+    /**
+     * Method to add a Restriction
+     * @param deptName new department restriction
+     */
+    public void addRestriction(String deptName) {
+        this.restrictions.add(deptName);
+    }
+
+    /**
+     * Method to remove a restriction
+     * @param deptName restriction to remove
+     */
+    public void removeRestrictions(String deptName) {
+        this.restrictions.remove(deptName);
+    }
 
     /**
      * Getter for the departments attribute

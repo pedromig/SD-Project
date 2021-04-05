@@ -11,6 +11,4 @@ public interface RmiAdminConsoleInterface extends Remote {
 
     String getRealTimeElectionName() throws RemoteException;
 
-    boolean allowRealTimeDesks() throws RemoteException;
-
 }
