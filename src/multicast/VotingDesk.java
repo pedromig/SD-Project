@@ -27,10 +27,55 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.*;
 
-
+/**
+ * The {@code VotingDesk} class represents a multicast server that provides the functionalities needed for a given
+ * eVoting election to occur. This server serves as a interface where both the users and the voting terminals (where
+ * the users vote) can connect to, in order to perform their activities. All voting desks are implemented as
+ * instances of this class.
+ * <p>
+ * The {@code VotingDesk} being itself a multicast server implementation uses 2 multicast groups that can configured
+ * using a properties file. These groups are used for the exchange of status / discovery messages between itself and
+ * the voting terminals and another group for the exchange of critical / relevant information between the server and
+ * the terminals (multicast clients). In the exchange of server-client information this server uses a protocol that
+ * provides the primitives and basic structure of the messages that are transmitted. The implementation of this
+ * protocol is provided in the {@link MulticastProtocol} interface.
+ * <p>
+ * The {@code VotingDesk} class is extends the {@link java.rmi.server.UnicastRemoteObject} class because it interacts
+ * with a centralized Remote Method Invocation server that provides all the methods needed for the exchange of
+ * relevant data e.g votes and user credentials. Also this server shares status messages with the RMI server in of
+ * for this to know about the status of the current machine. The methods necessary for this are implemented in the
+ * {@link RmiMulticastServerInterface}.
+ * <p>
+ * In order for this {@code VotingDesk} to be instanced correctly it may need a configuration.properties file that
+ * follows the format specified by the{@link java.util.Properties} file format.
+ * In the case of this server the arguments required to be present in the properties file are showed in the following
+ * example:
+ * <blockquote><pre>
+ * server.department.name=DEI
+ * multicast.discovery.group=224.3.2.1
+ * multicast.discovery.port=6789
+ * multicast.voting.group=224.3.2.2
+ * multicast.voting.port=4321
+ * </pre></blockquote>
+ * <p>
+ * The server uses a logging system that automatically prints debug messages to the console and to a log file if
+ * those messages are emitted at level equal or greater than {@code java.lang.System.Logger.Level.WARNING}
+ *
+ * @author Pedro Rodrigues
+ * @author Miguel Rabuge
+ * @version 1.0
+ * @see java.rmi.server.UnicastRemoteObject
+ * @see java.lang.System.Logger
+ * @see java.rmi.Naming
+ * @see multicast.protocol.MulticastProtocol
+ * @see multicast.protocol.MulticastPacket
+ * @see rmi.interfaces.RmiServerInterface
+ **/
 public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol, RmiMulticastServerInterface {
 
-	// Globals / Defaults
+	/**
+	 * @implNote Global / Default attributes that are given for a multicast server on starup
+	 */
 	private static final String DEFAULT_MULTICAST_SERVER_NAME = "department";
 
 	private static final String DEFAULT_MULTICAST_DISCOVERY_ADDRESS = "224.3.2.1";
@@ -42,27 +87,59 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	private static final int RMI_RECONNECT_ATTEMPTS = 5;
 	private static final int RMI_RECONNECT_TIMEOUT_MS = 30000 / RMI_RECONNECT_ATTEMPTS;
 
+	/**
+	 * @implNote Default RMI Server connection configurations
+	 */
+	private static final String RMI_SERVER_IP= "localhost";
+	private static final String RMI_SERVER_PORT = "7000";
+
+	/**
+	 * @implNote Logger instance use to log debug messages for the this server class.
+	 */
 	private static final Logger LOGGER = Logger.getLogger(VotingDesk.class.getName());
 	private final String config;
 
-	// Attributes
+	/**
+	 * @implNote This VotingDesk server Name / ID
+	 */
 	private String name;
+
 
 	private static final String rmiServerUrl = "RmiServer";
 	private RmiServerInterface rmiServer;
 
+	/**
+	 * @implNote Handles for the socket connection to the multicast discovery/status group needed by this server
+	 */
 	private MulticastSocket statusSocket;
 	private InetAddress statusGroup;
 	private int statusPort;
 
+	/**
+	 * @implNote Handles for the socket connection to the multicast voting/information group needed by this server
+	 */
 	private MulticastSocket votingSocket;
 	private InetAddress votingGroup;
 	private int votingPort;
 
+	/**
+	 * @implNote Data Structures holding flow control information in the server
+	 * (available terminals, queued users, etc...)
+	 */
 	private final Hashtable<String, String> terminals;
 	private final BlockingQueue<String> voters;
 	private final BlockingQueue<String> availableTerminals;
 
+	/**
+	 * Initializes a newly created {@code VotingDesk} object so that it represents
+	 * multicast server instance. The configurations of this server and initialization
+	 * of the data structures required in order to save relevant information.
+	 *
+	 * @param configFilePath A {@code String} containing the server.properties file with the configuration for this
+	 *                       server instance.
+	 * @throws RemoteException A {@code RemoteException} exception that occurred during the execution of a remote
+	 *                         method call to the RMI server
+	 */
 	public VotingDesk(String configFilePath) throws RemoteException {
 		super();
 		this.config = configFilePath;
@@ -71,6 +148,15 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		this.availableTerminals = new LinkedBlockingQueue<>();
 	}
 
+	/**
+	 * First method that is ran on server startup parsing the command line
+	 * arguments and setting up te server and handling a potential error that
+	 * can occur if {@link java.rmi.registry.LocateRegistry} could not find entry to the RMI
+	 * server remote object exiting with exit code -1.
+	 *
+	 * @param args The command line arguments supplied to this function. In the case of this program the only one
+	 *             required is the path for the configuration file
+	 */
 	public static void main(String[] args) {
 		if (args.length != 1) {
 			System.out.println("Usage: java " + VotingDesk.class.getName() + " {PROPERTIES_FILE}");
@@ -87,11 +173,37 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		}
 	}
 
+	/**
+	 * Implementation of a {@link rmi.interfaces.RmiMulticastServerInterface} method required by the RMI
+	 * server in order to query information about this {@code VotingDesk} instance.
+	 * <p>
+	 * A remote method invocation used by the RMI server to do a personalized print where this VotingDesk
+	 * ID is displayed as a message preamble.
+	 *
+	 * @param msg The message to be displayed
+	 * @throws RemoteException A RemoteException exception that occurred during the execution of a remote method call
+	 *                         to the RMI server
+	 */
 	@Override
 	public void print(String msg) throws RemoteException {
 		System.out.println("[VotingDesk@" + name + "]: " + msg);
 	}
 
+	/**
+	 * Implementation of a {@link rmi.interfaces.RmiMulticastServerInterface} method required by the RMI
+	 * server in order to query information about this {@code VotingDesk} instance.
+	 * <p>
+	 * A remote method invocation used by the RMI server print information about the current status of this VotingDesk.
+	 * The print message includes information about the terminals that this server has connected to it in any given
+	 * moment and which users are connected to it.
+	 *
+	 * @return A {@code String} containing a status message about this server instance.
+	 * @throws RemoteException A RemoteException exception that occurred during the execution of a remote method call
+	 *                         to the RMI server
+	 *                         <p>
+	 *                         Used by this method implementation
+	 * @see java.lang.StringBuilder
+	 */
 	@Override
 	public String ping() throws RemoteException {
 		StringBuilder sb = new StringBuilder();
@@ -106,6 +218,19 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		return sb.toString();
 	}
 
+	/**
+	 * A wrapper method used to encapsulate {@link java.rmi.RemoteException} thrown by a method that requires some
+	 * information to be queried from the RMI server.
+	 * <p>
+	 * This method provides a implementation that attempts to call method passed by parameter using the
+	 * {@link java.util.concurrent.Callable} interface and in the event that this method fails throwing a
+	 * {@link java.rmi.RemoteException} looping afterwards until the connection is able to be re-established
+	 * with the RMI main or backup servers.
+	 *
+	 * @param function A {@code Callable} interface object wrapping a remote method call to the RMI server
+	 * @param <V>      A template argument specifying the return type of the method called.
+	 * @return The result of the computation made by the function {@param function} parameter
+	 */
 	private <V> V rmiServerRemoteExceptionHandler(Callable<V> function) {
 		V result;
 		while (true) {
@@ -119,6 +244,13 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		return result;
 	}
 
+	/**
+	 * This method is responsible for reading the properties file and returning a {@link java.util.Properties} object
+	 * with the key-value pairs containing the server configs.
+	 *
+	 * @param path The path to the server.properties file
+	 * @return A properties object loaded with the server configs.
+	 */
 	private Properties readPropertiesFile(String path) {
 		Properties config = new Properties();
 		try (InputStream is = new FileInputStream(path)) {
@@ -130,6 +262,10 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		return config;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	private RmiServerInterface connectRMIServer() {
 		int attempt = 0;
 		RmiServerInterface server = null;
@@ -213,6 +349,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		LOGGER.info("Enqueued voter with Citizen Card ID: " + voter);
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
