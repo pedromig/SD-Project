@@ -23,10 +23,11 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RmiServer extends UnicastRemoteObject implements RmiServerInterface {
+	private final String dirPath;
 	private static final String
-			electionsPath = "../../../database/elections.obj",
-			peoplePath = "../../../database/people.obj",
-			listsPath = "../../../database/lists.obj";
+			electionsFilePath = "elections.obj",
+			peopleFilePath = "people.obj",
+			listsFilePath = "lists.obj";
 
 	private static final String[] UC_DEPARTMENTS = new String[]{
 			/* Faculdade de Letras */
@@ -520,26 +521,28 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 
 	public RmiServer(CopyOnWriteArrayList<Election<? extends Person>> elections,
 					 CopyOnWriteArrayList<List<? extends Person>> lists,
-					 CopyOnWriteArrayList<Person> people) throws RemoteException {
+					 CopyOnWriteArrayList<Person> people,
+					 String dirPath) throws RemoteException {
 		super();
 		this.elections = elections;
 		this.lists = lists;
 		this.people = people;
+		this.dirPath = dirPath;
 		this.adminConsoles = new CopyOnWriteArrayList<>();
 		this.multicastServers = new Hashtable<>();
 	}
 
 	/* Save Data */
 	public synchronized boolean saveElections() {
-		return RmiServer.saveData(electionsPath, this.elections);
+		return RmiServer.saveData(electionsFilePath, this.elections);
 	}
 
 	public synchronized boolean saveLists() {
-		return RmiServer.saveData(listsPath, this.lists);
+		return RmiServer.saveData(listsFilePath, this.lists);
 	}
 
 	public synchronized boolean savePeople() {
-		return RmiServer.saveData(peoplePath, this.people);
+		return RmiServer.saveData(peopleFilePath, this.people);
 	}
 
 	public synchronized static boolean saveData(String path, Object object) {
@@ -557,16 +560,16 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	}
 
 	/* Load Data */
-	public static synchronized CopyOnWriteArrayList<Election<? extends Person>> loadElections() {
-		return (CopyOnWriteArrayList<Election<? extends Person>>) RmiServer.loadData(electionsPath);
+	public static synchronized CopyOnWriteArrayList<Election<? extends Person>> loadElections(String dirPath) {
+		return (CopyOnWriteArrayList<Election<? extends Person>>) RmiServer.loadData(dirPath + electionsFilePath);
 	}
 
-	public static synchronized CopyOnWriteArrayList<List<? extends Person>> loadLists() {
-		return (CopyOnWriteArrayList<List<? extends Person>>) RmiServer.loadData(listsPath);
+	public static synchronized CopyOnWriteArrayList<List<? extends Person>> loadLists(String dirPath) {
+		return (CopyOnWriteArrayList<List<? extends Person>>) RmiServer.loadData(dirPath + listsFilePath);
 	}
 
-	public static synchronized CopyOnWriteArrayList<Person> loadPeople() {
-		return (CopyOnWriteArrayList<Person>) RmiServer.loadData(peoplePath);
+	public static synchronized CopyOnWriteArrayList<Person> loadPeople(String dirPath) {
+		return (CopyOnWriteArrayList<Person>) RmiServer.loadData(dirPath + peopleFilePath);
 	}
 
 	public static synchronized Object loadData(String path) {
@@ -586,13 +589,14 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	/* ################################################################################# */
 
 	public static void main(String[] args) {
-		final String IP, PORT;
-		if  (args.length != 2) {
-			System.out.println("java RmiServer <IP ADDRESS> <PORT>");
+		final String IP, PORT, DIR;
+		if  (args.length != 3) {
+			System.out.println("java RmiServer <IP ADDRESS> <PORT> <Database_directory/>");
 			return;
 		} else {
 			IP = args[0];
 			PORT = args[1];
+			DIR = args[2];
 		}
 
 		RmiServerInterface server = null;
@@ -624,13 +628,13 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 
 		/* Bootloading */
 
-		CopyOnWriteArrayList<Person> people = RmiServer.loadPeople();
-		CopyOnWriteArrayList<Election<? extends Person>> elections = RmiServer.loadElections();
-		CopyOnWriteArrayList<List<? extends Person>> lists = RmiServer.loadLists();
+		CopyOnWriteArrayList<Person> people = RmiServer.loadPeople(DIR);
+		CopyOnWriteArrayList<Election<? extends Person>> elections = RmiServer.loadElections(DIR);
+		CopyOnWriteArrayList<List<? extends Person>> lists = RmiServer.loadLists(DIR);
 
 		/* Run Server */
 		try {
-			server = new RmiServer(elections, lists, people);
+			server = new RmiServer(elections, lists, people, DIR);
 			Naming.rebind("rmi://" + IP + ":" + PORT  + "/RmiServer", server);
 			System.out.println("RmiServer ready! - Running on " + IP + ":" + PORT);
 		} catch (Exception e) {
