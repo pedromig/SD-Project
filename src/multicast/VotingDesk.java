@@ -263,7 +263,16 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	}
 
 	/**
-	 * @return
+	 * A method that implements the functionality that allows the {@code VotingDesk} multicast servers to connect to a
+	 * RMI server running in a given address and port. In case the server does not respond the function will loop a
+	 * few times in a attempt to re-connect again. This loop will last 30 seconds (by default) after which the {@code
+	 * VotingDesk} will timeout, causing the server to stop its execution.
+	 *
+	 * @return The handle to the {@link rmi.interfaces.RmiServerInterface} object holding the remote methods that
+	 * can be invoked by this {@code VotingDesk} instance.
+	 * @implNote The function might not be able to establish a connection with the server because this multicast
+	 * server could not lookup the registry. In that case the server will stop  logging and error message in the log
+	 * file.
 	 */
 	private RmiServerInterface connectRMIServer() {
 		int attempt = 0;
@@ -286,7 +295,6 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 					LOGGER.severe("RMI timeout error: " + e1.getMessage());
 				}
 			} catch (NotBoundException | MalformedURLException e) {
-				// FIXME: Look at this!
 				LOGGER.severe("Exception caught during RMI server connection: " + e.getMessage());
 				return null;
 			}
@@ -295,6 +303,13 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		return server;
 	}
 
+
+	/**
+	 * The method that is called to prepare the server startup, reading the server configuration properties file,
+	 * setting up the Logger instance configurations and connecting to the RMI server.
+	 * In case an exception is thrown inside the server will catch that exception
+	 * emitting an error message and automatically stopping its execution.
+	 */
 	public void start() {
 		setupLogger();
 
@@ -365,16 +380,37 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	}
 
 
+	/**
+	 * This method is called by the {@code VotingDeskUI} server console and it allows a voter with a certain Citizen
+	 * card ID to be placed in this server voters queue where he/she will wait until a {@code VotingTerminal} becomes
+	 * available for he/she to vote (if all the conditions required for this person to vote are met).
+	 *
+	 * @param voter The voter with Citizen Card ID that will be placed in this server queue.
+	 */
 	public void enqueueVoter(String voter) {
 		this.voters.add(voter);
 		LOGGER.info("Enqueued voter with Citizen Card ID: " + voter);
 	}
 
+	/**
+	 * A getter method for the name of this {@code VotingDesk} multicast server. Through this name the RMI server is
+	 * able to identify this {@code VotingDesk} being able to monitor, restrict the elections that may be ran on it
+	 * and query information about it. To accomplish the operations referred before this method also does an
+	 * {@link java.lang.Override} of the method {@link rmi.interfaces.RmiMulticastServerInterface#getName()} declared
+	 * in the {@link rmi.interfaces.RmiMulticastServerInterface}, that is forcing its implementation in this class.
+	 *
+	 * @return The name identifying the current {@code VotingDesk} server instances
+	 */
 	@Override
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * This method is responsible for the setup of the {@link java.util.logging.Logger} instance of this server
+	 * configuring the appearance / format of the log messages displayed by this server debug console and written to
+	 * the log file generated during the {@code VotingDesk} runtime.
+	 */
 	private void setupLogger() {
 		ConsoleHandler handler = new ConsoleHandler();
 		handler.setFormatter(new LoggingFormatter.ConsoleFormatter());
@@ -390,6 +426,13 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		}
 	}
 
+
+	/**
+	 * This method is called by the {@link VotingDesk#start()} method allowing the creation of all the components
+	 * required by the server to execute properly. It opens sockets, creates the server threads, UI instance and
+	 * does the proper cleanup of such resources once the exit command is issued to this server or the UI is closed
+	 * correctly (without using a signal to kill the {@code VotingDesk} server process)
+	 */
 	private void votingDeskServerStartup() {
 		try {
 			this.statusSocket = new MulticastSocket(statusPort);
@@ -452,14 +495,52 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	}
 
 
+	/**
+	 * This private inner class represents a thread instance that will be ran by this {@code VotingDesk} server
+	 * instance monitoring the status of all the server connections to the each one the {@code VotingTerminal}
+	 * instances managed by it. It answers to {@code MulticastProtocol} status messages such as
+	 * {@link MulticastProtocol#READY}, {@link MulticastProtocol#GREETING}, {@link MulticastProtocol#OFFER} and in a
+	 * later version of this code it will respond to a {@link MulticastProtocol#GOODBYE} that is emitted if the
+	 * terminal is shutdown properly.
+	 * <p>
+	 *
+	 * @implNote The messages sent by this thread are addressed to the multicast discovery / status group and dont
+	 * convey any critical or confidential message (just status communication allowing the server to automatically
+	 * handle terminals that might connect to it)
+	 * @see multicast.protocol.MulticastProtocol
+	 * @see multicast.protocol.MulticastPacket
+	 * @see java.lang.Thread
+	 */
 	private class VotingDeskTerminalManager extends Thread {
+
+		/**
+		 * @implNote The name of the vote the thread (in this case the {@code VotingDeskVotingManager} that will take
+		 * care of any critical operation required by any status message sent the the discovery group.
+		 */
 		private final String handler;
 
+
+		/**
+		 * Allocates a new {@code VotingDeskTerminalManager Thread} object. This constructor has the same
+		 * effect as {@linkplain java.lang.Thread#Thread(ThreadGroup, Runnable, String) Thread}
+		 * {@code (null, null, name)}.
+		 *
+		 * @param name               the name of the new thread
+		 * @param voterHandlerThread The name of the thread responsible for the handling and communication of
+		 *                           critical voting related information
+		 */
 		public VotingDeskTerminalManager(String name, String voterHandlerThread) {
 			super(name);
 			this.handler = voterHandlerThread;
 		}
 
+
+		/**
+		 * This method is the entry point of execution of the current thread. Being this thread a subclass of
+		 * {@code Thread} class it overrides this method implementing the specific functionality of this thread.
+		 *
+		 * @see java.lang.Thread#start()
+		 */
 		@Override
 		public void run() {
 			LOGGER.info(this.getName() + " thread started!");
@@ -538,12 +619,42 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		}
 	}
 
+
+	/**
+	 * This private inner class represents a thread instance that will be ran by this {@code VotingDesk} server
+	 * instance answering to voting and login requests made by the clients using the {@code VotingTerminal} instances
+	 * connected to this server. It answers to {@code MulticastProtocol} status messages such as
+	 * {@link MulticastProtocol#LOGIN} and {@link MulticastProtocol#VOTE}.
+	 * <p>
+	 *
+	 * @implNote The messages sent by this thread are addressed to the multicast voting / information group and
+	 * convey critical or confidential messages that if intercepted could potentially lead to theft of client
+	 * information. In terms of voting confidentiality it is more unlikely that it is broken since the vote messages
+	 * do carry the ID of the client who generated such message.
+	 * @see multicast.protocol.MulticastProtocol
+	 * @see multicast.protocol.MulticastPacket
+	 * @see java.lang.Thread
+	 */
 	private class VotingDeskVotingManager extends Thread {
 
+		/**
+		 * Allocates a new {@code VotingDeskVotingManager Thread} object. This constructor has the same
+		 * effect as {@linkplain java.lang.Thread#Thread(ThreadGroup, Runnable, String) Thread}
+		 * {@code (null, null, name)}.
+		 *
+		 * @param name the name of the new thread
+		 */
 		public VotingDeskVotingManager(String name) {
 			super(name);
 		}
 
+
+		/**
+		 * This method is the entry point of execution of the current thread. Being this thread a subclass of
+		 * {@code Thread} class it overrides this method implementing the specific functionality of this thread.
+		 *
+		 * @see java.lang.Thread#start()
+		 */
 		@Override
 		public void run() {
 			LOGGER.info(this.getName() + " thread started!");
@@ -594,6 +705,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 						);
 						assert elections != null;
 						elections.removeIf(election -> !election.getType().equals(user.getType()));
+						elections.removeIf(election -> election.getRestrictions().size() != 0 &&
+													   !election.getRestrictions().contains(user.getDepartment())
+						);
 
 						for (Election<?> election : elections) {
 
@@ -635,16 +749,63 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		}
 	}
 
+
+	/**
+	 * This private inner class represents a thread instance that will be ran by this {@code VotingDesk} server
+	 * instance managing enqueued clients. The thread is responsible for assigning a {@code VotingTerminal} to a given
+	 * client that is queued and waiting for a terminal to vote. It is also responsible for the identification of a
+	 * client
+	 * rejecting it if the is not eligible to vote in any election or if there is no reference to it in the RMI server
+	 * database.
+	 *
+	 * @implNote The messages sent by this thread are addressed to the multicast voting / information group and
+	 * convey critical or confidential messages that if intercepted could potentially lead to theft of client
+	 * information. In terms of voting confidentiality it is more unlikely that it is broken since the vote messages
+	 * do carry the ID of the client who generated such message.
+	 * @see multicast.protocol.MulticastProtocol
+	 * @see multicast.protocol.MulticastPacket
+	 * @see java.lang.Thread
+	 */
 	private class VotingDeskClientHandler extends Thread {
+
+		/**
+		 * @implNote The timeout for a connection to a terminal. If a client is redirected to a terminal the server
+		 * will send a request message carrying personal information to the {@code VotingTerminal} and wait
+		 * confirmation of receipt. If such confirmation (int the form of a {@link MulticastProtocol#ACKNOWLEDGE} is
+		 * not sent to this server's thread as a reply the server will assume the terminal to be dead and will
+		 * redirect the user to another terminal that becomes available
+		 */
 		private static final int ACK_TIMEOUT_MS = 5000;
 
+
+		/**
+		 * @implNote The name of the vote the thread (in this case the {@code VotingDeskVotingManager} that will take
+		 * care of any critical operation required by any status message sent the the discovery group.
+		 */
 		private final String handler;
 
+
+		/**
+		 * Allocates a new {@code VotingDeskTerminalManager Thread} object. This constructor has the same
+		 * effect as {@linkplain java.lang.Thread#Thread(ThreadGroup, Runnable, String) Thread}
+		 * {@code (null, null, name)}.
+		 *
+		 * @param name               the name of the new thread
+		 * @param voterHandlerThread The name of the thread responsible for the handling and communication of
+		 *                           critical voting related information
+		 */
 		public VotingDeskClientHandler(String name, String voterHandlerThread) {
 			super(name);
 			this.handler = voterHandlerThread;
 		}
 
+
+		/**
+		 * This method is the entry point of execution of the current thread. Being this thread a subclass of
+		 * {@code Thread} class it overrides this method implementing the specific functionality of this thread.
+		 *
+		 * @see java.lang.Thread#start()
+		 */
 		@Override
 		public void run() {
 			LOGGER.info(this.getName() + " thread started!");
@@ -680,7 +841,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 					assert elections != null : "Unexpected error handling remote exception";
 					elections.removeIf(election -> !election.getType().equals(user.getType()));
-
+					elections.removeIf(election -> election.getRestrictions().size() != 0 &&
+												   !election.getRestrictions().contains(user.getDepartment())
+					);
 
 					for (Election<?> election : elections) {
 

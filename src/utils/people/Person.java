@@ -67,6 +67,14 @@ public abstract class Person implements Serializable {
     }
 
     /**
+     * Getter for the department attribute
+     * @return this department
+     */
+    public String getDepartment() {
+        return department;
+    }
+
+    /**
      * Getter for the name attribute
      * @return this password
      */

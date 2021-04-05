@@ -1,4 +1,5 @@
 package multicast.ui;
+
 import multicast.VotingDesk;
 
 import java.awt.event.WindowAdapter;
@@ -6,46 +7,52 @@ import java.awt.event.WindowEvent;
 
 
 public class VotingDeskUI extends Terminal {
-    private final VotingDesk app;
+	private final VotingDesk app;
 
-    public VotingDeskUI(VotingDesk app) {
-        super("VotingDesk@" + app.getName());
-        this.app = app;
-    }
-
-
-    // FIXME: Enter in this makes the boys go wild
-    @Override
-    public void execute(String command) {
-        if (command.equals("clear")) {
-            terminal.setText("");
-        } else if (command.equals("exit")) {
-            synchronized (this.app) {
-                this.app.notify();
-            }
-            this.dispose();
-        } else {
-            this.app.enqueueVoter(command);
-            showNewLine();
-        }
-    }
-
-    public void addWindowCloseListener() {
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent arg) {
-                synchronized (app) {
-                    setVisible(false);
-                    dispose();
-                    app.notify();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void startText() {
+	public VotingDeskUI(VotingDesk app) {
+		super("VotingDesk@" + app.getName());
+		this.app = app;
+	}
 
 
-    }
+	// FIXME: Enter in this makes the boys go wild
+	@Override
+	public void execute(String command) {
+
+		if (command.equals("clear")) {
+			terminal.setText("");
+		} else if (command.equals("exit")) {
+			synchronized (this.app) {
+				this.app.notify();
+			}
+			this.dispose();
+		} else {
+			try {
+				int value = Integer.parseInt(command);
+				if (value >= 0)
+					this.app.enqueueVoter(command);
+			} catch (NumberFormatException ignore) {
+			}
+			showNewLine();
+		}
+	}
+
+	public void addWindowCloseListener() {
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg) {
+				synchronized (app) {
+					setVisible(false);
+					dispose();
+					app.notify();
+				}
+			}
+		});
+	}
+
+	@Override
+	public void startText() {
+
+
+	}
 }
