@@ -112,7 +112,6 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 	}
 
-	//TODO: REMOVE THIS FUNC AFTER DEPLOY (its for debug only)
 	@Override
 	public synchronized void info(RmiAdminConsoleInterface client) throws RemoteException {
 		client.print("\n*************************************************************************");
@@ -551,8 +550,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 			objOs.close();
 			os.close();
 		} catch (Exception e) {
-			System.out.println("DEBUG: Could not write to: " + path);
-			e.printStackTrace();
+			System.out.println("Could not write to: " + path);
 			return false;
 		}
 		return true;
@@ -580,7 +578,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 			is.close();
 			return data;
 		} catch (Exception e) {
-			System.out.println("DEBUG: Could not read from: " + path);
+			System.out.println("Could not read from: " + path);
 			return new CopyOnWriteArrayList<>();
 		}
 	}
@@ -636,7 +634,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 			Naming.rebind("rmi://" + IP + ":" + PORT  + "/RmiServer", server);
 			System.out.println("RmiServer ready! - Running on " + IP + ":" + PORT);
 		} catch (Exception e) {
-			System.out.println("[DEBUG] Exception in RMI Server: " + e);
+			System.out.println("Exception in RMI Server: Shutting Down");
 		}
 	}
 }

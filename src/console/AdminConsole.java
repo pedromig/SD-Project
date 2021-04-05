@@ -70,8 +70,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                 server.subscribe((RmiAdminConsoleInterface) this);
                 break;
             } catch (Exception e) {
-                System.out.println("[DEBUG]");
-                e.printStackTrace();
                 try { Thread.sleep(3000);} catch (Exception ignore) {}
                 counter += 3;
                 if (counter == timeout) {
@@ -104,8 +102,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
             try {
                 server.printVotingProcessedData(this, election);
             } catch (Exception e) {
-                System.out.println("[DEBUG]");
-                e.printStackTrace();
+                System.out.println("Could not fetch the Data");
             }
         }
         System.out.println("\n*************************************************************************");
@@ -440,8 +437,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                 server.signUp(person);
                                 break;
                             } catch (Exception e) {
-                                System.out.println("[DEBUG]");
-                                e.printStackTrace();
                                 server = admin.connect(IP, PORT);
                                 if (server == null) return;
                             }
@@ -456,8 +451,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                             admin.getDatabaseInfo(server);
                             break;
                         } catch (Exception e) {
-                            System.out.println("[DEBUG]");
-                            e.printStackTrace();
                             server = admin.connect(IP, PORT);
                             if (server == null) return;
                         }
@@ -482,8 +475,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                             server.createElection(election);
                                             break;
                                         } catch (Exception e) {
-                                            System.out.println("[DEBUG]");
-                                            e.printStackTrace();
                                             server = admin.connect(IP, PORT);
                                             if (server == null) return;
                                         }
@@ -499,8 +490,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         futureElections = server.getFutureElections();
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if (server == null) return;
                                     }
@@ -525,8 +514,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                                 server.editElectionName(election.getName(), editString);
                                                 break;
                                             } catch (Exception e) {
-                                                System.out.println("[DEBUG]");
-                                                e.printStackTrace();
                                                 server = admin.connect(IP, PORT);
                                                 if (server == null) return;
                                             }
@@ -541,8 +528,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                                 server.editElectionDescription(election.getName(), editString);
                                                 break;
                                             } catch (Exception e) {
-                                                System.out.println("[DEBUG]");
-                                                e.printStackTrace();
                                                 server = admin.connect(IP, PORT);
                                                 if (server == null) return;
                                             }
@@ -557,8 +542,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                                 server.editElectionStartDate(election.getName(), newDate);
                                                 break;
                                             } catch (Exception e) {
-                                                System.out.println("[DEBUG]");
-                                                e.printStackTrace();
                                                 server = admin.connect(IP, PORT);
                                                 if (server == null) return;
                                             }
@@ -573,8 +556,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                                 server.editElectionEndDate(election.getName(), newDate);
                                                 break;
                                             } catch (Exception e) {
-                                                System.out.println("[DEBUG]");
-                                                e.printStackTrace();
                                                 server = admin.connect(IP, PORT);
                                                 if (server == null) return;
                                             }
@@ -589,8 +570,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                                 departments = server.getDepartments();
                                                 break;
                                             } catch (Exception e) {
-                                                System.out.println("[DEBUG]");
-                                                e.printStackTrace();
                                                 server = admin.connect(IP, PORT);
                                                 if (server == null) return;
                                             }
@@ -607,8 +586,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                                 server.addDepartment(election.getName(), departments[addDeptOpt - 1]);
                                                 break;
                                             } catch (Exception e) {
-                                                System.out.println("[DEBUG]");
-                                                e.printStackTrace();
                                                 server = admin.connect(IP, PORT);
                                                 if (server == null) return;
                                             }
@@ -627,8 +604,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                                 server.removeDepartment(election.getName(), election.getDepartments().get(removeDeptOpt - 1));
                                                 break;
                                             } catch (Exception e) {
-                                                System.out.println("[DEBUG]");
-                                                e.printStackTrace();
                                                 server = admin.connect(IP, PORT);
                                                 if (server == null) return;
                                             }
@@ -642,8 +617,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                                 departments = server.getDepartments();
                                                 break;
                                             } catch (Exception e) {
-                                                System.out.println("[DEBUG]");
-                                                e.printStackTrace();
                                                 server = admin.connect(IP, PORT);
                                                 if (server == null) return;
                                             }
@@ -661,8 +634,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                                 server.addRestriction(election.getName(), departments[addRestDeptOpt - 1]);
                                                 break;
                                             } catch (Exception e) {
-                                                System.out.println("[DEBUG]");
-                                                e.printStackTrace();
                                                 server = admin.connect(IP, PORT);
                                                 if (server == null) return;
                                             }
@@ -681,8 +652,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                                 server.removeRestriction(election.getName(), election.getRestrictions().get(removeRestDeptOpt - 1));
                                                 break;
                                             } catch (Exception e) {
-                                                System.out.println("[DEBUG]");
-                                                e.printStackTrace();
                                                 server = admin.connect(IP, PORT);
                                                 if (server == null) return;
                                             }
@@ -700,8 +669,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         endedElections = server.getEndedElections();
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if (server == null) return;
                                     }
@@ -719,8 +686,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         people = server.getPeople();
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if (server == null) return;
                                     }
@@ -733,8 +698,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         server.printElectorVotesInfo(admin, p.getIdentityCardNumber());
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if (server == null) return;
                                     }
@@ -764,8 +727,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                             server.createList(list);
                                             break;
                                         } catch (Exception e){
-                                            System.out.println("[DEBUG]");
-                                            e.printStackTrace();
                                             server = admin.connect(IP, PORT);
                                             if (server == null) return;
                                         }
@@ -780,8 +741,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         futureElections = server.getFutureElections();
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if (server == null) return;
                                     }
@@ -795,8 +754,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         lists = server.getListsUnassignedOfType(selectedElection.getType());
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -810,8 +767,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         server.associateListToElection(selectedElection.getName(), lists.get(optList - 1).getName());
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -827,8 +782,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         futureElections = server.getFutureElections();
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -842,8 +795,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         lists = server.getListsAssignedOfType(selectedElection.getType(), selectedElection.getName());
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -857,8 +808,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         server.associateListToElection(null, lists.get(optList - 1).getName());
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -873,8 +822,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         lists = server.getEditableLists();
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -890,8 +837,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         people = server.getPeopleUnassignedOfType(list.getType());
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -904,8 +849,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         server.associatePersonToList(list.getName(), people.get(optPeople - 1).getIdentityCardNumber());
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -920,8 +863,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         lists = server.getEditableLists();
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -937,8 +878,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         people = server.getPeopleAssignedOfType(list.getType(), list.getName());
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -952,8 +891,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         server.associatePersonToList(null, people.get(optPeople - 1).getIdentityCardNumber());
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -981,8 +918,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                          runningElections = server.getRunningElections();
                                         break;
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -1009,8 +944,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         server.printVotingProcessedData((RmiAdminConsoleInterface) admin, election);
                                         Thread.sleep(1000);
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
@@ -1036,8 +969,6 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         server.pingDesks(admin);
                                         Thread.sleep(1000);
                                     } catch (Exception e) {
-                                        System.out.println("[DEBUG]");
-                                        e.printStackTrace();
                                         server = admin.connect(IP, PORT);
                                         if(server == null) return;
                                     }
