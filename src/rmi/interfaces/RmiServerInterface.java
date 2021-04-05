@@ -55,6 +55,11 @@ public interface RmiServerInterface extends Remote {
 
 	void removeDepartment(String electionName, String departmentName) throws RemoteException;
 
+	void addRestriction(String electionName, String departmentName) throws RemoteException;
+
+	void removeRestriction(String electionName, String departmentName) throws RemoteException;
+
+
 	void createList(List<? extends Person> list) throws RemoteException;
 
 	void associateListToElection(String electionName, String listName) throws RemoteException;

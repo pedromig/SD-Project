@@ -263,7 +263,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
      * @return Option Selected
      */
     public int editElectionsMenu() {
-        String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date", "Add Department", "Remove Department"};
+        String[] opts = new String[] {"Edit Name", "Edit Description", "Edit Start Date", "Edit End Date", "Add Department", "Remove Department", "Add Restraint", "Remove Restraint"};
         return this.parser.choose("Edit Options", opts);
     }
 
@@ -274,10 +274,27 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
      * @param departments String array of all departments
      * @return String array of the available department names
      */
-    public String[] addDepartmentMenu(Election<?> election, String[] departments) {
+    public String[] addDepartmentMenuFilter(Election<?> election, String[] departments) {
         ArrayList<String> selectableDepartments = new ArrayList<>();
         for (String deptName : departments) {
             if (!election.getDepartments().contains(deptName)){
+                selectableDepartments.add(deptName);
+            }
+        }
+        return selectableDepartments.toArray(new String[0]);
+    }
+
+    /**
+     * List of departments available to be added on the add Restriction Menu
+     * Shows all possible restrictions except the ones already associated with the given election
+     * @param election respective Election object
+     * @param departments String array of all departments
+     * @return String array of the available department names
+     */
+    public String[] addRestrictionMenuFilter(Election<?> election, String[] departments) {
+        ArrayList<String> selectableDepartments = new ArrayList<>();
+        for (String deptName : departments) {
+            if (!election.getRestrictions().contains(deptName)){
                 selectableDepartments.add(deptName);
             }
         }
@@ -576,7 +593,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                                 if (server == null) return;
                                             }
                                         }
-                                        departments = admin.addDepartmentMenu(election, departments);
+                                        departments = admin.addDepartmentMenuFilter(election, departments);
 
                                         admin.parser.clear();
                                         admin.parser.header("Add Department");
@@ -606,6 +623,60 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
                                         while (true) {
                                             try {
                                                 server.removeDepartment(election.getName(), election.getDepartments().get(removeDeptOpt - 1));
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect(IP, PORT);
+                                                if (server == null) return;
+                                            }
+                                        }
+
+                                        break;
+                                    /* Add Restriction */
+                                    case 7:
+                                        while (true) {
+                                            try {
+                                                departments = server.getDepartments();
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect(IP, PORT);
+                                                if (server == null) return;
+                                            }
+                                        }
+
+                                        departments = admin.addRestrictionMenuFilter(election, departments);
+
+                                        admin.parser.clear();
+                                        admin.parser.header("Add Restriction");
+                                        int addRestDeptOpt = admin.parser.choose("Choose a Department", departments);
+                                        if (addRestDeptOpt == 0) break;
+
+                                        while (true) {
+                                            try {
+                                                server.addRestriction(election.getName(), departments[addRestDeptOpt - 1]);
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("[DEBUG]");
+                                                e.printStackTrace();
+                                                server = admin.connect(IP, PORT);
+                                                if (server == null) return;
+                                            }
+                                        }
+                                        break;
+
+                                    /* Remove Restriction */
+                                    case 8:
+                                        admin.parser.clear();
+                                        admin.parser.header("Remove Restriction");
+                                        int removeRestDeptOpt = admin.parser.choose("Choose a Department", election.getRestrictions().toArray(new String[0]));
+                                        if (removeRestDeptOpt == 0) break;
+
+                                        while (true) {
+                                            try {
+                                                server.removeRestriction(election.getName(), election.getRestrictions().get(removeRestDeptOpt - 1));
                                                 break;
                                             } catch (Exception e) {
                                                 System.out.println("[DEBUG]");
