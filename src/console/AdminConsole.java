@@ -57,6 +57,8 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
     /**
      * A function to connect the Administrator console to the running RMI server.
      * It tries to connect to a running RMI server within a gap of 3s repeatedly
+     * @param ip RMI IP address
+     * @param port RMI port
      * @return RmiServerInterface object if connection is successful (reconnection < 30s), null otherwise
      */
     public RmiServerInterface connect(String ip, String port) {
@@ -394,7 +396,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
     /**
      * Main static method - Instance of an Administrator Console
      * Controls the whole flow on the Administrator Console
-     * @param args socket: arg#1 = IP arg#2 = port
+     * @param args socket: arg#1 = IP | arg#2 = port
      */
     public static void main(String[] args) {
         final String IP, PORT;
