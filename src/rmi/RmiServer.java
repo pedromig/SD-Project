@@ -90,7 +90,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	}
 
 	@Override
-	public synchronized void subscribe(RmiMulticastServerInterface multicastDesk) throws RemoteException {
+	public synchronized void subscribe(RmiMulticastServerInterface multicastDesk, String name) throws RemoteException {
 		this.multicastServers.add(multicastDesk);
 	}
 

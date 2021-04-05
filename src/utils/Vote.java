@@ -7,9 +7,10 @@ public class Vote implements Serializable {
     public static final String NULL_VOTE = "NULL";
     public static final String WHITE_VOTE = "WHITE";
 
-    private int personID;
+    private final int personID;
     private final String votingDeskID;
-    private String electionName, votedListName;
+    private final String electionName;
+    private final String votedListName;
     private final GregorianCalendar moment;
 
     public Vote(int personID, String electionName, String votedListName, String votingDeskID){
