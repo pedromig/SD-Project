@@ -74,7 +74,7 @@ import java.util.logging.*;
 public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol, RmiMulticastServerInterface {
 
 	/**
-	 * @implNote Global / Default attributes that are given for a multicast server on starup
+	 * @implNote Global / Default attributes that are given for a multicast server on startup
 	 */
 	private static final String DEFAULT_MULTICAST_SERVER_NAME = "department";
 
@@ -677,8 +677,10 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 					CopyOnWriteArrayList<Election<?>> elections = rmiServerRemoteExceptionHandler(
 							() -> rmiServer.getRunningElectionsByDepartment(name)
 					);
+
 					assert elections != null : "Unexpected error handling remote exception";
 					elections.removeIf(election -> !election.getType().equals(user.getType()));
+
 
 					for (Election<?> election : elections) {
 

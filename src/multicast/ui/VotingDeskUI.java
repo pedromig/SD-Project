@@ -13,6 +13,8 @@ public class VotingDeskUI extends Terminal {
         this.app = app;
     }
 
+
+    // FIXME: Enter in this makes the boys go wild
     @Override
     public void execute(String command) {
         if (command.equals("clear")) {
