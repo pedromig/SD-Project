@@ -102,7 +102,7 @@ public interface MulticastProtocol {
 	static MulticastPacket ready(String source) {return MulticastProtocol.header(source, READY);}
 
 	/**
-	 * A message used by the {@code VotingTerminal} clients when they perform a successfull shutdown. This is
+	 * A message used by the {@code VotingTerminal} clients when they perform a successful shutdown. This is
 	 * used to tell the server to remove the terminal from the list of active terminals.
 	 *
 	 * @param source The sender of the message
