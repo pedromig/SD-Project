@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"console"},{"l":"multicast"},{"l":"multicast.protocol"},{"l":"multicast.ui"},{"l":"multicast.utils"},{"l":"rmi"},{"l":"rmi.interfaces"},{"l":"utils"},{"l":"utils.elections"},{"l":"utils.lists"},{"l":"utils.people"}]
