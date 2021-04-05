@@ -534,15 +534,15 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 
 	/* Save Data */
 	public synchronized boolean saveElections() {
-		return RmiServer.saveData(electionsFilePath, this.elections);
+		return RmiServer.saveData(dirPath + electionsFilePath, this.elections);
 	}
 
 	public synchronized boolean saveLists() {
-		return RmiServer.saveData(listsFilePath, this.lists);
+		return RmiServer.saveData(dirPath + listsFilePath, this.lists);
 	}
 
 	public synchronized boolean savePeople() {
-		return RmiServer.saveData(peopleFilePath, this.people);
+		return RmiServer.saveData(dirPath + peopleFilePath, this.people);
 	}
 
 	public synchronized static boolean saveData(String path, Object object) {
