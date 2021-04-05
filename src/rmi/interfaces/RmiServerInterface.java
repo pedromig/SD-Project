@@ -30,7 +30,7 @@ public interface RmiServerInterface extends Remote {
 
 	void subscribe(RmiAdminConsoleInterface adminConsole) throws RemoteException;
 
-	void subscribe(RmiMulticastServerInterface multicastDesk) throws RemoteException;
+	void subscribe(RmiMulticastServerInterface multicastDesk, String name) throws RemoteException;
 
 	void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException;
 

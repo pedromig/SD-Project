@@ -47,7 +47,7 @@ import java.util.logging.*;
  * {@link RmiMulticastServerInterface}.
  * <p>
  * In order for this {@code VotingDesk} to be instanced correctly it may need a configuration.properties file that
- * follows the format specified by the{@link java.util.Properties} file format.
+ * follows the format specified by the {@link java.util.Properties} file format.
  * In the case of this server the arguments required to be present in the properties file are showed in the following
  * example:
  * <blockquote><pre>
@@ -90,8 +90,8 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	/**
 	 * @implNote Default RMI Server connection configurations
 	 */
-	private static final String RMI_SERVER_IP= "localhost";
-	private static final String RMI_SERVER_PORT = "7000";
+	private static final String DEFAULT_RMI_SERVER_IP = "localhost";
+	private static final String DEFAULT_RMI_SERVER_PORT = "7000";
 
 	/**
 	 * @implNote Logger instance use to log debug messages for the this server class.
@@ -104,9 +104,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	 */
 	private String name;
 
-
-	private static final String rmiServerUrl = "RmiServer";
 	private RmiServerInterface rmiServer;
+	private InetAddress rmiAddress;
+	private int rmiPort;
 
 	/**
 	 * @implNote Handles for the socket connection to the multicast discovery/status group needed by this server
@@ -263,7 +263,6 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	}
 
 	/**
-	 *
 	 * @return
 	 */
 	private RmiServerInterface connectRMIServer() {
@@ -272,8 +271,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 		while (attempt++ != RMI_RECONNECT_ATTEMPTS) {
 			try {
-				server = (RmiServerInterface) Naming.lookup(rmiServerUrl);
-				server.subscribe(this);
+				server = (RmiServerInterface)
+						Naming.lookup("rmi://" + this.rmiAddress.getHostName() + ":" + this.rmiPort + "/RmiServer");
+				server.subscribe(this, this.getName());
 				return server;
 			} catch (RemoteException e) {
 				LOGGER.warning("RMI server connection failed, retrying in "
@@ -338,6 +338,23 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 					DEFAULT_VOTING_MULTICAST_PORT
 					)
 			);
+
+			try {
+				this.rmiAddress = InetAddress.getByName((String)
+						configs.getOrDefault(
+								"rmi.server.ip",
+								DEFAULT_RMI_SERVER_IP
+						)
+				);
+			} catch (UnknownHostException e) {
+				LOGGER.severe("Unknown Host: " + e.getMessage());
+			}
+
+			this.rmiPort = Integer.parseInt((String) configs.getOrDefault(
+					"rmi.server.port",
+					DEFAULT_RMI_SERVER_PORT
+			));
+
 			votingDeskServerStartup();
 		}
 		System.exit(0);
