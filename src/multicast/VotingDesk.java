@@ -222,9 +222,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	 * A wrapper method used to encapsulate {@link java.rmi.RemoteException} thrown by a method that requires some
 	 * information to be queried from the RMI server.
 	 * <p>
-	 * This method provides a implementation that attempts to call method passed by parameter using the
-	 * {@link java.util.concurrent.Callable} interface and in the event that this method fails throwing a
-	 * {@link java.rmi.RemoteException} looping afterwards until the connection is able to be re-established
+	 * This method provides a implementation that attempts to call the method passed by parameter using the
+	 * {@link java.util.concurrent.Callable} interface. In the event the method fails throwing a
+	 * {@link java.rmi.RemoteException} the method loops until the connection is able to be re-established
 	 * with the RMI main or backup servers.
 	 *
 	 * @param function A {@code Callable} interface object wrapping a remote method call to the RMI server
