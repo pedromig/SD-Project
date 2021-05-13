@@ -6,20 +6,6 @@
 
 <struts>
     <package name="default" namespace="/" extends="struts-default">
-        <action name="index">
-            <result>index.jsp</result>
-        </action>
 
-        <action name="carSearch" class="carSearchAction">
-            <result>carSearchShow.jsp</result>
-        </action>
-
-        <action name="laptopSearch" class="laptopSearchAction">
-            <result>laptopSearchShow.jsp</result>
-        </action>
-
-        <action name="shoesSearch" class="shoesSearchAction">
-            <result>shoesSearchShow.jsp</result>
-        </action>
     </package>
 </struts>

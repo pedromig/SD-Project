@@ -3,39 +3,4 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-    <!-- Models -->
-    <bean id="shoesProductModel" class="models.ShoeProductModel" scope="prototype"/>
-
-    <bean id="laptopProductModel" class="models.LaptopProductModel" scope="prototype"/>
-
-    <bean id="carProductModel" class="models.CarProductModel" scope="prototype"/>
-
-    <!-- Services -->
-    <bean id="shoesSearchService" class="services.ShoesSearchService">
-    </bean>
-
-    <bean id="laptopSearchService" class="services.LaptopSearchService">
-    </bean>
-
-    <bean id="carSearchService" class="services.CarSearchService">
-    </bean>
-
-    <!-- Actions -->
-    <bean id="shoesSearchAction" class="actions.SearchAction" scope="prototype">
-        <property name="searchService" ref="shoesSearchService" />
-        <property name="inputObject" ref="shoesProductModel" />
-    </bean>
-
-    <bean id="laptopSearchAction" class="actions.SearchAction" scope="prototype">
-        <property name="searchService" ref="laptopSearchService" />
-        <property name="inputObject" ref="laptopProductModel" />
-    </bean>
-
-    <bean id="carSearchAction" class="actions.SearchAction" scope="prototype">
-        <property name="searchService" ref="carSearchService" />
-        <property name="inputObject" ref="carProductModel" />
-    </bean>
-
-
-
 </beans>
