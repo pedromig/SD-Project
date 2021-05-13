@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="war">
+    <output-path>$PROJECT_DIR$/out/artifacts/war</output-path>
+    <root id="archive" name="war.war">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Meta-2" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="javassist:javassist:3.11.0.GA" />
+          <element id="library" level="project" name="javax.servlet:jstl:1.2" />
+          <element id="library" level="project" name="org.apache.struts:struts2-spring-plugin:2.5.14.1" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="Meta-2/web/Web" />
+    </root>
+  </artifact>
+</component>

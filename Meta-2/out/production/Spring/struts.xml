@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <package name="default" namespace="/" extends="struts-default">
+        <action name="index">
+            <result>index.jsp</result>
+        </action>
+
+        <action name="carSearch" class="carSearchAction">
+            <result>carSearchShow.jsp</result>
+        </action>
+
+        <action name="laptopSearch" class="laptopSearchAction">
+            <result>laptopSearchShow.jsp</result>
+        </action>
+
+        <action name="shoesSearch" class="shoesSearchAction">
+            <result>shoesSearchShow.jsp</result>
+        </action>
+    </package>
+</struts>
