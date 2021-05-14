@@ -11,8 +11,8 @@
             <result>index.jsp</result>
         </action>
 
-        <action name="login" class="actions.LoginAction" method="execute">
-            <result name="login">/login.jsp</result>
+        <action name="login" class="core.actions.LoginAction" method="execute">
+            <result name="login">login.jsp</result>
         </action>
 
     </package>

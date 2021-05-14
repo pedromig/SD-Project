@@ -1,4 +1,4 @@
-package actions;
+package core.actions;
 
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.interceptor.SessionAware;

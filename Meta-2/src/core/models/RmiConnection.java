@@ -1,4 +1,4 @@
-package models;
+package core.models;
 
 import rmiserver.interfaces.RmiServerInterface;
 
