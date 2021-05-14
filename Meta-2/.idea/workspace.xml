@@ -7,16 +7,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/actions/LoginAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/RmiConnection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/Vote.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/elections/Election.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/elections/EmployeeElection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/elections/StudentElection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/elections/TeacherElection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiAdminConsoleInterface.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiMulticastServerInterface.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiServerInterface.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/lists/EmployeeList.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/lists/List.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/lists/StudentList.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/lists/TeacherList.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/people/Employee.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/people/Person.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/people/Student.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rmiserver/people/Teacher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/WEB-INF/applicationContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/web/WEB-INF/applicationContext.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/carSearchShow.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/laptopSearchShow.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/shoesSearchShow.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -29,12 +54,15 @@
     <option name="CUSTOM_FILTER" />
   </component>
   <component name="ProjectId" id="1sSnh166pEM4PlWm0ZACrxwKLcI" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.Annotations" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
@@ -44,11 +72,28 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="project.structure.last.edited" value="Facets" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JSP" />
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Tomcat 8.5.65" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.65" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="UPDATE_ON_FRAME_DEACTIVATION" value="true" />
       <option name="HOT_SWAP_CLASSES_ON_FRAME_DEACTIVATION" value="true" />
@@ -226,6 +271,9 @@
       <option name="presentableId" value="Default" />
       <updated>1620874975466</updated>
       <workItem from="1620874978394" duration="415000" />
+      <workItem from="1620915393999" duration="1135000" />
+      <workItem from="1620990524460" duration="254000" />
+      <workItem from="1620990888420" duration="4639000" />
     </task>
     <servers />
   </component>
@@ -242,5 +290,9 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
