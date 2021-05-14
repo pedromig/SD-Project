@@ -6,6 +6,7 @@
     </head>
     <body>
         <h1>Welcome to E-Voting!</h1>
-        <s:url action="login">Login</s:url>
+        <s:url action="login" var="loginUrl" />
+        <s:a href="%{loginUrl}" >Login</s:a>
     </body>
 </html>

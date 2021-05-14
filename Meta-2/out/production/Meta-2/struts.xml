@@ -7,5 +7,13 @@
 <struts>
     <package name="default" namespace="/" extends="struts-default">
 
+        <action name="index">
+            <result>index.jsp</result>
+        </action>
+
+        <action name="login" class="actions.LoginAction" method="execute">
+            <result name="login">/login.jsp</result>
+        </action>
+
     </package>
 </struts>

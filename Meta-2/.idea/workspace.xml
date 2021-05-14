@@ -7,29 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/actions/LoginAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/models/RmiConnection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/Vote.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/elections/Election.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/elections/EmployeeElection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/elections/StudentElection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/elections/TeacherElection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiAdminConsoleInterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiMulticastServerInterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiServerInterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/lists/EmployeeList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/lists/List.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/lists/StudentList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/lists/TeacherList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/people/Employee.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/people/Person.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/people/Student.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/people/Teacher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/login.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +20,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Jsp File" />
       </list>
     </option>
   </component>
@@ -77,23 +58,13 @@
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Facets" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JSP" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Tomcat 8.5.65" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.65" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="UPDATE_ON_FRAME_DEACTIVATION" value="true" />
       <option name="HOT_SWAP_CLASSES_ON_FRAME_DEACTIVATION" value="true" />
@@ -273,7 +244,8 @@
       <workItem from="1620874978394" duration="415000" />
       <workItem from="1620915393999" duration="1135000" />
       <workItem from="1620990524460" duration="254000" />
-      <workItem from="1620990888420" duration="4639000" />
+      <workItem from="1620990888420" duration="4787000" />
+      <workItem from="1620997269051" duration="301000" />
     </task>
     <servers />
   </component>
