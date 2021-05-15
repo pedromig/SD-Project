@@ -1,8 +1,8 @@
-package rmi;
+package rmiserver;
 
-import rmi.interfaces.RmiAdminConsoleInterface;
-import rmi.interfaces.RmiMulticastServerInterface;
-import rmi.interfaces.RmiServerInterface;
+import rmiserver.interfaces.RmiServerInterface;
+import rmiserver.interfaces.RmiAdminConsoleInterface;
+import rmiserver.interfaces.RmiMulticastServerInterface;
 import utils.Vote;
 import utils.lists.List;
 import utils.elections.Election;
@@ -239,8 +239,8 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	public synchronized void editElectionStartDate(String electionName, GregorianCalendar newDate) throws RemoteException {
 		Election<?> election = this.getElection(electionName);
 		if (this.compareDates(new GregorianCalendar(), election.getStartDate()) &&
-			this.compareDates(new GregorianCalendar(), newDate) &&
-			this.compareDates(newDate, election.getEndDate())) {
+				this.compareDates(new GregorianCalendar(), newDate) &&
+				this.compareDates(newDate, election.getEndDate())) {
 			election.setStartDate(newDate);
 			this.saveElections();
 		}
@@ -256,7 +256,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	public synchronized void editElectionEndDate(String electionName, GregorianCalendar newDate) throws RemoteException {
 		Election<?> election = this.getElection(electionName);
 		if (this.compareDates(new GregorianCalendar(), election.getStartDate()) &&
-			this.compareDates(election.getStartDate(), newDate)) {
+				this.compareDates(election.getStartDate(), newDate)) {
 			election.setEndDate(newDate);
 			this.saveElections();
 		}
@@ -431,7 +431,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		CopyOnWriteArrayList<Election<?>> running = new CopyOnWriteArrayList<>();
 		for (Election<?> e : this.elections) {
 			if (this.compareDates(e.getStartDate(), new GregorianCalendar()) &&
-				this.compareDates(new GregorianCalendar(), e.getEndDate())) {
+					this.compareDates(new GregorianCalendar(), e.getEndDate())) {
 				running.add(e);
 			}
 		}
@@ -628,7 +628,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		boolean status = false;
 		Election<?> election = this.getElection(vote.getElectionName());
 		if (this.compareDates(new GregorianCalendar(), election.getEndDate()) &&
-			!this.hasVoted(vote.getElectionName(), vote.getPersonID())) {
+				!this.hasVoted(vote.getElectionName(), vote.getPersonID())) {
 			election.addVote(vote);
 			status = true;
 
@@ -895,10 +895,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		/* Run Server */
 		try {
 			server = new RmiServer(elections, lists, people, DIR);
-			Naming.rebind("rmi://" + IP + ":" + PORT  + "/RmiServer", server);
+//			Naming.rebind("rmi://" + IP + ":" + PORT  + "/RmiServer", server);
+			Naming.rebind("rmi://localhost:7000/RmiServer", server);
 			System.out.println("RmiServer ready! - Running on " + IP + ":" + PORT);
 		} catch (Exception e) {
 			System.out.println("Exception in RMI Server: Shutting Down");
 		}
 	}
 }
+

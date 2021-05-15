@@ -11,7 +11,7 @@
             <result>index.jsp</result>
         </action>
 
-        <action name="login" class="core.actions.LoginAction" method="execute">
+        <action name="login" class="core.actions.RmiConnectAction" method="execute">
             <result name="login">login.jsp</result>
         </action>
 

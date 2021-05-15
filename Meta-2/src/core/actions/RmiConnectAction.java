@@ -13,7 +13,9 @@ public class RmiConnectAction extends ActionSupport implements SessionAware {
 
     @Override
     public String execute() {
-        return LOGIN;
+        if (this.getRmiConnector().getServer() != null)
+            return LOGIN;
+        return ERROR;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package core.models;
 
-import rmi.interfaces.RmiServerInterface;
+import rmiserver.interfaces.RmiServerInterface;
 
 import java.rmi.Naming;
 
@@ -12,10 +12,16 @@ public class RmiConnector {
     public RmiConnector() {
         try {
             this.setServer((RmiServerInterface) Naming.lookup("rmi://localhost:7000/RmiServer"));
+            System.out.println("it runs baby");
+            server.print("hellp");
         } catch (Exception e) {
             this.setServer(null);
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args){
+        new RmiConnector();
     }
 
     public RmiServerInterface getServer() {
