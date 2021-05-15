@@ -2,9 +2,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-	<title>Title</title>
+	<title>Login</title>
 </head>
 	<body>
-		This is the login menu
+		<h1>Login Menu</h1>
 	</body>
 </html>

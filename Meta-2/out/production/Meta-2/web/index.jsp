@@ -6,7 +6,7 @@
     </head>
     <body>
         <h1>Welcome to E-Voting!</h1>
-        <s:url action="login" var="loginUrl" />
-        <s:a href="%{loginUrl}" >Login</s:a>
+        <s:url action="connectRmi" var="rmiConnectUrl" />
+        <s:a href="%{rmiConnectUrl}">Start!</s:a>
     </body>
 </html>
