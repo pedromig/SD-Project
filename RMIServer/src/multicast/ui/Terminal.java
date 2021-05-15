@@ -34,7 +34,7 @@ public abstract class Terminal extends JFrame {
 		// General Setup
 		this.prompt = title + ":~$ ";
 
-		// Terminal Window Setup
+		// multicast.ui.Terminal Window Setup
 		this.setTitle(title);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(700, 700);
@@ -44,7 +44,7 @@ public abstract class Terminal extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		this.getContentPane().add(scrollPane);
 
-		// Text Terminal Setup
+		// Text multicast.ui.Terminal Setup
 		this.terminal = new JTextArea();
 		this.terminal.setBackground(new Color(35, 35, 36));
 

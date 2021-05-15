@@ -1,11 +1,11 @@
 package rmiserver;
 
-import rmiserver.interfaces.RmiServerInterface;
 import rmiserver.interfaces.RmiAdminConsoleInterface;
 import rmiserver.interfaces.RmiMulticastServerInterface;
+import rmiserver.interfaces.RmiServerInterface;
 import utils.Vote;
-import utils.lists.List;
 import utils.elections.Election;
+import utils.lists.List;
 import utils.people.Person;
 
 import java.io.FileInputStream;
@@ -132,7 +132,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 
 	/**
 	 * Callback to get an overview of the objects in the database
-	 * @param client AdminConsole that requested the information
+	 * @param client console.AdminConsole that requested the information
 	 * @throws RemoteException
 	 */
 	@Override

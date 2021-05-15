@@ -70,7 +70,7 @@ public class VotingTerminalUI extends JFrame {
 		BoxLayout layout = new BoxLayout(topPanel, BoxLayout.Y_AXIS);
 		topPanel.setLayout(layout);
 
-		this.terminalTitle = new JLabel("Welcome to eVoting Terminal " + name);
+		this.terminalTitle = new JLabel("Welcome to eVoting multicast.ui.Terminal " + name);
 		terminalTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 		terminalTitle.setBorder(new EmptyBorder(2, 2, 6, 2));
 		terminalTitle.setFont(new Font(Font.MONOSPACED, Font.BOLD, 25));

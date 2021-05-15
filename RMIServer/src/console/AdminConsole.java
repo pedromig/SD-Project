@@ -398,7 +398,7 @@ public class AdminConsole extends UnicastRemoteObject implements RmiAdminConsole
     public static void main(String[] args) {
         final String IP, PORT;
         if  (args.length != 2) {
-            System.out.println("java AdminConsole <RMI SERVER - IP ADDRESS> <RMI SERVER - PORT>");
+            System.out.println("java console.AdminConsole <RMI SERVER - IP ADDRESS> <RMI SERVER - PORT>");
             return;
         } else {
             IP = args[0];

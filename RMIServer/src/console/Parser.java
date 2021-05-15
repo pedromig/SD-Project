@@ -5,7 +5,7 @@ import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 /**
- *  A class for a Parser
+ *  A class for a console.Parser
  */
 public class Parser {
     public final static String ABORT_CODE = "QUIT";
@@ -33,7 +33,7 @@ public class Parser {
      * A generic terminal UI generator
      * @param title String with the menu Title (header)
      * @param options [Optional] Options for the user to choose
-     * @return This Terminal
+     * @return This multicast.ui.Terminal
      */
     private Parser launchUI(String title, String[] options, boolean header) {
         int counter = 0, maxLen = title.length();
@@ -58,7 +58,7 @@ public class Parser {
     /**
      * A launchUI wrapper for a Header UI
      * @param title String with the menu Title (header)
-     * @return This Terminal
+     * @return This multicast.ui.Terminal
      */
     public Parser header(String title){
         return this.launchUI(title, new String[]{}, true);
@@ -160,7 +160,7 @@ public class Parser {
     }
 
     /**
-     * Ask user for a date in the format specified in Terminal.DATE_FORMAT
+     * Ask user for a date in the format specified in multicast.ui.Terminal.DATE_FORMAT
      * @param label Asking label
      * @param abortFlag boolean that indicates if this procedure should be aborted
      * @return The User inputted GregorianDate or null if the abortCode is entered
@@ -190,7 +190,7 @@ public class Parser {
     }
 
     /**
-     * Ask user for Time in the format specified in Terminal.TIME_FORMAT
+     * Ask user for Time in the format specified in multicast.ui.Terminal.TIME_FORMAT
      * @param label Asking label
      * @param abortFlag boolean that indicates if this procedure should be aborted
      * @return The User inputted Date or null if the abortCode is entered
@@ -220,9 +220,9 @@ public class Parser {
     }
 
     /**
-     * A script to clear the Terminal 
+     * A script to clear the multicast.ui.Terminal
      * #FIXME might be system dependent!
-     * @return This Terminal
+     * @return This multicast.ui.Terminal
      */
     public Parser clear(){
         System.out.print("\033[H\033[2J");

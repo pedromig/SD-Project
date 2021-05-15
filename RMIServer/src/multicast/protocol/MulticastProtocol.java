@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 
 /**
- * A interface that provides the {@code MulticastProtocol} standard to be used in the communication between
- * {@link multicast.VotingDesk} and the {@link multicast.VotingTerminal}. Any voting terminal that is to be used with
+ * A interface that provides the {@code multicast.protocol.MulticastProtocol} standard to be used in the communication between
+ * {@link VotingDesk} and the {@link VotingTerminal}. Any voting terminal that is to be used with
  * the voting desk following this implementation should implement this interface in order to provide compatibility and
  * stability to the implementations.
  * <p>
@@ -54,7 +54,7 @@ public interface MulticastProtocol {
 	 *
 	 * @param source The sender of a message
 	 * @param type   The type of the message being sent
-	 * @return The {@code MulticastPacket} containing the header info.
+	 * @return The {@code multicast.protocol.MulticastPacket} containing the header info.
 	 * @implSpec PROTOCOL HEADER
 	 */
 	static MulticastPacket header(String source, String type) {
@@ -66,12 +66,12 @@ public interface MulticastProtocol {
 
 
 	/**
-	 * A {@code MulticastProtocol} message used to transmit a vote from the client to the {@code VotingDesk} server.
+	 * A {@code multicast.protocol.MulticastProtocol} message used to transmit a vote from the client to the {@code multicast.VotingDesk} server.
 	 *
 	 * @param source   The sender of the message
 	 * @param election The election that is associated with this vote
 	 * @param list     The list that a person voted.
-	 * @return The {@code MulticastPacket} containing the vote info
+	 * @return The {@code multicast.protocol.MulticastPacket} containing the vote info
 	 * @implNote ADVERTISEMENT MESSAGES
 	 */
 	static MulticastPacket vote(String source, String election, String list) {
@@ -82,10 +82,10 @@ public interface MulticastProtocol {
 	}
 
 	/**
-	 * A greeting message used by the {@code VotingTerminal} clients
+	 * A greeting message used by the {@code multicast.VotingTerminal} clients
 	 *
 	 * @param source The sender of the message
-	 * @return The {@code MulticastPacket} containing the greeting
+	 * @return The {@code multicast.protocol.MulticastPacket} containing the greeting
 	 * @implNote ADVERTISEMENT MESSAGES
 	 */
 	static MulticastPacket greeting(String source) {
@@ -93,20 +93,20 @@ public interface MulticastProtocol {
 	}
 
 	/**
-	 * A message used by the {@code VotingTerminal} clients when they are ready to receive users
+	 * A message used by the {@code multicast.VotingTerminal} clients when they are ready to receive users
 	 *
 	 * @param source The sender of the message
-	 * @return The {@code MulticastPacket} containing the ready information
+	 * @return The {@code multicast.protocol.MulticastPacket} containing the ready information
 	 * @implNote ADVERTISEMENT MESSAGES
 	 */
 	static MulticastPacket ready(String source) {return MulticastProtocol.header(source, READY);}
 
 	/**
-	 * A message used by the {@code VotingTerminal} clients when they perform a successful shutdown. This is
+	 * A message used by the {@code multicast.VotingTerminal} clients when they perform a successful shutdown. This is
 	 * used to tell the server to remove the terminal from the list of active terminals.
 	 *
 	 * @param source The sender of the message
-	 * @return The {@code MulticastPacket} containing the goodbye information
+	 * @return The {@code multicast.protocol.MulticastPacket} containing the goodbye information
 	 * @implNote ADVERTISEMENT MESSAGES
 	 */
 	static MulticastPacket bye(String source) {
@@ -114,11 +114,11 @@ public interface MulticastProtocol {
 	}
 
 	/**
-	 * A message used by the {@code VotingTerminal} clients when they are finished processing a user and are
+	 * A message used by the {@code multicast.VotingTerminal} clients when they are finished processing a user and are
 	 * ready to receive one more job
 	 *
 	 * @param source The sender of the message
-	 * @return The {@code MulticastPacket} containing the offer information
+	 * @return The {@code multicast.protocol.MulticastPacket} containing the offer information
 	 * @implNote ADVERTISEMENT MESSAGES
 	 */
 	static MulticastPacket offer(String source) {
@@ -126,24 +126,24 @@ public interface MulticastProtocol {
 	}
 
 	/**
-	 * A message used by the {@code VotingDesk} server on startup. This probe is sent scanning for any {@code
-	 * VotingTerminal} client connected to the multicast discovery group and connecting with them.
+	 * A message used by the {@code multicast.VotingDesk} server on startup. This probe is sent scanning for any {@code
+	 * multicast.VotingTerminal} client connected to the multicast discovery group and connecting with them.
 	 *
 	 * @param source The sender of the message
-	 * @return The {@code MulticastPacket} containing the probe
+	 * @return The {@code multicast.protocol.MulticastPacket} containing the probe
 	 * @implNote ADVERTISEMENT MESSAGES
 	 */
 	static MulticastPacket probe(String source) {return MulticastProtocol.header(source, PROBE);}
 
 
 	/**
-	 * A message used by the {@code VotingTerminal} clients or the {@code VotingDesk} servers when there is a
+	 * A message used by the {@code multicast.VotingTerminal} clients or the {@code multicast.VotingDesk} servers when there is a
 	 * need to send a list of items across the multicast group
 	 *
 	 * @param source The sender of the message
 	 * @param target The target receiver of the message
 	 * @param items  The item list contained in the message as a hashmap
-	 * @return The {@code MulticastPacket} containing the item list
+	 * @return The {@code multicast.protocol.MulticastPacket} containing the item list
 	 * @implNote INFORMATIONAL / COMMUNICATION MESSAGES
 	 */
 	static <K, V> MulticastPacket itemList(String source, String target, HashMap<K, V> items) {
@@ -157,14 +157,14 @@ public interface MulticastProtocol {
 	}
 
 	/**
-	 * A message used by the {@code VotingTerminal} clients when there is a
+	 * A message used by the {@code multicast.VotingTerminal} clients when there is a
 	 * need to transmit a login message contain user critical information e.g credentials
 	 *
 	 * @param source The sender of the message
 	 * @param target The target receive of this message
 	 * @param userID The id of the user attempting to login
 	 * @param pass   The password of the user attempting to login
-	 * @return The {@code MulticastPacket} containing the item list
+	 * @return The {@code multicast.protocol.MulticastPacket} containing the item list
 	 * @implNote INFORMATIONAL / COMMUNICATION MESSAGES
 	 */
 	static MulticastPacket login(String source, String target, String userID, String pass) {
@@ -176,13 +176,13 @@ public interface MulticastProtocol {
 	}
 
 	/**
-	 * A message used by the {@code VotingTerminal} clients when there is a
+	 * A message used by the {@code multicast.VotingTerminal} clients when there is a
 	 * need to transmit a status message containing the result code of a given operation
 	 *
 	 * @param source The sender of the message
 	 * @param target The target receiver of this message
 	 * @param status The status code to be sent
-	 * @return The {@code MulticastPacket} containing the status message
+	 * @return The {@code multicast.protocol.MulticastPacket} containing the status message
 	 * @implNote INFORMATIONAL / COMMUNICATION MESSAGES
 	 */
 	static MulticastPacket status(String source, String target, String status) {
@@ -193,12 +193,12 @@ public interface MulticastProtocol {
 	}
 
 	/**
-	 * A acknowledgement message used by the {@code VotingTerminal} and {@code VotingDesk} to confirm that a given
+	 * A acknowledgement message used by the {@code multicast.VotingTerminal} and {@code multicast.VotingDesk} to confirm that a given
 	 * operation took place or is completed.
 	 *
 	 * @param source The sender of the message
 	 * @param target The target receiver of this message
-	 * @return The {@code MulticastPacket} containing the acknowledgement message
+	 * @return The {@code multicast.protocol.MulticastPacket} containing the acknowledgement message
 	 * @implNote INFORMATIONAL / COMMUNICATION MESSAGES
 	 */
 	static MulticastPacket acknowledge(String source, String target) {

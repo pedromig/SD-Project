@@ -19,11 +19,11 @@ import java.util.concurrent.TimeoutException;
 
 
 /**
- * The {@code VotingTerminal} class represents a multicast client that provides the functionalities needed for a given
+ * The {@code multicast.VotingTerminal} class represents a multicast client that provides the functionalities needed for a given
  * eVoting election to occur. This client serves as a interface with the users (voters) where these can interact with
  * in order to register their voting option. All voting terminals are implemented assistance of this class.
  * <p>
- * The {@code VotingDesk} being itself a multicast client implementation uses 2 multicast groups that can configured
+ * The {@code multicast.VotingDesk} being itself a multicast client implementation uses 2 multicast groups that can configured
  * using a properties file. These groups are used for the exchange of status / discovery messages between the server and
  * the voting terminals and another group for the exchange of critical / relevant information between the server and
  * the terminals (multicast clients). In the exchange of client-server information this client makes use of a
@@ -31,7 +31,7 @@ import java.util.concurrent.TimeoutException;
  * of protocol is provided in the {@link MulticastProtocol} interface. Since the protocol is standard a client
  * for many platforms may be created if the rules of communication are followed.
  * <p>
- * In order for this {@code VotingTerminal} to be instanced correctly it may need a configuration.properties file that
+ * In order for this {@code multicast.VotingTerminal} to be instanced correctly it may need a configuration.properties file that
  * follows the format specified by the {@link Properties} file format.
  * In the case of this client the arguments required to be present in the properties file are showed in the following
  * example:
@@ -62,7 +62,7 @@ public class VotingTerminal implements MulticastProtocol {
 	private static final int AUTH_TIMEOUT_MS = 60000;
 
 	/**
-	 * @implNote This VotingTerminal client Name / ID
+	 * @implNote This multicast.VotingTerminal client Name / ID
 	 */
 	private String name;
 
@@ -86,7 +86,7 @@ public class VotingTerminal implements MulticastProtocol {
 	private int votingPort;
 
 	/**
-	 * Initializes a newly created {@code VotingTerminal} object so that it represents
+	 * Initializes a newly created {@code multicast.VotingTerminal} object so that it represents
 	 * multicast client instance. The configurations of this client.
 	 *
 	 * @param configPath A {@code String} containing the terminal.properties file with the configuration for this
@@ -190,11 +190,11 @@ public class VotingTerminal implements MulticastProtocol {
 	}
 
 	/**
-	 * A getter method for the name of this {@code VotingTerminal} multicast client. Through this name the Multicast
-	 * server is able to identify this {@code VotingTerminal} being able to monitor it, and restrict use it to attend
+	 * A getter method for the name of this {@code multicast.VotingTerminal} multicast client. Through this name the Multicast
+	 * server is able to identify this {@code multicast.VotingTerminal} being able to monitor it, and restrict use it to attend
 	 * to the clients (voters) requests.
 	 *
-	 * @return The name identifying the current {@code VotingTerminal} client instance
+	 * @return The name identifying the current {@code multicast.VotingTerminal} client instance
 	 */
 	public String getName() {
 		return name;
@@ -214,13 +214,13 @@ public class VotingTerminal implements MulticastProtocol {
 	}
 
 	/**
-	 * A method that implements the functionality that allows the {@code VotingTerminal} multicast client to connect
-	 * to a{@code VotingDesk} server running in a given multicast group. In case the server does not respond the method
+	 * A method that implements the functionality that allows the {@code multicast.VotingTerminal} multicast client to connect
+	 * to a{@code multicast.VotingDesk} server running in a given multicast group. In case the server does not respond the method
 	 * will wait until a server connects to a multicast group and sends {@link MulticastProtocol#PROBE} that tells the
 	 * terminal clients that they can already connect to it.
 	 *
 	 * @return The handle to the {@link rmiserver.interfaces.RmiServerInterface} object holding the remote methods that
-	 * can be invoked by this {@code VotingDesk} instance.
+	 * can be invoked by this {@code multicast.VotingDesk} instance.
 	 * @implNote The method might not be able to establish a connection with the multicast server because this one is
 	 * offline. In that case it will wait until the program is killed having no timout mechanism.
 	 */
@@ -266,7 +266,7 @@ public class VotingTerminal implements MulticastProtocol {
 
 
 	/**
-	 * This method is responsible for starting this {@code VotingTerminal} voting service that starts by signaling the
+	 * This method is responsible for starting this {@code multicast.VotingTerminal} voting service that starts by signaling the
 	 * server telling that it is ready through the use of a {@link MulticastProtocol#READY} message. After this
 	 * terminal receives a job it will complete it and on completion will send a {@link MulticastProtocol#OFFER}
 	 * message signaling the server so it can know that this terminal is available to receive a new job again.
@@ -325,10 +325,10 @@ public class VotingTerminal implements MulticastProtocol {
 	}
 
 	/**
-	 * This method is responsible for registering a vote intention of a given client using this {@code VotingTerminal}
+	 * This method is responsible for registering a vote intention of a given client using this {@code multicast.VotingTerminal}
 	 * instance. To make the vote choice it is given to the user 120 seconds by default after which a timeout will
 	 * take place causing the terminal to be blocked again and the user removed (needing to go back to the {@code
-	 * VotingDesk} in order to reenter the queue.
+	 * multicast.VotingDesk} in order to reenter the queue.
 	 *
 	 * @param sc            An instance o a scanner class containing the scanner to be used in this terminal in order
 	 *                      to receive user input
@@ -382,7 +382,7 @@ public class VotingTerminal implements MulticastProtocol {
 	}
 
 	/**
-	 * This method is responsible for authenticating a given user in the {@code VotingDesk} multicast server instance
+	 * This method is responsible for authenticating a given user in the {@code multicast.VotingDesk} multicast server instance
 	 * that it is connected to. It sends the user credentials and waits for a {@link MulticastProtocol#STATUS} message
 	 * saying that the user logged in successfully. For this operation to be performed it is given to the client a 60
 	 * seconds after which a timeout will occur causing the client (voter) to be removed from the terminal resulting
@@ -442,7 +442,7 @@ public class VotingTerminal implements MulticastProtocol {
 	 * @param sc            An instance o a scanner class containing the scanner to be used in this terminal in order
 	 *                      to receive user input
 	 * @param voteRecipient The thread/server that handles the reception of votes send by the terminals.
-	 * @return The {@code MulticastPacket} with the information regarding the election choosen by the user.
+	 * @return The {@code multicast.protocol.MulticastPacket} with the information regarding the election choosen by the user.
 	 * @throws TimeoutException A exception thrown if the user does not fill the required fields in the time that it
 	 *                          was given to do so
 	 */

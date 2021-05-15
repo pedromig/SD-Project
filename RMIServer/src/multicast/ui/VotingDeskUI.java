@@ -19,15 +19,15 @@ public class VotingDeskUI extends Terminal {
 
 	/**
 	 * The default constructor for this GUI
-	 * @param app The backend for the {@code VotingDeskUI} app
+	 * @param app The backend for the {@code multicast.ui.VotingDeskUI} app
 	 */
 	public VotingDeskUI(VotingDesk app) {
-		super("VotingDesk@" + app.getName());
+		super("multicast.VotingDesk@" + app.getName());
 		this.app = app;
 	}
 
 	/**
-	 * A implementation of the command parser used by the {@code VotingDeskUI}
+	 * A implementation of the command parser used by the {@code multicast.ui.VotingDeskUI}
 	 *
 	 * @param command The command that is to be executed by this class
 	 */

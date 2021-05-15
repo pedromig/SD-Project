@@ -33,25 +33,25 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The {@code VotingDesk} class represents a multicast server that provides the functionalities needed for a given
+ * The {@code multicast.VotingDesk} class represents a multicast server that provides the functionalities needed for a given
  * eVoting election to occur. This server serves as a interface where both the users and the voting terminals (where
  * the users vote) can connect to, in order to perform their activities. All voting desks are implemented as
  * instances of this class.
  * <p>
- * The {@code VotingDesk} being itself a multicast server implementation uses 2 multicast groups that can configured
+ * The {@code multicast.VotingDesk} being itself a multicast server implementation uses 2 multicast groups that can configured
  * using a properties file. These groups are used for the exchange of status / discovery messages between itself and
  * the voting terminals and another group for the exchange of critical / relevant information between the server and
  * the terminals (multicast clients). In the exchange of server-client information this server uses a protocol that
  * provides the primitives and basic structure of the messages that are transmitted. The implementation of this
  * protocol is provided in the {@link MulticastProtocol} interface.
  * <p>
- * The {@code VotingDesk} class is extends the {@link UnicastRemoteObject} class because it interacts
+ * The {@code multicast.VotingDesk} class is extends the {@link UnicastRemoteObject} class because it interacts
  * with a centralized Remote Method Invocation server that provides all the methods needed for the exchange of
  * relevant data e.g votes and user credentials. Also this server shares status messages with the RMI server in of
  * for this to know about the status of the current machine. The methods necessary for this are implemented in the
  * {@link RmiMulticastServerInterface}.
  * <p>
- * In order for this {@code VotingDesk} to be instanced correctly it may need a configuration.properties file that
+ * In order for this {@code multicast.VotingDesk} to be instanced correctly it may need a configuration.properties file that
  * follows the format specified by the {@link Properties} file format.
  * In the case of this server the arguments required to be present in the properties file are showed in the following
  * example:
@@ -105,7 +105,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	private final String config;
 
 	/**
-	 * @implNote This VotingDesk server Name / ID
+	 * @implNote This multicast.VotingDesk server Name / ID
 	 */
 	private String name;
 
@@ -136,7 +136,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	private final BlockingQueue<String> availableTerminals;
 
 	/**
-	 * Initializes a newly created {@code VotingDesk} object so that it represents
+	 * Initializes a newly created {@code multicast.VotingDesk} object so that it represents
 	 * multicast server instance. The configurations of this server and initialization
 	 * of the data structures required in order to save relevant information.
 	 *
@@ -180,9 +180,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 	/**
 	 * Implementation of a {@link RmiMulticastServerInterface} method required by the RMI
-	 * server in order to query information about this {@code VotingDesk} instance.
+	 * server in order to query information about this {@code multicast.VotingDesk} instance.
 	 * <p>
-	 * A remote method invocation used by the RMI server to do a personalized print where this VotingDesk
+	 * A remote method invocation used by the RMI server to do a personalized print where this multicast.VotingDesk
 	 * ID is displayed as a message preamble.
 	 *
 	 * @param msg The message to be displayed
@@ -191,14 +191,14 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	 */
 	@Override
 	public void print(String msg) throws RemoteException {
-		System.out.println("[VotingDesk@" + name + "]: " + msg);
+		System.out.println("[multicast.VotingDesk@" + name + "]: " + msg);
 	}
 
 	/**
 	 * Implementation of a {@link RmiMulticastServerInterface} method required by the RMI
-	 * server in order to query information about this {@code VotingDesk} instance.
+	 * server in order to query information about this {@code multicast.VotingDesk} instance.
 	 * <p>
-	 * A remote method invocation used by the RMI server print information about the current status of this VotingDesk.
+	 * A remote method invocation used by the RMI server print information about the current status of this multicast.VotingDesk.
 	 * The print message includes information about the terminals that this server has connected to it in any given
 	 * moment and which users are connected to it.
 	 *
@@ -212,9 +212,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	@Override
 	public String ping() throws RemoteException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("VotingDesk@").append(name);
+		sb.append("multicast.VotingDesk@").append(name);
 		for (String terminal : terminals.keySet()) {
-			sb.append("Terminal: ")
+			sb.append("multicast.ui.Terminal: ")
 			  .append(terminal)
 			  .append("\t User: ")
 			  .append(terminals.get(terminal))
@@ -268,13 +268,13 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	}
 
 	/**
-	 * A method that implements the functionality that allows the {@code VotingDesk} multicast servers to connect to a
+	 * A method that implements the functionality that allows the {@code multicast.VotingDesk} multicast servers to connect to a
 	 * RMI server running in a given address and port. In case the server does not respond the function will loop a
 	 * few times in a attempt to re-connect again. This loop will last 30 seconds (by default) after which the {@code
-	 * VotingDesk} will timeout, causing the server to stop its execution.
+	 * multicast.VotingDesk} will timeout, causing the server to stop its execution.
 	 *
 	 * @return The handle to the {@link RmiServerInterface} object holding the remote methods that
-	 * can be invoked by this {@code VotingDesk} instance.
+	 * can be invoked by this {@code multicast.VotingDesk} instance.
 	 * @implNote The function might not be able to establish a connection with the server because this multicast
 	 * server could not lookup the registry. In that case the server will stop  logging and error message in the log
 	 * file.
@@ -386,8 +386,8 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 
 	/**
-	 * This method is called by the {@code VotingDeskUI} server console and it allows a voter with a certain Citizen
-	 * card ID to be placed in this server voters queue where he/she will wait until a {@code VotingTerminal} becomes
+	 * This method is called by the {@code multicast.ui.VotingDeskUI} server console and it allows a voter with a certain Citizen
+	 * card ID to be placed in this server voters queue where he/she will wait until a {@code multicast.VotingTerminal} becomes
 	 * available for he/she to vote (if all the conditions required for this person to vote are met).
 	 *
 	 * @param voter The voter with Citizen Card ID that will be placed in this server queue.
@@ -398,13 +398,13 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	}
 
 	/**
-	 * A getter method for the name of this {@code VotingDesk} multicast server. Through this name the RMI server is
-	 * able to identify this {@code VotingDesk} being able to monitor, restrict the elections that may be ran on it
+	 * A getter method for the name of this {@code multicast.VotingDesk} multicast server. Through this name the RMI server is
+	 * able to identify this {@code multicast.VotingDesk} being able to monitor, restrict the elections that may be ran on it
 	 * and query information about it. To accomplish the operations referred before this method also does an
 	 * {@link Override} of the method {@link RmiMulticastServerInterface#getName()} declared
 	 * in the {@link RmiMulticastServerInterface}, that is forcing its implementation in this class.
 	 *
-	 * @return The name identifying the current {@code VotingDesk} server instances
+	 * @return The name identifying the current {@code multicast.VotingDesk} server instances
 	 */
 	@Override
 	public String getName() {
@@ -414,7 +414,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	/**
 	 * This method is responsible for the setup of the {@link Logger} instance of this server
 	 * configuring the appearance / format of the log messages displayed by this server debug console and written to
-	 * the log file generated during the {@code VotingDesk} runtime.
+	 * the log file generated during the {@code multicast.VotingDesk} runtime.
 	 */
 	private void setupLogger() {
 		ConsoleHandler handler = new ConsoleHandler();
@@ -436,7 +436,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	 * This method is called by the {@link VotingDesk#start()} method allowing the creation of all the components
 	 * required by the server to execute properly. It opens sockets, creates the server threads, UI instance and
 	 * does the proper cleanup of such resources once the exit command is issued to this server or the UI is closed
-	 * correctly (without using a signal to kill the {@code VotingDesk} server process)
+	 * correctly (without using a signal to kill the {@code multicast.VotingDesk} server process)
 	 */
 	private void votingDeskServerStartup() {
 		try {
@@ -470,7 +470,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 			voteManager.start();
 			clientHandler.start();
 
-			LOGGER.info("Starting VotingDesk console");
+			LOGGER.info("Starting multicast.VotingDesk console");
 			VotingDeskUI console = new VotingDeskUI(this);
 			console.addWindowCloseListener();
 			console.open();
@@ -501,9 +501,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 
 	/**
-	 * This private inner class represents a thread instance that will be ran by this {@code VotingDesk} server
-	 * instance monitoring the status of all the server connections to the each one the {@code VotingTerminal}
-	 * instances managed by it. It answers to {@code MulticastProtocol} status messages such as
+	 * This private inner class represents a thread instance that will be ran by this {@code multicast.VotingDesk} server
+	 * instance monitoring the status of all the server connections to the each one the {@code multicast.VotingTerminal}
+	 * instances managed by it. It answers to {@code multicast.protocol.MulticastProtocol} status messages such as
 	 * {@link MulticastProtocol#READY}, {@link MulticastProtocol#GREETING}, {@link MulticastProtocol#OFFER} and in a
 	 * later version of this code it will respond to a {@link MulticastProtocol#GOODBYE} that is emitted if the
 	 * terminal is shutdown properly.
@@ -613,7 +613,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 						case MulticastProtocol.GOODBYE:
 							// Perhaps Handle terminal shutdown properly
-							LOGGER.info("Voting Terminal Disconnected");
+							LOGGER.info("Voting multicast.ui.Terminal Disconnected");
 							break;
 
 					}
@@ -626,9 +626,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 
 	/**
-	 * This private inner class represents a thread instance that will be ran by this {@code VotingDesk} server
-	 * instance answering to voting and login requests made by the clients using the {@code VotingTerminal} instances
-	 * connected to this server. It answers to {@code MulticastProtocol} status messages such as
+	 * This private inner class represents a thread instance that will be ran by this {@code multicast.VotingDesk} server
+	 * instance answering to voting and login requests made by the clients using the {@code multicast.VotingTerminal} instances
+	 * connected to this server. It answers to {@code multicast.protocol.MulticastProtocol} status messages such as
 	 * {@link MulticastProtocol#LOGIN} and {@link MulticastProtocol#VOTE}.
 	 * <p>
 	 *
@@ -756,8 +756,8 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 
 	/**
-	 * This private inner class represents a thread instance that will be ran by this {@code VotingDesk} server
-	 * instance managing enqueued clients. The thread is responsible for assigning a {@code VotingTerminal} to a given
+	 * This private inner class represents a thread instance that will be ran by this {@code multicast.VotingDesk} server
+	 * instance managing enqueued clients. The thread is responsible for assigning a {@code multicast.VotingTerminal} to a given
 	 * client that is queued and waiting for a terminal to vote. It is also responsible for the identification of a
 	 * client
 	 * rejecting it if the is not eligible to vote in any election or if there is no reference to it in the RMI server
@@ -775,7 +775,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 		/**
 		 * @implNote The timeout for a connection to a terminal. If a client is redirected to a terminal the server
-		 * will send a request message carrying personal information to the {@code VotingTerminal} and wait
+		 * will send a request message carrying personal information to the {@code multicast.VotingTerminal} and wait
 		 * confirmation of receipt. If such confirmation (int the form of a {@link MulticastProtocol#ACKNOWLEDGE} is
 		 * not sent to this server's thread as a reply the server will assume the terminal to be dead and will
 		 * redirect the user to another terminal that becomes available
@@ -878,7 +878,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 						LOGGER.info("Waiting for terminal to be available");
 						String terminal = availableTerminals.take();
 
-						LOGGER.info("Terminal " + terminal + " requested by voter with Citizen Card ID: " + voter);
+						LOGGER.info("multicast.ui.Terminal " + terminal + " requested by voter with Citizen Card ID: " + voter);
 						terminals.put(terminal, voter);
 
 						HashMap<String, String> userItems = new HashMap<>();
@@ -897,7 +897,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 							}
 							timeoutFlag = false;
 						} catch (SocketTimeoutException e) {
-							LOGGER.warning("Terminal " + terminal + " not responding and is probably down...");
+							LOGGER.warning("multicast.ui.Terminal " + terminal + " not responding and is probably down...");
 							LOGGER.warning("Re-rooting voter with Citizen Card ID: " + voter + " to another terminal");
 							terminals.remove(terminal);
 							timeoutFlag = true;

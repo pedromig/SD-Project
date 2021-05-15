@@ -7,30 +7,30 @@ import java.net.MulticastSocket;
 import java.util.HashMap;
 
 /**
- * The {@code MulticastPacket} class is a class that works like a wrapper arrowing the DatagramPacket implementation.
+ * The {@code multicast.protocol.MulticastPacket} class is a class that works like a wrapper arrowing the DatagramPacket implementation.
  * Since the DatagramPacket cannot be extended (because it has been marked as a final class) this class aims to
  * provide the same features but adapted to work with the {@link MulticastProtocol} developed for our application.
  * <p>
- * The data contained in a {@code MulticastPacket} follows a hashmap like structure and is parsed and stored using
+ * The data contained in a {@code multicast.protocol.MulticastPacket} follows a hashmap like structure and is parsed and stored using
  * that data structure. The string representation of a packet before it is parsed is the following
- * <blockquote><pre> {source = VotingDesk@DEI ; target = VT-1 ; status="logged-in"} </pre></blockquote>
+ * <blockquote><pre> {source = multicast.VotingDesk@DEI ; target = VT-1 ; status="logged-in"} </pre></blockquote>
  * <p>
  * This API provides methods that make easy the sending and receiving of messages between 2 multicast entities
  * Usage examples are shown bellow:
  * <blockquote<pre>
- *  MulticastPacket empty = new MulticastPacket();
+ *  multicast.protocol.MulticastPacket empty = new multicast.protocol.MulticastPacket();
  *  empty.put("Hello", "World");
  *  String query = empty.get("Hello")
  *
- *  MulticastPacket packet = new MulticastPacket.from(socket)
+ *  multicast.protocol.MulticastPacket packet = new multicast.protocol.MulticastPacket.from(socket)
  *  System.out.println(packet);
  *
- *  Multicast info = new MulticastPacket()
+ *  Multicast info = new multicast.protocol.MulticastPacket()
  *  info.add("username", "pedro");
  *  info.sendTo(socket, group, port);
  *
  *  // Example using {@link MulticastProtocol} protocol standard.
- *  MulticastPacket ack = MulticastProtocol.acknowledge();
+ *  multicast.protocol.MulticastPacket ack = multicast.protocol.MulticastProtocol.acknowledge();
  *  ack.sendTo(socket, group, port);
  *  </pre></blockquote>
  *
@@ -70,7 +70,7 @@ public class MulticastPacket {
 	 *
 	 * @param socket The socket where the message is to be read.
 	 * @param self   The ID of the sender of this message.
-	 * @return The {@code MulticastPacket} with all the information contained in the datagram received from the socket
+	 * @return The {@code multicast.protocol.MulticastPacket} with all the information contained in the datagram received from the socket
 	 * @throws IOException A exception thrown if the socket where we were trying to read is closed during the read
 	 *                     operation
 	 */
@@ -91,7 +91,7 @@ public class MulticastPacket {
 	 * {@link DatagramPacket} into a {@link MulticastPacket}.
 	 *
 	 * @param datagramPacket The {@code DatagramPacket} that is going to be parsed
-	 * @return The {@code MulticastPacket} that was parsed from the original message conveyed in the {@code
+	 * @return The {@code multicast.protocol.MulticastPacket} that was parsed from the original message conveyed in the {@code
 	 * DatagramPacket}
 	 */
 	public static MulticastPacket parse(DatagramPacket datagramPacket) {
@@ -107,7 +107,7 @@ public class MulticastPacket {
 	}
 
 	/**
-	 * A method that is used to send a the information contained in this instance of the {@code MulticastPacket} to the
+	 * A method that is used to send a the information contained in this instance of the {@code multicast.protocol.MulticastPacket} to the
 	 * given socket linked to a given multicast group address and port.
 	 *
 	 * @param socket  The socket where the information will be sent
@@ -155,9 +155,9 @@ public class MulticastPacket {
 
 	/**
 	 * This method transforms the information of the hashmap that contains the information of this {@code
-	 * MulticastPacket} to bytes in order for this packet to be sent as a datagram.
+	 * multicast.protocol.MulticastPacket} to bytes in order for this packet to be sent as a datagram.
 	 *
-	 * @return The byte representation of the items of this {@code MulticastPacket}
+	 * @return The byte representation of the items of this {@code multicast.protocol.MulticastPacket}
 	 */
 	private byte[] getPacketBytes() {
 		StringBuilder builder = new StringBuilder();

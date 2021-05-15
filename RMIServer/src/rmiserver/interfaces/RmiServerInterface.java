@@ -73,7 +73,7 @@ public interface RmiServerInterface extends Remote {
 
 	/**
 	 * Callback to get an overview of the objects in the database
-	 * @param client AdminConsole that requested the information
+	 * @param client console.AdminConsole that requested the information
 	 * @throws RemoteException
 	 */
 	void info(RmiAdminConsoleInterface client) throws RemoteException;
