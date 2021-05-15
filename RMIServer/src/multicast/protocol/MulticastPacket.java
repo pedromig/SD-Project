@@ -37,8 +37,8 @@ import java.util.HashMap;
  * @author Pedro Rodrigues
  * @author Miguel Rabuge
  * @version 1.0
- * @see java.net.DatagramPacket
- * @see java.net.InetAddress
+ * @see DatagramPacket
+ * @see InetAddress
  */
 public class MulticastPacket {
 

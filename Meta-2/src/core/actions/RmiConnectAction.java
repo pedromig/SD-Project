@@ -3,7 +3,6 @@ package core.actions;
 import com.opensymphony.xwork2.ActionSupport;
 import core.models.RmiConnector;
 import org.apache.struts2.interceptor.SessionAware;
-import rmi.interfaces.RmiServerInterface;
 
 import java.util.Map;
 

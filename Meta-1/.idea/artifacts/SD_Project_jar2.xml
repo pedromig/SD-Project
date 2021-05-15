@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="SD-Project:jar2">
-    <output-path>$PROJECT_DIR$/out/artifacts/SD_Project_jar2</output-path>
-    <root id="archive" name="SD-Project.jar">
-      <element id="module-output" name="SD-Project" />
-    </root>
-  </artifact>
-</component>

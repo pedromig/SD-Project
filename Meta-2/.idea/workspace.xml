@@ -8,16 +8,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiServerInterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/RMIServer.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/interfaces/RmiAdminConsoleInterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/interfaces/RmiMulticastServerInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Meta-1/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/configs/DEEC.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/configs/DEEC_VT1.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/configs/DEEC_VT2.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/configs/DEI.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/configs/DEI_VT1.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/configs/DEI_VT2.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/database/elections.obj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/database/lists.obj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/database/people.obj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/src/console/AdminConsole.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/src/console/Parser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/VotingDesk.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/VotingTerminal.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/protocol/MulticastPacket.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/protocol/MulticastProtocol.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/ui/Terminal.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/ui/VotingDeskUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/ui/VotingTerminalUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/utils/LoggingFormatter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Meta-1/configs/DEEC.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/configs/DEEC.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Meta-1/configs/DEI.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/configs/DEI.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Meta-1/policy.all" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Meta-1/src/console/AdminConsole.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/console/AdminConsole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Meta-1/src/multicast/VotingDesk.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/multicast/VotingDesk.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Meta-1/src/multicast/VotingTerminal.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/multicast/VotingTerminal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Meta-1/src/rmi/RmiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/rmiserver/RmiServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Meta-1/src/rmi/interfaces/RmiAdminConsoleInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/rmiserver/interfaces/RmiAdminConsoleInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Meta-1/src/rmi/interfaces/RmiMulticastServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/rmiserver/interfaces/RmiMulticastServerInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Meta-1/src/rmi/interfaces/RmiServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/rmiserver/interfaces/RmiServerInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/WEB-INF/applicationContext.xml" beforeDir="false" />
@@ -25,25 +44,11 @@
       <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/error.jsp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/index.jsp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/login.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/models/RmiConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/models/RmiConnector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rmi/RmiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rmi/interfaces/RmiAdminConsoleInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiAdminConsoleInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rmi/interfaces/RmiMulticastServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiMulticastServerInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rmi/interfaces/RmiServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/interfaces/RmiServerInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/Vote.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/Vote.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/elections/Election.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/elections/Election.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/elections/EmployeeElection.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/elections/EmployeeElection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/elections/StudentElection.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/elections/StudentElection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/elections/TeacherElection.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/elections/TeacherElection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/lists/EmployeeList.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/lists/EmployeeList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/lists/List.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/lists/List.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/lists/StudentList.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/lists/StudentList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/lists/TeacherList.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/lists/TeacherList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/people/Employee.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/people/Employee.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/people/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/people/Person.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/people/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/people/Student.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/people/Teacher.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/utils/people/Teacher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/actions/RmiConnectAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/RmiConnectAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rmi/interfaces/RmiAdminConsoleInterface.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rmi/interfaces/RmiMulticastServerInterface.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rmi/interfaces/RmiServerInterface.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,19 +132,6 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -341,7 +333,9 @@
       <workItem from="1621086311192" duration="43000" />
       <workItem from="1621103093355" duration="304000" />
       <workItem from="1621109433658" duration="1491000" />
-      <workItem from="1621112149931" duration="2696000" />
+      <workItem from="1621112149931" duration="3957000" />
+      <workItem from="1621116147003" duration="81000" />
+      <workItem from="1621116504411" duration="82000" />
     </task>
     <servers />
   </component>

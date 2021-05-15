@@ -1,7 +1,7 @@
 package multicast;
 
-import multicast.protocol.MulticastProtocol;
 import multicast.protocol.MulticastPacket;
+import multicast.protocol.MulticastProtocol;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,7 +12,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 /**
@@ -29,7 +32,7 @@ import java.util.concurrent.*;
  * for many platforms may be created if the rules of communication are followed.
  * <p>
  * In order for this {@code VotingTerminal} to be instanced correctly it may need a configuration.properties file that
- * follows the format specified by the {@link java.util.Properties} file format.
+ * follows the format specified by the {@link Properties} file format.
  * In the case of this client the arguments required to be present in the properties file are showed in the following
  * example:
  * <blockquote><pre>
@@ -41,8 +44,8 @@ import java.util.concurrent.*;
  * @author Pedro Rodrigues
  * @author Miguel Rabuge
  * @version 1.0
- * @see multicast.protocol.MulticastProtocol
- * @see multicast.protocol.MulticastPacket
+ * @see MulticastProtocol
+ * @see MulticastPacket
  **/
 public class VotingTerminal implements MulticastProtocol {
 
@@ -110,7 +113,7 @@ public class VotingTerminal implements MulticastProtocol {
 	}
 
 	/**
-	 * This method is responsible for reading the properties file and returning a {@link java.util.Properties} object
+	 * This method is responsible for reading the properties file and returning a {@link Properties} object
 	 * with the key-value pairs containing the client configs.
 	 *
 	 * @param path The path to the terminal.properties file
@@ -216,7 +219,7 @@ public class VotingTerminal implements MulticastProtocol {
 	 * will wait until a server connects to a multicast group and sends {@link MulticastProtocol#PROBE} that tells the
 	 * terminal clients that they can already connect to it.
 	 *
-	 * @return The handle to the {@link rmi.interfaces.RmiServerInterface} object holding the remote methods that
+	 * @return The handle to the {@link rmiserver.interfaces.RmiServerInterface} object holding the remote methods that
 	 * can be invoked by this {@code VotingDesk} instance.
 	 * @implNote The method might not be able to establish a connection with the multicast server because this one is
 	 * offline. In that case it will wait until the program is killed having no timout mechanism.

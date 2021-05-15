@@ -1,31 +1,36 @@
 package multicast;
 
-import multicast.utils.LoggingFormatter;
-import multicast.protocol.MulticastProtocol;
 import multicast.protocol.MulticastPacket;
+import multicast.protocol.MulticastProtocol;
 import multicast.ui.VotingDeskUI;
-
-import rmi.interfaces.RmiMulticastServerInterface;
-import rmi.interfaces.RmiServerInterface;
-
+import multicast.utils.LoggingFormatter;
+import rmiserver.interfaces.RmiMulticastServerInterface;
+import rmiserver.interfaces.RmiServerInterface;
 import utils.Vote;
 import utils.elections.Election;
 import utils.lists.List;
 import utils.people.Person;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.*;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.logging.*;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The {@code VotingDesk} class represents a multicast server that provides the functionalities needed for a given
@@ -40,14 +45,14 @@ import java.util.logging.*;
  * provides the primitives and basic structure of the messages that are transmitted. The implementation of this
  * protocol is provided in the {@link MulticastProtocol} interface.
  * <p>
- * The {@code VotingDesk} class is extends the {@link java.rmi.server.UnicastRemoteObject} class because it interacts
+ * The {@code VotingDesk} class is extends the {@link UnicastRemoteObject} class because it interacts
  * with a centralized Remote Method Invocation server that provides all the methods needed for the exchange of
  * relevant data e.g votes and user credentials. Also this server shares status messages with the RMI server in of
  * for this to know about the status of the current machine. The methods necessary for this are implemented in the
  * {@link RmiMulticastServerInterface}.
  * <p>
  * In order for this {@code VotingDesk} to be instanced correctly it may need a configuration.properties file that
- * follows the format specified by the {@link java.util.Properties} file format.
+ * follows the format specified by the {@link Properties} file format.
  * In the case of this server the arguments required to be present in the properties file are showed in the following
  * example:
  * <blockquote><pre>
@@ -64,12 +69,12 @@ import java.util.logging.*;
  * @author Pedro Rodrigues
  * @author Miguel Rabuge
  * @version 1.0
- * @see java.rmi.server.UnicastRemoteObject
- * @see java.lang.System.Logger
- * @see java.rmi.Naming
- * @see multicast.protocol.MulticastProtocol
- * @see multicast.protocol.MulticastPacket
- * @see rmi.interfaces.RmiServerInterface
+ * @see UnicastRemoteObject
+ * @see System.Logger
+ * @see Naming
+ * @see MulticastProtocol
+ * @see MulticastPacket
+ * @see RmiServerInterface
  **/
 public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol, RmiMulticastServerInterface {
 
@@ -174,7 +179,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	}
 
 	/**
-	 * Implementation of a {@link rmi.interfaces.RmiMulticastServerInterface} method required by the RMI
+	 * Implementation of a {@link RmiMulticastServerInterface} method required by the RMI
 	 * server in order to query information about this {@code VotingDesk} instance.
 	 * <p>
 	 * A remote method invocation used by the RMI server to do a personalized print where this VotingDesk
@@ -190,7 +195,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	}
 
 	/**
-	 * Implementation of a {@link rmi.interfaces.RmiMulticastServerInterface} method required by the RMI
+	 * Implementation of a {@link RmiMulticastServerInterface} method required by the RMI
 	 * server in order to query information about this {@code VotingDesk} instance.
 	 * <p>
 	 * A remote method invocation used by the RMI server print information about the current status of this VotingDesk.
@@ -202,7 +207,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	 *                         to the RMI server
 	 *                         <p>
 	 *                         Used by this method implementation
-	 * @see java.lang.StringBuilder
+	 * @see StringBuilder
 	 */
 	@Override
 	public String ping() throws RemoteException {
@@ -219,12 +224,12 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	}
 
 	/**
-	 * A wrapper method used to encapsulate {@link java.rmi.RemoteException} thrown by a method that requires some
+	 * A wrapper method used to encapsulate {@link RemoteException} thrown by a method that requires some
 	 * information to be queried from the RMI server.
 	 * <p>
 	 * This method provides a implementation that attempts to call the method passed by parameter using the
-	 * {@link java.util.concurrent.Callable} interface. In the event the method fails throwing a
-	 * {@link java.rmi.RemoteException} the method loops until the connection is able to be re-established
+	 * {@link Callable} interface. In the event the method fails throwing a
+	 * {@link RemoteException} the method loops until the connection is able to be re-established
 	 * with the RMI main or backup servers.
 	 *
 	 * @param function A {@code Callable} interface object wrapping a remote method call to the RMI server
@@ -245,7 +250,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	}
 
 	/**
-	 * This method is responsible for reading the properties file and returning a {@link java.util.Properties} object
+	 * This method is responsible for reading the properties file and returning a {@link Properties} object
 	 * with the key-value pairs containing the server configs.
 	 *
 	 * @param path The path to the server.properties file
@@ -268,7 +273,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	 * few times in a attempt to re-connect again. This loop will last 30 seconds (by default) after which the {@code
 	 * VotingDesk} will timeout, causing the server to stop its execution.
 	 *
-	 * @return The handle to the {@link rmi.interfaces.RmiServerInterface} object holding the remote methods that
+	 * @return The handle to the {@link RmiServerInterface} object holding the remote methods that
 	 * can be invoked by this {@code VotingDesk} instance.
 	 * @implNote The function might not be able to establish a connection with the server because this multicast
 	 * server could not lookup the registry. In that case the server will stop  logging and error message in the log
@@ -396,8 +401,8 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	 * A getter method for the name of this {@code VotingDesk} multicast server. Through this name the RMI server is
 	 * able to identify this {@code VotingDesk} being able to monitor, restrict the elections that may be ran on it
 	 * and query information about it. To accomplish the operations referred before this method also does an
-	 * {@link java.lang.Override} of the method {@link rmi.interfaces.RmiMulticastServerInterface#getName()} declared
-	 * in the {@link rmi.interfaces.RmiMulticastServerInterface}, that is forcing its implementation in this class.
+	 * {@link Override} of the method {@link RmiMulticastServerInterface#getName()} declared
+	 * in the {@link RmiMulticastServerInterface}, that is forcing its implementation in this class.
 	 *
 	 * @return The name identifying the current {@code VotingDesk} server instances
 	 */
@@ -407,7 +412,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	}
 
 	/**
-	 * This method is responsible for the setup of the {@link java.util.logging.Logger} instance of this server
+	 * This method is responsible for the setup of the {@link Logger} instance of this server
 	 * configuring the appearance / format of the log messages displayed by this server debug console and written to
 	 * the log file generated during the {@code VotingDesk} runtime.
 	 */
@@ -507,9 +512,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	 * @implNote The messages sent by this thread are addressed to the multicast discovery / status group and dont
 	 * convey any critical or confidential message (just status communication allowing the server to automatically
 	 * handle terminals that might connect to it)
-	 * @see multicast.protocol.MulticastProtocol
-	 * @see multicast.protocol.MulticastPacket
-	 * @see java.lang.Thread
+	 * @see MulticastProtocol
+	 * @see MulticastPacket
+	 * @see Thread
 	 */
 	private class VotingDeskTerminalManager extends Thread {
 
@@ -522,7 +527,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 		/**
 		 * Allocates a new {@code VotingDeskTerminalManager Thread} object. This constructor has the same
-		 * effect as {@linkplain java.lang.Thread#Thread(ThreadGroup, Runnable, String) Thread}
+		 * effect as {@linkplain Thread#Thread(ThreadGroup, Runnable, String) Thread}
 		 * {@code (null, null, name)}.
 		 *
 		 * @param name               the name of the new thread
@@ -539,7 +544,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		 * This method is the entry point of execution of the current thread. Being this thread a subclass of
 		 * {@code Thread} class it overrides this method implementing the specific functionality of this thread.
 		 *
-		 * @see java.lang.Thread#start()
+		 * @see Thread#start()
 		 */
 		@Override
 		public void run() {
@@ -631,15 +636,15 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	 * convey critical or confidential messages that if intercepted could potentially lead to theft of client
 	 * information. In terms of voting confidentiality it is more unlikely that it is broken since the vote messages
 	 * do carry the ID of the client who generated such message.
-	 * @see multicast.protocol.MulticastProtocol
-	 * @see multicast.protocol.MulticastPacket
-	 * @see java.lang.Thread
+	 * @see MulticastProtocol
+	 * @see MulticastPacket
+	 * @see Thread
 	 */
 	private class VotingDeskVotingManager extends Thread {
 
 		/**
 		 * Allocates a new {@code VotingDeskVotingManager Thread} object. This constructor has the same
-		 * effect as {@linkplain java.lang.Thread#Thread(ThreadGroup, Runnable, String) Thread}
+		 * effect as {@linkplain Thread#Thread(ThreadGroup, Runnable, String) Thread}
 		 * {@code (null, null, name)}.
 		 *
 		 * @param name the name of the new thread
@@ -653,7 +658,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		 * This method is the entry point of execution of the current thread. Being this thread a subclass of
 		 * {@code Thread} class it overrides this method implementing the specific functionality of this thread.
 		 *
-		 * @see java.lang.Thread#start()
+		 * @see Thread#start()
 		 */
 		@Override
 		public void run() {
@@ -762,9 +767,9 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 	 * convey critical or confidential messages that if intercepted could potentially lead to theft of client
 	 * information. In terms of voting confidentiality it is more unlikely that it is broken since the vote messages
 	 * do carry the ID of the client who generated such message.
-	 * @see multicast.protocol.MulticastProtocol
-	 * @see multicast.protocol.MulticastPacket
-	 * @see java.lang.Thread
+	 * @see MulticastProtocol
+	 * @see MulticastPacket
+	 * @see Thread
 	 */
 	private class VotingDeskClientHandler extends Thread {
 
@@ -787,7 +792,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 
 		/**
 		 * Allocates a new {@code VotingDeskTerminalManager Thread} object. This constructor has the same
-		 * effect as {@linkplain java.lang.Thread#Thread(ThreadGroup, Runnable, String) Thread}
+		 * effect as {@linkplain Thread#Thread(ThreadGroup, Runnable, String) Thread}
 		 * {@code (null, null, name)}.
 		 *
 		 * @param name               the name of the new thread
@@ -804,7 +809,7 @@ public class VotingDesk extends UnicastRemoteObject implements MulticastProtocol
 		 * This method is the entry point of execution of the current thread. Being this thread a subclass of
 		 * {@code Thread} class it overrides this method implementing the specific functionality of this thread.
 		 *
-		 * @see java.lang.Thread#start()
+		 * @see Thread#start()
 		 */
 		@Override
 		public void run() {

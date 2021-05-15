@@ -16,7 +16,7 @@ import java.util.HashMap;
  * @author Pedro Rodrigues
  * @author Miguel Rabuge
  * @version 1.0
- * @see multicast.protocol.MulticastPacket
+ * @see MulticastPacket
  */
 public interface MulticastProtocol {
 

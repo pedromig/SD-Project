@@ -16,9 +16,9 @@ import java.util.logging.SimpleFormatter;
  * @author Pedro Rodrigues
  * @author Miguel Rabuge
  * @version 1.0
- * @see java.util.Date
- * @see java.util.logging.LogRecord
- * @see java.util.logging.SimpleFormatter
+ * @see Date
+ * @see LogRecord
+ * @see SimpleFormatter
  * @see java.util.logging.Logger
  */
 public final class LoggingFormatter {

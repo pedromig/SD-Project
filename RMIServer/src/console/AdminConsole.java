@@ -1,13 +1,13 @@
 package console;
 
-import rmi.interfaces.RmiAdminConsoleInterface;
-import rmi.interfaces.RmiServerInterface;
-import utils.lists.EmployeeList;
-import utils.lists.List;
+import rmiserver.interfaces.RmiAdminConsoleInterface;
+import rmiserver.interfaces.RmiServerInterface;
 import utils.elections.Election;
 import utils.elections.EmployeeElection;
 import utils.elections.StudentElection;
 import utils.elections.TeacherElection;
+import utils.lists.EmployeeList;
+import utils.lists.List;
 import utils.lists.StudentList;
 import utils.lists.TeacherList;
 import utils.people.Employee;

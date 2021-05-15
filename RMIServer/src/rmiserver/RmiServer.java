@@ -895,8 +895,8 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		/* Run Server */
 		try {
 			server = new RmiServer(elections, lists, people, DIR);
-//			Naming.rebind("rmi://" + IP + ":" + PORT  + "/RmiServer", server);
-			Naming.rebind("rmi://localhost:7000/RmiServer", server);
+			Naming.rebind("rmi://" + IP + ":" + PORT  + "/RmiServer", server);
+//			Naming.rebind("rmi://localhost:7000/RmiServer", server);
 			System.out.println("RmiServer ready! - Running on " + IP + ":" + PORT);
 		} catch (Exception e) {
 			System.out.println("Exception in RMI Server: Shutting Down");
