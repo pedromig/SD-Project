@@ -8,47 +8,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../RMIServer/configs/DEEC.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/configs/DEEC_VT1.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/configs/DEEC_VT2.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/configs/DEI.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/configs/DEI_VT1.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/configs/DEI_VT2.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/database/elections.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/database/lists.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/database/people.obj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/src/console/AdminConsole.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/src/console/Parser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/VotingDesk.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/VotingTerminal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/protocol/MulticastPacket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/protocol/MulticastProtocol.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/ui/Terminal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/ui/VotingDeskUI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/ui/VotingTerminalUI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RMIServer/src/multicast/utils/LoggingFormatter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Meta-1/configs/DEEC.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/configs/DEEC.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Meta-1/configs/DEI.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/configs/DEI.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Meta-1/policy.all" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Meta-1/src/console/AdminConsole.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/console/AdminConsole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Meta-1/src/multicast/VotingDesk.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/multicast/VotingDesk.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Meta-1/src/multicast/VotingTerminal.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/multicast/VotingTerminal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Meta-1/src/rmi/RmiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/rmiserver/RmiServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Meta-1/src/rmi/interfaces/RmiAdminConsoleInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/rmiserver/interfaces/RmiAdminConsoleInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Meta-1/src/rmi/interfaces/RmiMulticastServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/rmiserver/interfaces/RmiMulticastServerInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Meta-1/src/rmi/interfaces/RmiServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Meta-1/src/rmiserver/interfaces/RmiServerInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/WEB-INF/applicationContext.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/WEB-INF/web.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/error.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/index.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/login.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/actions/RmiConnectAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/RmiConnectAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rmi/interfaces/RmiAdminConsoleInterface.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rmi/interfaces/RmiMulticastServerInterface.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rmi/interfaces/RmiServerInterface.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +63,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/rmiserver/interfaces" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -336,6 +298,7 @@
       <workItem from="1621112149931" duration="3957000" />
       <workItem from="1621116147003" duration="81000" />
       <workItem from="1621116504411" duration="82000" />
+      <workItem from="1621118333466" duration="439000" />
     </task>
     <servers />
   </component>
