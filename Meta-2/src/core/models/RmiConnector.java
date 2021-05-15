@@ -1,6 +1,6 @@
 package core.models;
 
-import rmiserver.interfaces.RmiServerInterface;
+import rmi.interfaces.RmiServerInterface;
 
 import java.rmi.Naming;
 
@@ -11,8 +11,7 @@ public class RmiConnector {
 
     public RmiConnector() {
         try {
-            //FIXME: read file!!!! "rmiserver" is wrong, should be something like localhost:8000/..... (i think)
-            this.setServer((RmiServerInterface) Naming.lookup("rmiserver"));
+            this.setServer((RmiServerInterface) Naming.lookup("rmi://localhost:7000/RmiServer"));
         } catch (Exception e) {
             this.setServer(null);
             e.printStackTrace();

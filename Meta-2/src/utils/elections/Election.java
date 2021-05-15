@@ -1,7 +1,7 @@
-package rmiserver.elections;
+package utils.elections;
 
-import rmiserver.Vote;
-import rmiserver.people.Person;
+import utils.Vote;
+import utils.people.Person;
 
 import java.io.Serializable;
 import java.util.GregorianCalendar;

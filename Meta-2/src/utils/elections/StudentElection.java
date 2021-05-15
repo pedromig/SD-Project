@@ -1,13 +1,13 @@
-package rmiserver.elections;
+package utils.elections;
 
-import rmiserver.people.Teacher;
+import utils.people.Student;
 
 import java.util.GregorianCalendar;
 
 /**
- * A class for a Teacher Election
+ * A class for a Student Election
  */
-public class TeacherElection extends Election<Teacher> {
+public class StudentElection extends Election<Student> {
 
     /**
      * Builder
@@ -16,17 +16,17 @@ public class TeacherElection extends Election<Teacher> {
      * @param startDate The Start Date/Time of an Election
      * @param endDate The End Date/Time of an Election
      */
-    public TeacherElection(String name, String description, GregorianCalendar startDate, GregorianCalendar endDate) {
+    public StudentElection(String name, String description, GregorianCalendar startDate, GregorianCalendar endDate) {
         super(name, description, startDate, endDate);
     }
 
     /**
      * Function to implement in the subclasses to get the corresponding Template Type
-     * @return Teacher class type
+     * @return Student class type
      */
     @Override
-    public Class<Teacher> getType() {
-        return Teacher.class;
+    public Class<Student> getType() {
+        return Student.class;
     }
 
     /**
@@ -35,6 +35,6 @@ public class TeacherElection extends Election<Teacher> {
      */
     @Override
     public String toString() {
-        return " - Teacher Election" + super.toString();
+        return " - Student Election" + super.toString();
     }
 }

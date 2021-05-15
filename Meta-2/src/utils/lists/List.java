@@ -1,6 +1,6 @@
-package rmiserver.lists;
+package utils.lists;
 
-import rmiserver.people.Person;
+import utils.people.Person;
 
 import java.io.Serializable;
 

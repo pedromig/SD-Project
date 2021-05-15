@@ -1,4 +1,4 @@
-package rmiserver;
+package utils;
 
 import java.io.Serializable;
 import java.util.GregorianCalendar;

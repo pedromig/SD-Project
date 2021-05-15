@@ -1,6 +1,6 @@
-package rmiserver.lists;
+package utils.lists;
 
-import rmiserver.people.Employee;
+import utils.people.Employee;
 
 /**
  * A class for an Employee List

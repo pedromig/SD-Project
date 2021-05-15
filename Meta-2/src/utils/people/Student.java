@@ -1,4 +1,4 @@
-package rmiserver.people;
+package utils.people;
 
 import java.util.GregorianCalendar;
 

@@ -9,7 +9,10 @@
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta-2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta-2.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/actions/RmiConnectAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/RmiConnectAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/models/AdminConsole.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/models/Parser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/models/RmiConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/models/RmiConnector.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -263,6 +266,8 @@
       <workItem from="1621033775435" duration="62000" />
       <workItem from="1621033843419" duration="282000" />
       <workItem from="1621034131118" duration="58000" />
+      <workItem from="1621086311192" duration="43000" />
+      <workItem from="1621103093355" duration="304000" />
     </task>
     <servers />
   </component>

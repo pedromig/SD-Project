@@ -1,9 +1,9 @@
-package rmiserver.interfaces;
+package rmi.interfaces;
 
-import rmiserver.Vote;
-import rmiserver.lists.List;
-import rmiserver.elections.Election;
-import rmiserver.people.Person;
+import utils.Vote;
+import utils.lists.List;
+import utils.elections.Election;
+import utils.people.Person;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

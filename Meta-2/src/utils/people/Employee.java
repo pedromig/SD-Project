@@ -1,11 +1,11 @@
-package rmiserver.people;
+package utils.people;
 
 import java.util.GregorianCalendar;
 
 /**
- * A class for a Teacher
+ * A class for a Employee
  */
-public class Teacher extends Person {
+public class Employee extends Person {
 
     /**
      * Builder
@@ -18,17 +18,17 @@ public class Teacher extends Person {
      * @param identityCardNumber the ID card number of a Person
      * @param identityCardExpiryDate the expiry date of the ID card of a Person
      */
-    public Teacher(String name, String password, String address, String faculty, String department, int phoneNumber, int identityCardNumber, GregorianCalendar identityCardExpiryDate) {
+    public Employee(String name, String password, String address, String faculty, String department, int phoneNumber, int identityCardNumber, GregorianCalendar identityCardExpiryDate) {
         super(name, password, address, faculty, department, phoneNumber, identityCardNumber, identityCardExpiryDate);
     }
 
     /**
      * The getType implementation of the super Class
-     * @return Teacher class type
+     * @return Employee class type
      */
     @Override
-    public Class<Teacher> getType() {
-        return Teacher.class;
+    public Class<Employee> getType() {
+        return Employee.class;
     }
 
     /**
@@ -37,6 +37,6 @@ public class Teacher extends Person {
      */
     @Override
     public String toString() {
-        return " - Teacher " + super.toString();
+        return " - Employee" + super.toString();
     }
 }

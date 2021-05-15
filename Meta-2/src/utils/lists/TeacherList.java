@@ -1,27 +1,27 @@
-package rmiserver.lists;
+package utils.lists;
 
-import rmiserver.people.Student;
+import utils.people.Teacher;
 
 /**
- * A class for a Student List
+ * A class for a Teacher List
  */
-public class StudentList extends List<Student> {
+public class TeacherList extends List<Teacher> {
 
     /**
      * Builder
      * @param name The name of the list
      */
-    public StudentList(String name) {
+    public TeacherList(String name) {
         super(name);
     }
 
     /**
      * The getType implementation of the super Class
-     * @return Student class type
+     * @return Teacher class type
      */
     @Override
-    public Class<Student> getType() {
-        return Student.class;
+    public Class<Teacher> getType() {
+        return Teacher.class;
     }
 
     /**
@@ -30,6 +30,6 @@ public class StudentList extends List<Student> {
      */
     @Override
     public String toString() {
-        return " - Student List" + super.toString();
+        return " - Teacher List" + super.toString();
     }
 }

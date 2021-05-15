@@ -1,6 +1,6 @@
-package rmiserver.elections;
+package utils.elections;
 
-import rmiserver.people.Employee;
+import utils.people.Employee;
 
 import java.util.GregorianCalendar;
 
