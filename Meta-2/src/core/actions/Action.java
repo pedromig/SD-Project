@@ -31,7 +31,6 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
     }
 
     public void setServerOnline(boolean bool) {
-        System.out.println("server is " + bool);
         this.session.put(SERVER_STATUS_KEY, bool);
     }
 

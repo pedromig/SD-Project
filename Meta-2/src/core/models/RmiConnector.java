@@ -15,7 +15,6 @@ public class RmiConnector implements Configuration {
             this.server = (RmiServerInterface) Naming.lookup("rmi://" + IP + ":" + PORT + "/" + SERVER_NAME);
             this.server.ping();
             System.out.println("it runs baby");
-            server.print("hellp");
         } catch (Exception e) {
             this.server = null;
             e.printStackTrace();

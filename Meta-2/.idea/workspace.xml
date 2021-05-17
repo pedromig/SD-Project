@@ -3,41 +3,12 @@
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
       <artifact name="Meta-2:war exploded" />
+      <artifact name="war" />
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/core/interceptors/LoginInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/core/interceptors/RmiInterceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/error.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/error.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/userConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/userConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/error.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/error.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/userConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/userConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/error.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/error.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/userConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/userConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Configuration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/actions/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/Action.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/actions/LoginAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/LoginAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/actions/RmiConnectAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/RmiConnectAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/models/RmiConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/models/RmiConnector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/error.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/error.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/userConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/userConsole.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -342,7 +313,7 @@
       <workItem from="1621118333466" duration="439000" />
       <workItem from="1621119050561" duration="202000" />
       <workItem from="1621123667433" duration="398000" />
-      <workItem from="1621247459770" duration="32564000" />
+      <workItem from="1621247459770" duration="32866000" />
     </task>
     <servers />
   </component>
