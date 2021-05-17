@@ -6,7 +6,10 @@
     </head>
     <body>
         <h1>Welcome to E-Voting!</h1>
-        <s:url action="connect" var="connectURL" />
-        <s:a href="%{connectURL}" >Start!</s:a>
+
+        <s:a action="connect">
+            <s:submit type="button">Start!</s:submit>
+        </s:a>
+
     </body>
 </html>

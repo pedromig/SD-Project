@@ -4,6 +4,8 @@
     <title>Error page</title>
   </head>
   <body>
-  This is a error page. Don't worry, you got this
+  <h2>This is an error page </h2>
+  <IMG SRC="https://media.giphy.com/media/4Vtk42BGiL1T2/giphy.gif">
+
   </body>
 </html>

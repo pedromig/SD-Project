@@ -16,13 +16,36 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
     }
 
     public RmiConnector getRmiConnector() {
-        if(!this.session.containsKey(SERVER_NAME) || (((RmiConnector)(this.session.get(SERVER_NAME))).getServer() == null))
-            this.setRmiConnector(new RmiConnector());
-        return (RmiConnector) session.get(SERVER_NAME);
+        try {
+            ((RmiConnector)(this.session.get(RMI_CONNECTOR_KEY))).getServer().ping();
+        } catch (Exception e) {
+            RmiConnector rmiConnector = new RmiConnector();
+            this.setRmiConnector(rmiConnector);
+            this.setServerOnline(rmiConnector.getServer() != null);
+        }
+        return (RmiConnector) session.get(RMI_CONNECTOR_KEY);
     }
 
-    public void setRmiConnector(RmiConnector server) {
-        this.session.put(SERVER_NAME, server);
+    public void setRmiConnector(RmiConnector rmiConnector) {
+        this.session.put(RMI_CONNECTOR_KEY, rmiConnector);
     }
 
+    public void setServerOnline(boolean bool) {
+        System.out.println("server is " + bool);
+        this.session.put(SERVER_STATUS_KEY, bool);
+    }
+
+    public boolean getServerOnline(){
+        return (boolean) this.session.get(SERVER_STATUS_KEY);
+    }
+
+    public void setLogin(String username, String password, boolean isAdmin) {
+        this.session.put(USERNAME_KEY, username);
+        this.session.put(PASSWORD_KEY, password);
+        this.session.put(ADMIN_MODE_KEY, isAdmin);
+    }
+
+    public void clearLogin() {
+        this.setLogin(null, null, false);
+    }
 }

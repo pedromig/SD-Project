@@ -13,6 +13,7 @@ public class RmiConnector implements Configuration {
     public RmiConnector() {
         try {
             this.server = (RmiServerInterface) Naming.lookup("rmi://" + IP + ":" + PORT + "/" + SERVER_NAME);
+            this.server.ping();
             System.out.println("it runs baby");
             server.print("hellp");
         } catch (Exception e) {
@@ -23,10 +24,6 @@ public class RmiConnector implements Configuration {
 
     public RmiServerInterface getServer() {
         return this.server;
-    }
-
-    public void setServer(RmiServerInterface server) {
-        this.server = server;
     }
 
     public boolean checkLogin(int idCardNumber, String password) throws RemoteException {

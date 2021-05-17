@@ -6,15 +6,34 @@
 
 <struts>
     <package name="default" namespace="/" extends="struts-default">
+        <interceptors>
+            <interceptor name="rmiInterceptor" class="core.interceptors.RmiInterceptor" />
+            <interceptor name="loginInterceptor" class="core.interceptors.LoginInterceptor" />
+
+            <interceptor-stack name="rmi-stack">
+                <interceptor-ref name="rmiInterceptor" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+
+            <interceptor-stack name="login-stack">
+                <interceptor-ref name="rmiInterceptor" />
+                <interceptor-ref name="loginInterceptor" />
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+
+        </interceptors>
+
+
         <default-action-ref name="index" />
 
         <global-results>
-            <result name="error">/error.jsp</result>
+            <result name="error">error.jsp</result>
         </global-results>
 
         <global-exception-mappings>
             <exception-mapping exception="java.lang.Exception" result="error" />
         </global-exception-mappings>
+
 
         <action name="index">
             <result>index.jsp</result>
@@ -25,6 +44,7 @@
         </action>
 
         <action name="login" class="core.actions.LoginAction" method="execute">
+            <interceptor-ref name="rmi-stack"/>
             <result name="admin">adminConsole.jsp</result>
             <result name="login">userConsole.jsp</result>
         </action>

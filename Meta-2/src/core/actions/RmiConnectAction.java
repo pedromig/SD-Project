@@ -4,7 +4,7 @@ public class RmiConnectAction extends Action {
 
     @Override
     public String execute() {
-        if (this.getRmiConnector().getServer() != null)
+        if (super.getRmiConnector().getServer() != null)
             return SUCCESS;
         return ERROR;
     }

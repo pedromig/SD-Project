@@ -5,19 +5,26 @@ public class LoginAction extends Action {
 
     @Override
     public String execute() {
-        try {
-            int idCardNumber = Integer.parseInt(this.username); // Note: The form input Username is the String(idcardNumber)
+        System.out.println("login action" + (this.session == null));
+        if (this.getServerOnline()) { // Protecting action
+            try {
+                /* Admin Login*/
+                if (this.username.equals(ADMIN_USERNAME) && this.password.equals(ADMIN_PASSWORD)) {
+                    super.getRmiConnector().getServer().ping(); // If server is null || is not reachable it will throw an exception;
+                    super.setLogin(this.username, this.password, true);
+                    return ADMIN;
+                }
 
-            /* Admin Login*/
-            if (this.username.equals(ADMIN_USERNAME) && this.password.equals(ADMIN_PASSWORD))
-                return ADMIN;
-
-            /* User Login*/
-            if (this.getRmiConnector().checkLogin(idCardNumber, this.password))
-                return LOGIN;
-
-        } catch (Exception e) {
-            e.printStackTrace();
+                /* User Login*/
+                int idCardNumber = Integer.parseInt(this.username); // Note: The form input Username is the String(idCardNumber)
+                if (super.getRmiConnector().checkLogin(idCardNumber, this.password)) {
+                    super.setLogin(this.username, this.password, false);
+                    return LOGIN;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            super.clearLogin();
         }
         return ERROR;
     }
