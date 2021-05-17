@@ -2,11 +2,11 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <html>
     <head>
-        <title> </title>
+        <title>E-Voting</title>
     </head>
     <body>
         <h1>Welcome to E-Voting!</h1>
-        <s:url action="login" var="loginUrl" />
-        <s:a href="%{loginUrl}" >Login</s:a>
+        <s:url action="connect" var="connectURL" />
+        <s:a href="%{connectURL}" >Start!</s:a>
     </body>
 </html>

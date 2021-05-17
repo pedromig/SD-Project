@@ -1,27 +1,24 @@
 package core.models;
 
+import core.Configuration;
 import rmiserver.interfaces.RmiServerInterface;
+import utils.people.Person;
 
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 
-public class RmiConnector {
+public class RmiConnector implements Configuration {
     private RmiServerInterface server;
-    private String username;
-    private String password;
 
     public RmiConnector() {
         try {
-            this.setServer((RmiServerInterface) Naming.lookup("rmi://localhost:7000/RmiServer"));
+            this.server = (RmiServerInterface) Naming.lookup("rmi://" + IP + ":" + PORT + "/" + SERVER_NAME);
             System.out.println("it runs baby");
             server.print("hellp");
         } catch (Exception e) {
-            this.setServer(null);
+            this.server = null;
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args){
-        new RmiConnector();
     }
 
     public RmiServerInterface getServer() {
@@ -30,5 +27,10 @@ public class RmiConnector {
 
     public void setServer(RmiServerInterface server) {
         this.server = server;
+    }
+
+    public boolean checkLogin(int idCardNumber, String password) throws RemoteException {
+        Person person = this.server.getPerson(idCardNumber);
+        return (person != null) && person.getPassword().equals(password);
     }
 }
