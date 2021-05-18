@@ -65,9 +65,16 @@
             <result name="success">pages/adminConsole.jsp</result>
         </action>
 
-        <action name="createElectionMenu"><result>pages/createElectionMenu.jsp</result></action>
+        <action name="createElectionMenu"><result>pages/createElection.jsp</result></action>
         <action name="createElection" class="core.actions.CreateElectionAction">
             <result name="success">pages/adminConsole.jsp</result>
         </action>
+
+        <action name="createListMenu"><result>pages/createList.jsp</result></action>
+        <action name="createList" class="core.actions.CreateListAction">
+            <result name="success">pages/adminConsole.jsp</result>
+        </action>
+
+
     </package>
 </struts>

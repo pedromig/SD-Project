@@ -7,39 +7,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/core/actions/CreateElectionAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/core/actions/SignUpAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/web/pages/createElectionMenu.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/core/actions/CreateListAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/web/pages/createList.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/struts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/error.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/error.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/signUp.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/signUp.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/userConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/userConsole.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/createElectionMenu.jsp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/error.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/error.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/signUp.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/signUp.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/userConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/userConsole.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/createElectionMenu.jsp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/pages/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/pages/error.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/pages/error.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/pages/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/pages/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/pages/signUp.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/pages/signUp.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/pages/userConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/pages/userConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Configuration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/actions/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/Action.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/interceptors/LoginInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/interceptors/LoginInterceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/interceptors/RmiInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/interceptors/RmiInterceptor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/pages/createElectionMenu.jsp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/models/RmiConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/models/RmiConnector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/pages/error.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/error.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/pages/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/pages/signUp.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/signUp.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/pages/userConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/userConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/database/people.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/database/people.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/web/pages/createElectionMenu.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/createElection.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -348,7 +330,7 @@
       <workItem from="1621119050561" duration="202000" />
       <workItem from="1621123667433" duration="398000" />
       <workItem from="1621247459770" duration="37365000" />
-      <workItem from="1621335574043" duration="21096000" />
+      <workItem from="1621335574043" duration="24058000" />
     </task>
     <servers />
   </component>

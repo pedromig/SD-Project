@@ -3,6 +3,7 @@ package core.models;
 import core.Configuration;
 import rmiserver.interfaces.RmiServerInterface;
 import utils.elections.Election;
+import utils.lists.List;
 import utils.people.Person;
 
 import java.rmi.Naming;
@@ -37,5 +38,9 @@ public class RmiConnector implements Configuration {
 
     public void createElection(Election<?> election) throws RemoteException {
         this.server.createElection(election);
+    }
+
+    public void createList(List<?> list) throws RemoteException {
+        this.server.createList(list);
     }
 }
