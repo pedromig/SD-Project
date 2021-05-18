@@ -8,7 +8,7 @@ import core.actions.Action;
 
 import java.util.Map;
 
-public class LoginInterceptor implements Interceptor, Configuration{
+public class LoginInterceptor implements Interceptor, Configuration {
 
     @Override
     public String intercept(ActionInvocation actionInvocation) throws Exception {
