@@ -31,4 +31,9 @@ public interface Configuration {
     String STRUTS_DATE_FORMAT = "yyyy-MM-dd";
     String STRUTS_TIME_FORMAT = "HH:mm";
 
+    /* Database Keys */
+    String ELECTIONS_KEY = "elections";
+    String LISTS_KEY = "lists";
+    String PEOPLE_KEY = "people";
+
 }

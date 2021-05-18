@@ -4,8 +4,13 @@ import com.opensymphony.xwork2.ActionSupport;
 import core.Configuration;
 import core.models.RmiConnector;
 import org.apache.struts2.interceptor.SessionAware;
+import utils.elections.Election;
+import utils.lists.List;
+import utils.people.Person;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class Action extends ActionSupport implements SessionAware, Configuration {
     protected Map<String, Object> session;
@@ -44,7 +49,39 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
         this.session.put(ADMIN_MODE_KEY, isAdmin);
     }
 
+    public String getUsername()  {
+        return (String) this.session.get(USERNAME_KEY);
+    }
+    public String getPassword() {
+        return (String) this.session.get(PASSWORD_KEY);
+    }
+
     public void clearLogin() {
         this.setLogin(null, null, null);
     }
+
+    public void setElections(CopyOnWriteArrayList<Election<?>> elections) {
+        ArrayList<String> prints = new ArrayList<>();
+        for (Election<?> e : elections) {
+            prints.add(e.toString());
+        }
+        this.session.put(ELECTIONS_KEY, prints);
+    }
+
+    public void setLists(CopyOnWriteArrayList<List<?>> lists) {
+        ArrayList<String> prints = new ArrayList<>();
+        for (List<?> l : lists) {
+            prints.add(l.toString());
+        }
+        this.session.put(LISTS_KEY, prints);
+    }
+
+    public void setPeople(CopyOnWriteArrayList<Person> people) {
+        ArrayList<String> prints = new ArrayList<>();
+        for (Person p : people) {
+            prints.add(p.toString());
+        }
+        this.session.put(PEOPLE_KEY, prints);
+    }
+
 }

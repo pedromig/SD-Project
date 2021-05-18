@@ -13,7 +13,7 @@
 		<s:a action="signUpMenu"><button>Sign up</button></s:a>
 
 		<h3>Database Info</h3>
-		<s:a action=""><button>Database Info</button></s:a>
+		<s:a action="databaseInfo"><button>Database Info</button></s:a>
 
 		<h3>Elections</h3>
 		<s:a action="createElectionMenu"><button>Create Election</button></s:a>

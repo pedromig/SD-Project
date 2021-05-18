@@ -75,6 +75,9 @@
             <result name="success">pages/adminConsole.jsp</result>
         </action>
 
+        <action name="databaseInfo" class="core.actions.DatabaseInfoAction" method="execute">
+            <result>pages/databaseInfo.jsp</result>
+        </action>
 
     </package>
 </struts>

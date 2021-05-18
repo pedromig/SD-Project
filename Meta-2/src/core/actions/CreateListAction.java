@@ -9,6 +9,7 @@ import utils.lists.TeacherList;
 public class CreateListAction extends Action implements Configuration {
     private List<?> list;
     private String listType, name;
+
     @Override
     public String execute() {
         if (!(name.equals("") || name.contains(":") || name.contains("|"))){

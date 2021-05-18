@@ -5,6 +5,8 @@ public class LoginAction extends Action {
 
     @Override
     public String execute() {
+
+        /* New Login */
         try {
             /* Admin Login*/
             if (this.username.equals(ADMIN_USERNAME) && this.password.equals(ADMIN_PASSWORD)) {
@@ -22,6 +24,14 @@ public class LoginAction extends Action {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        /* Already Logged User (this code block stays here in case the web user wants to login with other account. The new will have priority) */
+//        if (this.getUsername() != null && this.getPassword() != null) {
+//            if (this.getUsername().equals(ADMIN_USERNAME) && this.getPassword().equals(ADMIN_PASSWORD))
+//                return ADMIN;
+//            return LOGIN;
+//        }
+
         super.clearLogin();
         return ERROR;
     }
