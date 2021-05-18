@@ -15,8 +15,10 @@ public class LoginInterceptor implements Interceptor, Configuration {
         Map<String, Object> session = actionInvocation.getInvocationContext().getSession();
         // If there is a user logged
         if ((session.get(USERNAME_KEY) != null) && (session.get(PASSWORD_KEY) != null)) {
+            System.out.println("Done: Login Interceptor");
             return actionInvocation.invoke();
         }
+        System.out.println("Failed: Login Interceptor");
         return Action.ERROR;
     }
 

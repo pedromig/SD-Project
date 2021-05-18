@@ -14,8 +14,10 @@ public class RmiInterceptor implements Interceptor, Configuration {
         Map<String, Object> session = actionInvocation.getInvocationContext().getSession();
         // If there is a responsive RMI Server, continue
         if ((session.get(RMI_CONNECTOR_KEY) != null) && ((boolean) session.get(SERVER_STATUS_KEY))) {
+            System.out.println("Done: RMI Interceptor");
             return actionInvocation.invoke();
         }
+        System.out.println("Failed: RMI Interceptor");
         return Action.ERROR;
     }
 

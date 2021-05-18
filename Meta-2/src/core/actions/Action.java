@@ -38,13 +38,13 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
         return (boolean) this.session.get(SERVER_STATUS_KEY);
     }
 
-    public void setLogin(String username, String password, boolean isAdmin) {
+    public void setLogin(String username, String password, Boolean isAdmin) {
         this.session.put(USERNAME_KEY, username);
         this.session.put(PASSWORD_KEY, password);
         this.session.put(ADMIN_MODE_KEY, isAdmin);
     }
 
     public void clearLogin() {
-        this.setLogin(null, null, false);
+        this.setLogin(null, null, null);
     }
 }

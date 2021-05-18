@@ -60,5 +60,14 @@
             <result name="login">pages/userConsole.jsp</result>
         </action>
 
+        <action name="signUpMenu"><result>pages/signUp.jsp</result></action>
+        <action name="signUp" class="core.actions.SignUpAction">
+            <result name="success">pages/adminConsole.jsp</result>
+        </action>
+
+        <action name="createElectionMenu"><result>pages/createElectionMenu.jsp</result></action>
+        <action name="createElection" class="core.actions.CreateElectionAction">
+            <result name="success">pages/adminConsole.jsp</result>
+        </action>
     </package>
 </struts>
