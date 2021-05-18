@@ -3,12 +3,19 @@
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
       <artifact name="Meta-2:war exploded" />
-      <artifact name="war" />
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/core/actions/LoginAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/LoginAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/web/signUp.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/adminConsole.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/adminConsole.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/adminConsole.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/web/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/adminConsole.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/database/elections.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/database/elections.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/database/lists.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/database/lists.obj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +27,8 @@
       <list>
         <option value="Interface" />
         <option value="jsf" />
-        <option value="Jsp File" />
         <option value="Class" />
+        <option value="Jsp File" />
       </list>
     </option>
   </component>
@@ -313,7 +320,7 @@
       <workItem from="1621118333466" duration="439000" />
       <workItem from="1621119050561" duration="202000" />
       <workItem from="1621123667433" duration="398000" />
-      <workItem from="1621247459770" duration="32866000" />
+      <workItem from="1621247459770" duration="37193000" />
     </task>
     <servers />
   </component>
