@@ -43,6 +43,7 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
         return (boolean) this.session.get(SERVER_STATUS_KEY);
     }
 
+
     public void setLogin(String username, String password, Boolean isAdmin) {
         this.session.put(USERNAME_KEY, username);
         this.session.put(PASSWORD_KEY, password);
@@ -52,6 +53,7 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
     public String getUsername()  {
         return (String) this.session.get(USERNAME_KEY);
     }
+
     public String getPassword() {
         return (String) this.session.get(PASSWORD_KEY);
     }
@@ -59,6 +61,7 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
     public void clearLogin() {
         this.setLogin(null, null, null);
     }
+
 
     public void setElections(CopyOnWriteArrayList<Election<?>> elections) {
         ArrayList<String> prints = new ArrayList<>();
@@ -83,5 +86,15 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
         }
         this.session.put(PEOPLE_KEY, prints);
     }
+
+
+    public void setEndedElectionsLog(CopyOnWriteArrayList<Election<?>> elections) {
+        ArrayList<String> prints = new ArrayList<>();
+        for (Election<?> e : elections) {
+            prints.add(this.getRmiConnector().getEndedLog(e));
+        }
+        this.session.put(ENDED_ELECTIONS_LOG_KEY, prints);
+    }
+
 
 }

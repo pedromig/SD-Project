@@ -79,5 +79,9 @@
             <result>pages/databaseInfo.jsp</result>
         </action>
 
+        <action name="endedElectionLogMenu" class="core.actions.EndedElectionsLogAction" method="execute">
+            <result>pages/endedElectionsLog.jsp</result>
+        </action>
+
     </package>
 </struts>

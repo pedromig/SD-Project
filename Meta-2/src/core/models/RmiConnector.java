@@ -47,6 +47,7 @@ public class RmiConnector implements Configuration {
     public void createList(List<?> list) throws RemoteException {
         this.server.createList(list);
     }
+
     public CopyOnWriteArrayList<Election<?>> getRunningElections() throws RemoteException {
         return server.getRunningElections();
     }
@@ -64,7 +65,6 @@ public class RmiConnector implements Configuration {
         allElections.addAll(this.getFutureElections());
         return allElections;
     }
-
     public CopyOnWriteArrayList<List<?>> getLists() throws RemoteException {
         CopyOnWriteArrayList<List<?>> allLists = new CopyOnWriteArrayList<>();
         allLists.addAll(server.getListsOfType(Student.class));
@@ -72,8 +72,16 @@ public class RmiConnector implements Configuration {
         allLists.addAll(server.getListsOfType(Employee.class));
         return allLists;
     }
-
     public CopyOnWriteArrayList<Person> getPeople() throws RemoteException {
         return server.getPeople();
+    }
+
+    public String getEndedLog(Election<?> election) {
+        try {
+            return server.printVotingProcessedData(null, election);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Could not fetch the data";
+        }
     }
 }
