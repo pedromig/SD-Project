@@ -672,10 +672,12 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	 * Method to process and then print the voting details on an Administrator console
 	 * @param admin the administrator console that made the request
 	 * @param election The Election object to retrieve the details
+	 * @return string with the printed message
 	 * @throws RemoteException
 	 */
 	@Override
-	public synchronized void printVotingProcessedData(RmiAdminConsoleInterface admin, Election<?> election) throws RemoteException {
+	public synchronized String printVotingProcessedData(RmiAdminConsoleInterface admin, Election<?> election) throws RemoteException {
+		String output = "";
 		int total = 0;
 		int nullVotes = 0;
 		String listName;
@@ -693,17 +695,26 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		}
 
 		/* Printing */
-		admin.print(" - " + election.getName());
+		if(admin != null)
+			admin.print(" - " + election.getName());
+		output = output + " - " + election.getName();
 		if (total + nullVotes != 0) {
 			for (Map.Entry<String, Integer> entry : results.entrySet()) {
 				String key = entry.getKey();
 				Integer value = entry.getValue();
-				admin.print("\tList: " + key + "\t Votes:" + value + "\t % " + 100 * value / (float) total);
+				if(admin != null)
+					admin.print("\tList: " + key + "\t Votes:" + value + "\t % " + 100 * value / (float) total);
+				output = output + "\tList: " + key + "\t Votes:" + value + "\t % " + 100 * value / (float) total;
 			}
-			admin.print("\tNull Votes: " + nullVotes);
+			if(admin != null)
+				admin.print("\tNull Votes: " + nullVotes);
+			output = output + "\tNull Votes: " + nullVotes;
 		} else {
-			admin.print("\tNo Votes available");
+			if(admin != null)
+				admin.print("\tNo Votes available");
+			output = output + "\tNo Votes available";
 		}
+		return output;
 	}
 
 	/**

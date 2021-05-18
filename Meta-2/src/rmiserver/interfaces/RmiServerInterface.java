@@ -73,7 +73,7 @@ public interface RmiServerInterface extends Remote {
 
     /**
      * Callback to get an overview of the objects in the database
-     * @param client AdminConsole that requested the information
+     * @param client console.AdminConsole that requested the information
      * @throws RemoteException
      */
     void info(RmiAdminConsoleInterface client) throws RemoteException;
@@ -331,9 +331,10 @@ public interface RmiServerInterface extends Remote {
      * Method to process and then print the voting details on an Administrator console
      * @param admin the administrator console that made the request
      * @param election The Election object to retrieve the details
+     * @return string with the printed message
      * @throws RemoteException
      */
-    void printVotingProcessedData(RmiAdminConsoleInterface admin, Election<?> election) throws RemoteException;
+    String printVotingProcessedData(RmiAdminConsoleInterface admin, Election<?> election) throws RemoteException;
 
     /**
      * Method to print the voting acts of a given person
