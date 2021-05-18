@@ -8,7 +8,7 @@
         <h1>Welcome to E-Voting!</h1>
 
         <s:a action="connect">
-            <s:submit type="button">Start!</s:submit>
+            <button>Start!</button>
         </s:a>
 
     </body>

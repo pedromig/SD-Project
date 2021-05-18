@@ -7,7 +7,8 @@
 	<body>
 	<div>
 		<h2>This is an error page </h2>
-		<s:a action="index"><s:submit type="button">Index Page</s:submit></s:a>
+		<s:a action="index"><button>Index Page</button></s:a>
+
 	</div>
 	<p></p>
 	<IMG SRC="https://media.giphy.com/media/4Vtk42BGiL1T2/giphy.gif">

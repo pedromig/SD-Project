@@ -8,7 +8,7 @@
 	<body>
 		<h2>User Console</h2>
 		<s:a action="">
-			<s:submit type="button">Votar</s:submit>
+			<button>Votar</button>
 		</s:a>
 	</body>
 </html>

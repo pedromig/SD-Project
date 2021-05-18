@@ -10,23 +10,23 @@
 		<p>Welcome, ${sessionScope.get('username')}.</p>
 
 		<h3>People</h3>
-		<s:a href="signUp.jsp"><s:submit type="button">Sign up</s:submit></s:a>
+		<s:a href="signUp.jsp"><button>Sign up</button></s:a>
 
 		<h3>Database Info</h3>
-		<s:a action=""><s:submit type="button">Database Info</s:submit></s:a>
+		<s:a action=""><button>Database Info</button></s:a>
 
 		<h3>Elections</h3>
-		<s:a action=""><s:submit type="button">Create Election</s:submit></s:a>
-		<s:a action=""><s:submit type="button">Edit Election</s:submit></s:a>
-		<s:a action=""><s:submit type="button">Ended Elections Log</s:submit></s:a>
-		<s:a action=""><s:submit type="button">Person Audit</s:submit></s:a>
+		<s:a action=""><button>Create Election</button></s:a>
+		<s:a action=""><button>Edit Election</button></s:a>
+		<s:a action=""><button>Ended Elections Log</button></s:a>
+		<s:a action=""><button>Person Audit</button></s:a>
 
 		<h3>Lists</h3>
-		<s:a action=""><s:submit type="button">Create List</s:submit></s:a>
-		<s:a action=""><s:submit type="button">Add List to Election</s:submit></s:a>
-		<s:a action=""><s:submit type="button">Remove List from Election</s:submit></s:a>
-		<s:a action=""><s:submit type="button">Add People to List </s:submit></s:a>
-		<s:a action=""><s:submit type="button">Remove People from List </s:submit></s:a>
+		<s:a action=""><button>Create List</button></s:a>
+		<s:a action=""><button>Add List to Election</button></s:a>
+		<s:a action=""><button>Remove List from Election</button></s:a>
+		<s:a action=""><button>Add People to List </button></s:a>
+		<s:a action=""><button>Remove People from List </button></s:a>
 
 		<h3>Real Time Data</h3>
 		<p>To be continued... (websockets)</p>
