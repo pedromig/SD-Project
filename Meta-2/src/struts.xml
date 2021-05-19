@@ -83,5 +83,9 @@
             <result>pages/endedElectionsLog.jsp</result>
         </action>
 
+        <action name="personAuditMenu" class="core.actions.PersonAuditAction" method="execute">
+            <result>pages/personAudit.jsp</result>
+        </action>
+
     </package>
 </struts>

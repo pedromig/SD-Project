@@ -9,6 +9,7 @@ import utils.lists.List;
 import utils.people.Person;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -68,7 +69,7 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
         for (Election<?> e : elections) {
             prints.add(e.toString());
         }
-        this.session.put(ELECTIONS_KEY, prints);
+        this.session.put(ELECTIONS_PRINT_KEY, prints);
     }
 
     public void setLists(CopyOnWriteArrayList<List<?>> lists) {
@@ -76,7 +77,7 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
         for (List<?> l : lists) {
             prints.add(l.toString());
         }
-        this.session.put(LISTS_KEY, prints);
+        this.session.put(LISTS_PRINT_KEY, prints);
     }
 
     public void setPeople(CopyOnWriteArrayList<Person> people) {
@@ -84,7 +85,7 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
         for (Person p : people) {
             prints.add(p.toString());
         }
-        this.session.put(PEOPLE_KEY, prints);
+        this.session.put(PEOPLE_PRINT_KEY, prints);
     }
 
 

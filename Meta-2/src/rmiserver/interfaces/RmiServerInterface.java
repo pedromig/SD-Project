@@ -340,8 +340,9 @@ public interface RmiServerInterface extends Remote {
      * Method to print the voting acts of a given person
      * @param admin the administrator console that made the request
      * @param personID the ID of the target Person
+     * @return string with the printed message
      * @throws RemoteException
      */
-    void printElectorVotesInfo(RmiAdminConsoleInterface admin, int personID) throws RemoteException;
+    String printElectorVotesInfo(RmiAdminConsoleInterface admin, int personID) throws RemoteException;
 
 }

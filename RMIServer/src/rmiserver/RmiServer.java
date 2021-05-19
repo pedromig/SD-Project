@@ -721,17 +721,22 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	 * Method to print the voting acts of a given person
 	 * @param admin the administrator console that made the request
 	 * @param personID the ID of the target Person
+	 * @return string with the printed message
 	 * @throws RemoteException
 	 */
 	@Override
-	public synchronized void printElectorVotesInfo(RmiAdminConsoleInterface admin, int personID) throws RemoteException {
+	public synchronized String printElectorVotesInfo(RmiAdminConsoleInterface admin, int personID) throws RemoteException {
+		String output = "";
 		for (Election<?> e : this.elections) {
 			for (Vote v : e.getVotes()) {
 				if (v.getPersonID() == personID) {
-					admin.print(" [" + e.getName() + "]\n\tDesk: " + v.getVotingDeskID() + "\n\tTime: " + v.getMoment().getTime().toString());
+					if (admin != null)
+						admin.print(" [" + e.getName() + "]\n\tDesk: " + v.getVotingDeskID() + "\n\tTime: " + v.getMoment().getTime().toString());
+					output = output + " [" + e.getName() + "]\n\tDesk: " + v.getVotingDeskID() + "\n\tTime: " + v.getMoment().getTime().toString();
 				}
 			}
 		}
+		return output;
 	}
 
 

@@ -30,10 +30,11 @@ public interface Configuration {
     String PASSWORD_KEY = "password";
     String ADMIN_MODE_KEY = "isAdmin";
 
-    String ELECTIONS_KEY = "elections";
-    String LISTS_KEY = "lists";
-    String PEOPLE_KEY = "people";
+    String ELECTIONS_PRINT_KEY = "elections";
+    String LISTS_PRINT_KEY = "lists";
+    String PEOPLE_PRINT_KEY = "people";
 
     String ENDED_ELECTIONS_LOG_KEY = "endedElectionsLog";
+    String PEOPLE_AUDIT_SELECTABLE_KEY = "peopleAuditSelectableNames";
 
 }

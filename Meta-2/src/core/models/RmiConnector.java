@@ -84,4 +84,8 @@ public class RmiConnector implements Configuration {
             return "Could not fetch the data";
         }
     }
+
+    public String getElectorVotesInfo(int idCardNumber) throws RemoteException {
+        return this.server.printElectorVotesInfo(null, idCardNumber);
+    }
 }

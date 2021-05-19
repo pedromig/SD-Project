@@ -19,7 +19,7 @@
 		<s:a action="createElectionMenu"><button>Create Election</button></s:a>
 		<s:a action=""><button>Edit Election</button></s:a>
 		<s:a action="endedElectionLogMenu"><button>Ended Elections Log</button></s:a>
-		<s:a action=""><button>Person Audit</button></s:a>
+		<s:a action="personAuditMenu"><button>Person Audit</button></s:a>
 
 		<h3>Lists</h3>
 		<s:a action="createListMenu"><button>Create List</button></s:a>
