@@ -97,5 +97,7 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
         this.session.put(ENDED_ELECTIONS_LOG_KEY, prints);
     }
 
-
+    public void setPeopleAudit(String info) {
+        this.session.put(PEOPLE_AUDIT_KEY, info);
+    }
 }

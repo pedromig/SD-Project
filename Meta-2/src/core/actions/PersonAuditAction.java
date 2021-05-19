@@ -3,21 +3,20 @@ package core.actions;
 import core.Configuration;
 import utils.people.Person;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PersonAuditAction extends Action implements Configuration {
-    private String selectedPerson;
-    private List<String> peopleAuditNames;
+    private Integer selectedPerson;
+    private Map<Integer, String> peopleAuditNames;
 
     @Override
     public String execute() throws Exception {
         try {
             this.setPeopleAuditNames(super.getRmiConnector().getPeople());
             if (this.selectedPerson != null){
-                System.out.println("print: " + selectedPerson);
-//                super.getRmiConnector().getElectorVotesInfo(selectedPerson);
+                this.setPeopleAudit(super.getRmiConnector().getElectorVotesInfo(selectedPerson));
             }
             return SUCCESS;
         } catch (Exception e) {
@@ -26,23 +25,23 @@ public class PersonAuditAction extends Action implements Configuration {
         return ERROR;
     }
 
-    public String getSelectedPerson() {
+    public Integer getSelectedPerson() {
         return this.selectedPerson;
     }
 
-    public void setSelectedPerson(String selectedPerson) {
+    public void setSelectedPerson(Integer selectedPerson) {
         this.selectedPerson = selectedPerson;
     }
 
     public void setPeopleAuditNames(CopyOnWriteArrayList<Person> people) {
-        ArrayList<String> names = new ArrayList<>();
+        HashMap<Integer, String> names = new HashMap<>();
         for (Person p : people) {
-            names.add(p.getName());
+            names.put(p.getIdentityCardNumber(), p.getName() + " - " + p.getIdentityCardNumber());
         }
         this.peopleAuditNames = names;
     }
 
-    public List<String> getPeopleAuditNames() {
+    public Map<Integer, String> getPeopleAuditNames() {
         return this.peopleAuditNames;
     }
 

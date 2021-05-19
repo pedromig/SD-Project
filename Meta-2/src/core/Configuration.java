@@ -35,6 +35,6 @@ public interface Configuration {
     String PEOPLE_PRINT_KEY = "people";
 
     String ENDED_ELECTIONS_LOG_KEY = "endedElectionsLog";
-    String PEOPLE_AUDIT_SELECTABLE_KEY = "peopleAuditSelectableNames";
+    String PEOPLE_AUDIT_KEY = "peopleAudit";
 
 }

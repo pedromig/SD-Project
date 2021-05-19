@@ -7,25 +7,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/personAudit.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/personAudit.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Meta-2/web/pages/personAudit.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/core/actions/PersonAuditAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/web/pages/personAudit.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/pages/adminConsole.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Configuration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/actions/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/Action.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/models/RmiConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/models/RmiConnector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiServerInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/src/rmiserver/interfaces/RmiServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/interfaces/RmiServerInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/actions/PersonAuditAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/PersonAuditAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/web/pages/personAudit.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/personAudit.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -333,7 +319,7 @@
       <workItem from="1621123667433" duration="398000" />
       <workItem from="1621247459770" duration="37365000" />
       <workItem from="1621335574043" duration="35333000" />
-      <workItem from="1621381515549" duration="6218000" />
+      <workItem from="1621381515549" duration="7092000" />
     </task>
     <servers />
   </component>

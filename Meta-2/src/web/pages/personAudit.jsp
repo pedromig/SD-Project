@@ -13,7 +13,9 @@
 		</s:form>
 		<s:if test="selectedPerson != null">
 			<h3>Result</h3>
-
+			<c:forEach var="item" items="${sessionScope.get('peopleAudit')}">
+				<c:out value="${item}"/> <br/>
+			</c:forEach>
 		</s:if>
 	</body>
 </html>
