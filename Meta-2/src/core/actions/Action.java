@@ -8,6 +8,8 @@ import utils.elections.Election;
 import utils.lists.List;
 import utils.people.Person;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +65,7 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
     public void setElections(CopyOnWriteArrayList<Election<?>> elections) {
         ArrayList<String> prints = new ArrayList<>();
         for (Election<?> e : elections) {
-            prints.add(e.toString());
+            prints.add(e.toString() + "\n" + e.getDepartments() + "\n");
         }
         this.session.put(ELECTIONS_PRINT_KEY, prints);
     }

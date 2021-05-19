@@ -114,5 +114,10 @@
         <action name="editElectionAttribute" class="core.actions.EditElectionAttributeAction" method="execute">
             <result>pages/adminConsole.jsp</result>
         </action>
+
+        <action name="addDepartment" class="core.actions.AddDepartmentAction" method="execute">
+            <result name="success">pages/addDepartment.jsp</result>
+            <result name="admin">pages/adminConsole.jsp</result>
+        </action>
     </package>
 </struts>

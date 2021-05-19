@@ -7,19 +7,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/core/actions/EditElectionAttributeAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/core/actions/EditElectionMenuAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/web/pages/editElection.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/core/actions/AddDepartmentAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/web/pages/addDepartment.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/adminConsole.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/pages/adminConsole.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Configuration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/actions/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/Action.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/models/RmiConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/models/RmiConnector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/adminConsole.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/web/pages/editElection.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/editElection.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -332,7 +329,7 @@
       <workItem from="1621335574043" duration="35333000" />
       <workItem from="1621381515549" duration="8966000" />
       <workItem from="1621390962511" duration="153000" />
-      <workItem from="1621428490668" duration="23952000" />
+      <workItem from="1621428490668" duration="28402000" />
     </task>
     <servers />
   </component>

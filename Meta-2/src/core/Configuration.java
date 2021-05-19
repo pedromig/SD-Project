@@ -67,4 +67,11 @@ public interface Configuration {
     String SELECTED_ELECTION_EDIT = "selectedElectionEdit";
     String SELECTABLE_ELECTIONS_EDIT = "selectableElectionsEdit";
 
+    String SELECTABLE_DEPARTMENTS_ADD = "selectableDepartmentsAdd";
+    String SELECTABLE_DEPARTMENTS_ADD_REST = "selectableDepartmentsAddRest";
+    String SELECTABLE_DEPARTMENTS_REM = "selectableDepartmentsRem";
+    String SELECTABLE_DEPARTMENTS_REM_REST = "selectableDepartmentsRemRest";
+
+
+
 }

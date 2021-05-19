@@ -124,4 +124,20 @@ public class RmiConnector implements Configuration {
     public void associateListToElection(String electionName, String listName) throws RemoteException {
         server.associateListToElection(electionName, listName);
     }
+
+    public String[] getDepartments() throws RemoteException {
+        return this.server.getDepartments();
+    }
+
+    public void addDepartment(String electionName, String dept) throws RemoteException {
+        this.server.addDepartment(electionName, dept);
+    }
+
+    public void removeDepartment(String electionName, String dept) throws RemoteException {
+        this.server.removeDepartment(electionName, dept);
+    }
+
+    public Election<?> getElection(String name) throws RemoteException {
+        return this.server.getElection(name);
+    }
 }
