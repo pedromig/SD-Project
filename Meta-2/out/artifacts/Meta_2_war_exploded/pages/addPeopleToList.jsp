@@ -7,13 +7,13 @@
 	</head>
 	<body>
 		<s:form action="addPeopleToList">
-			<s:if test="selectedList == null">
+			<s:if test="selectedListJsp == null">
 				<h2>Add People To List [1/2]</h2>
-				<s:select name="selectedList" label="Select List" list="listOpts"/>
+				<s:select name="selectedListJsp" label="Select List" list="listOpts"/>
 			</s:if>
-			<s:elseif test="selectedPerson == null">
+			<s:elseif test="selectedPersonJsp == null">
 				<h2>Add People To List [2/2]</h2>
-				<s:select name="selectedPerson" label="Select Person" list="peopleOpts"/>
+				<s:select name="selectedPersonJsp" label="Select Person" list="peopleOpts"/>
 			</s:elseif>
 
 			<s:submit/>

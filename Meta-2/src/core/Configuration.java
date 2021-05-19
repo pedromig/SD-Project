@@ -36,6 +36,7 @@ public interface Configuration {
 
     String ENDED_ELECTIONS_LOG_KEY = "endedElectionsLog";
     String PEOPLE_AUDIT_KEY = "peopleAudit";
+    String SELECTABLE_PEOPLE_AUDIT_KEY = "selectablePeopleAudit";
 
     String SELECTABLE_PEOPLE_KEY_ADD_LE = "selectablePeopleKeyAddLE";
     String SELECTABLE_PEOPLE_KEY_ADD_PL = "selectablePeopleKeyAddPL";

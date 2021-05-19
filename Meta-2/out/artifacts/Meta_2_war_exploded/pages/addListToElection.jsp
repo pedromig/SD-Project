@@ -6,13 +6,13 @@
 	</head>
 	<body>
 		<s:form action="addListToElection">
-			<s:if test="selectedElection == null">
+			<s:if test="selectedElectionJsp == null">
 				<h2>Add List To Election [1/2]</h2>
-				<s:select name="selectedElection" label="Select Election" list="electionsOpts"/>
+				<s:select name="selectedElectionJsp" label="Select Election" list="electionsOpts"/>
 			</s:if>
-			<s:elseif test="selectedList == null">
+			<s:elseif test="selectedListJsp == null">
 				<h2>Add List To Election [2/2]</h2>
-				<s:select name="selectedList" label="Select List" list="listOpts"/>
+				<s:select name="selectedListJsp" label="Select List" list="listOpts"/>
 			</s:elseif>
 
 			<s:submit/>
