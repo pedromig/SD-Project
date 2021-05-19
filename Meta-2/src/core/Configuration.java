@@ -64,5 +64,7 @@ public interface Configuration {
     String SELECTED_LIST_KEY_REM_LE = "selectedListKeyRemLE";
     String SELECTED_LIST_KEY_REM_PL = "selectedListKeyRemPL";
 
+    String SELECTED_ELECTION_EDIT = "selectedElectionEdit";
+    String SELECTABLE_ELECTIONS_EDIT = "selectableElectionsEdit";
 
 }

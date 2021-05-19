@@ -107,5 +107,12 @@
             <result name="admin">pages/adminConsole.jsp</result>
         </action>
 
+        <action name="editElectionMenu" class="core.actions.EditElectionMenuAction" method="execute">
+            <result>pages/editElection.jsp</result>
+        </action>
+
+        <action name="editElectionAttribute" class="core.actions.EditElectionAttributeAction" method="execute">
+            <result>pages/adminConsole.jsp</result>
+        </action>
     </package>
 </struts>
