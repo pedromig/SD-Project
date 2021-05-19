@@ -57,7 +57,6 @@ public class RmiConnector implements Configuration {
     public CopyOnWriteArrayList<Election<?>> getFutureElections() throws RemoteException {
         return server.getFutureElections();
     }
-
     public CopyOnWriteArrayList<Election<?>> getAllElections() throws RemoteException {
         CopyOnWriteArrayList<Election<?>> allElections = new CopyOnWriteArrayList<>();
         allElections.addAll(this.getEndedElections());
@@ -65,6 +64,7 @@ public class RmiConnector implements Configuration {
         allElections.addAll(this.getFutureElections());
         return allElections;
     }
+
     public CopyOnWriteArrayList<List<?>> getLists() throws RemoteException {
         CopyOnWriteArrayList<List<?>> allLists = new CopyOnWriteArrayList<>();
         allLists.addAll(server.getListsOfType(Student.class));
@@ -72,8 +72,19 @@ public class RmiConnector implements Configuration {
         allLists.addAll(server.getListsOfType(Employee.class));
         return allLists;
     }
+    public CopyOnWriteArrayList<List<?>> getEditableLists() throws RemoteException {
+        return server.getEditableLists();
+    }
+
     public CopyOnWriteArrayList<Person> getPeople() throws RemoteException {
         return server.getPeople();
+    }
+    public Person getPerson(int personId) throws RemoteException {
+        return server.getPerson(personId);
+    }
+
+    public CopyOnWriteArrayList<Person> getPeopleUnassignedOfType(Class<?> type) throws RemoteException {
+        return server.getPeopleUnassignedOfType(type);
     }
 
     public String getEndedLog(Election<?> election) {
@@ -87,5 +98,9 @@ public class RmiConnector implements Configuration {
 
     public String getElectorVotesInfo(int idCardNumber) throws RemoteException {
         return this.server.printElectorVotesInfo(null, idCardNumber);
+    }
+
+    public void associatePersonToList(String listName, int personID) throws RemoteException {
+        server.associatePersonToList(listName, personID);
     }
 }

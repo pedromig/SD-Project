@@ -3,7 +3,6 @@ package core.actions;
 import core.Configuration;
 import utils.people.Person;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -34,11 +33,7 @@ public class PersonAuditAction extends Action implements Configuration {
     }
 
     public void setPeopleAuditNames(CopyOnWriteArrayList<Person> people) {
-        HashMap<Integer, String> names = new HashMap<>();
-        for (Person p : people) {
-            names.put(p.getIdentityCardNumber(), p.getName() + " - " + p.getIdentityCardNumber());
-        }
-        this.peopleAuditNames = names;
+        this.peopleAuditNames = super.makeSelectablePeople(people);
     }
 
     public Map<Integer, String> getPeopleAuditNames() {
