@@ -37,13 +37,31 @@ public interface Configuration {
     String ENDED_ELECTIONS_LOG_KEY = "endedElectionsLog";
     String PEOPLE_AUDIT_KEY = "peopleAudit";
 
-    String SELECTABLE_PEOPLE_KEY = "selectablePeopleKey";
-    String SELECTABLE_ELECTIONS_KEY = "selectableElectionsKey";
-    String SELECTABLE_LISTS_KEY = "selectableListsKey";
+    String SELECTABLE_PEOPLE_KEY_ADD_LE = "selectablePeopleKeyAddLE";
+    String SELECTABLE_PEOPLE_KEY_ADD_PL = "selectablePeopleKeyAddPL";
+    String SELECTABLE_PEOPLE_KEY_REM_LE = "selectablePeopleKeyRemLE";
+    String SELECTABLE_PEOPLE_KEY_REM_PL = "selectablePeopleKeyRemPL";
 
-    String SELECTED_PERSON_KEY = "selectedPersonKey";
-    String SELECTED_ELECTION_KEY = "selectedElectionKey";
-    String SELECTED_LIST_KEY = "selectedListKey";
+    String SELECTABLE_ELECTIONS_KEY_ADD_LE = "selectableElectionsKeyAddLE";
+    String SELECTABLE_ELECTIONS_KEY_ADD_PL = "selectableElectionsKeyAddPL";
+    String SELECTABLE_ELECTIONS_KEY_REM_LE = "selectableElectionsKeyRemLE";
+    String SELECTABLE_ELECTIONS_KEY_REM_PL = "selectableElectionsKeyRemPL";
+
+    String SELECTABLE_LISTS_KEY_ADD_LE = "selectableListsKeyAddLE";
+    String SELECTABLE_LISTS_KEY_ADD_PL = "selectableListsKeyAddPL";
+    String SELECTABLE_LISTS_KEY_REM_LE = "selectableListsKeyRemLE";
+    String SELECTABLE_LISTS_KEY_REM_PL = "selectableListsKeyRemPL";
+
+    String SELECTED_PERSON_KEY_ADD_PL = "selectedPersonKeyAddPL";
+    String SELECTED_PERSON_KEY_REM_PL = "selectedPersonKeyRemPL";
+
+    String SELECTED_ELECTION_KEY_ADD_LE = "selectedElectionKeyAddLE";
+    String SELECTED_ELECTION_KEY_REM_LE = "selectedElectionKeyRemLE";
+
+    String SELECTED_LIST_KEY_ADD_LE = "selectedListKeyAddLE";
+    String SELECTED_LIST_KEY_ADD_PL = "selectedListKeyAddPL";
+    String SELECTED_LIST_KEY_REM_LE = "selectedListKeyRemLE";
+    String SELECTED_LIST_KEY_REM_PL = "selectedListKeyRemPL";
 
 
 }

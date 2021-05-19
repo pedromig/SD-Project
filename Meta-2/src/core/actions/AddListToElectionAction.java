@@ -7,24 +7,24 @@ import utils.lists.List;
 import java.util.Map;
 
 public class AddListToElectionAction extends Action implements Configuration {
-    private Integer selectedList, selectedElection;
+    private Integer selectedListJsp, selectedElectionJsp;
     private Map<Integer, String> listOpts, electionsOpts;
 
     @Override
     public String execute() throws Exception {
         try {
-            if (selectedList != null) {
-                Election<?> election = super.getSelectableElections().get(super.getSelectedElection());
-                List<?> list = super.getSelectableLists().get(selectedList);
-                super.setSelectedList(selectedList); // Not Needed
+            if (selectedListJsp != null) {
+                Election<?> election = super.getSelectableElections(SELECTABLE_ELECTIONS_KEY_ADD_LE).get(super.getSelectedElection(SELECTED_ELECTION_KEY_ADD_LE));
+                List<?> list = super.getSelectableLists(SELECTABLE_LISTS_KEY_ADD_LE).get(selectedListJsp);
+                super.setSelectedList(SELECTED_LIST_KEY_ADD_LE, selectedListJsp); // Not Needed
                 super.getRmiConnector().associateListToElection(election.getName(), list.getName());
                 return ADMIN;
-            } else if (this.selectedElection == null) {
-                this.electionsOpts = super.makeSelectableElections(super.getRmiConnector().getFutureElections());
+            } else if (this.selectedElectionJsp == null) {
+                this.electionsOpts = super.makeSelectableElections(SELECTABLE_ELECTIONS_KEY_ADD_LE, super.getRmiConnector().getFutureElections());
             } else {
-                Election<?> election = super.getSelectableElections().get(selectedElection);
-                super.setSelectedElection(selectedElection);
-                this.listOpts = super.makeSelectableLists(super.getRmiConnector().getListsUnassignedOfType(election.getType()));
+                Election<?> election = super.getSelectableElections(SELECTABLE_ELECTIONS_KEY_ADD_LE).get(selectedElectionJsp);
+                super.setSelectedElection(SELECTED_ELECTION_KEY_ADD_LE, selectedElectionJsp);
+                this.listOpts = super.makeSelectableLists(SELECTABLE_LISTS_KEY_ADD_LE, super.getRmiConnector().getListsUnassignedOfType(election.getType()));
             }
             return SUCCESS;
         } catch (Exception e) {
@@ -33,24 +33,20 @@ public class AddListToElectionAction extends Action implements Configuration {
         return ERROR;
     }
 
-    @Override
-    public Integer getSelectedList() {
-        return this.selectedList;
+    public Integer getSelectedListJsp() {
+        return this.selectedListJsp;
     }
 
-    @Override
-    public void setSelectedList(Integer selectedList) {
-        this.selectedList = selectedList;
+    public void setSelectedListJsp(Integer selectedListJsp) {
+        this.selectedListJsp = selectedListJsp;
     }
 
-    @Override
-    public Integer getSelectedElection() {
-        return this.selectedElection;
+    public Integer getSelectedElectionJsp() {
+        return this.selectedElectionJsp;
     }
 
-    @Override
-    public void setSelectedElection(Integer selectedElection) {
-        this.selectedElection = selectedElection;
+    public void setSelectedElectionJsp(Integer selectedElectionJsp) {
+        this.selectedElectionJsp = selectedElectionJsp;
     }
 
     public Map<Integer, String> getListOpts() {
