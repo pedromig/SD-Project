@@ -36,7 +36,7 @@ public class AddPeopleToListAction extends Action implements Configuration {
     }
 
     public Integer getSelectedList() {
-        return selectedList;
+        return this.selectedList;
     }
 
     public void setSelectedList(Integer selectedList) {
@@ -44,7 +44,7 @@ public class AddPeopleToListAction extends Action implements Configuration {
     }
 
     public Integer getSelectedPerson() {
-        return selectedPerson;
+        return this.selectedPerson;
     }
 
     public void setSelectedPerson(Integer selectedPerson) {

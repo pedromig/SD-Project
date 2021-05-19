@@ -23,7 +23,7 @@
 
 		<h3>Lists</h3>
 		<s:a action="createListMenu"><button>Create List</button></s:a>
-		<s:a action=""><button>Add List to Election</button></s:a>
+		<s:a action="addListToElection"><button>Add List to Election</button></s:a>
 		<s:a action=""><button>Remove List from Election</button></s:a>
 		<s:a action="addPeopleToList"><button>Add People to List </button></s:a>
 		<s:a action="removePeopleFromList"><button>Remove People from List </button></s:a>

@@ -117,7 +117,7 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
 
     public HashMap<Integer, String> makeSelectableLists(CopyOnWriteArrayList<List<?>> lists) {
         HashMap<Integer, String> names = new HashMap<>();
-        for (int i=0; i < lists.size(); i++) {
+        for (int i = 0; i < lists.size(); i++) {
             names.put(i, lists.get(i).getName());
         }
         this.session.put(SELECTABLE_LISTS_KEY, lists);
@@ -131,5 +131,23 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
     }
     public Integer getSelectedList() {
         return (Integer) this.session.get(SELECTED_LIST_KEY);
+    }
+
+    public HashMap<Integer, String> makeSelectableElections(CopyOnWriteArrayList<Election<?>> elections) {
+        HashMap<Integer, String> names = new HashMap<>();
+        for (int i = 0; i < elections.size(); i++) {
+            names.put(i, elections.get(i).getName());
+        }
+        this.session.put(SELECTABLE_ELECTIONS_KEY, elections);
+        return names;
+    }
+    public CopyOnWriteArrayList<Election<?>> getSelectableElections() {
+        return (CopyOnWriteArrayList<Election<?>>) this.session.get(SELECTABLE_ELECTIONS_KEY);
+    }
+    public void setSelectedElection(Integer idx) {
+        this.session.put(SELECTED_ELECTION_KEY, idx);
+    }
+    public Integer getSelectedElection() {
+        return (Integer) this.session.get(SELECTED_ELECTION_KEY);
     }
 }
