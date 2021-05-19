@@ -30,12 +30,10 @@ public class RmiConnector implements Configuration {
     public RmiServerInterface getServer() {
         return this.server;
     }
-
     public boolean checkLogin(int idCardNumber, String password) throws RemoteException {
         Person person = this.server.getPerson(idCardNumber);
         return (person != null) && person.getPassword().equals(password);
     }
-
     public void signUp(Person person) throws RemoteException {
         this.server.signUp(person);
     }
@@ -43,7 +41,6 @@ public class RmiConnector implements Configuration {
     public void createElection(Election<?> election) throws RemoteException {
         this.server.createElection(election);
     }
-
     public void createList(List<?> list) throws RemoteException {
         this.server.createList(list);
     }
@@ -79,13 +76,16 @@ public class RmiConnector implements Configuration {
     public CopyOnWriteArrayList<Person> getPeople() throws RemoteException {
         return server.getPeople();
     }
+    public CopyOnWriteArrayList<Person> getPeopleUnassignedOfType(Class<?> type) throws RemoteException {
+        return server.getPeopleUnassignedOfType(type);
+    }
+    public CopyOnWriteArrayList<Person> getPeopleAssignedOfType(Class<?> type, String listName) throws RemoteException {
+        return server.getPeopleAssignedOfType(type, listName);
+    }
     public Person getPerson(int personId) throws RemoteException {
         return server.getPerson(personId);
     }
 
-    public CopyOnWriteArrayList<Person> getPeopleUnassignedOfType(Class<?> type) throws RemoteException {
-        return server.getPeopleUnassignedOfType(type);
-    }
 
     public String getEndedLog(Election<?> election) {
         try {
@@ -95,7 +95,6 @@ public class RmiConnector implements Configuration {
             return "Could not fetch the data";
         }
     }
-
     public String getElectorVotesInfo(int idCardNumber) throws RemoteException {
         return this.server.printElectorVotesInfo(null, idCardNumber);
     }
