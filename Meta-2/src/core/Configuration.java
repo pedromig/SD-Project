@@ -72,6 +72,10 @@ public interface Configuration {
     String SELECTABLE_DEPARTMENTS_REM = "selectableDepartmentsRem";
     String SELECTABLE_DEPARTMENTS_REM_REST = "selectableDepartmentsRemRest";
 
+    String SELECTABLE_VOTING_ELECTIONS_KEY = "votingSelectableElectionsKey";
+    String SELECTED_VOTING_ELECTION_KEY = "selectedVotingElectionKey";
+    String SELECTRABLE_VOTING_LISTS_KEY = "votingSelectableListsKey";
+
 
 
 }

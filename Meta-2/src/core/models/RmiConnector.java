@@ -2,6 +2,7 @@ package core.models;
 
 import core.Configuration;
 import rmiserver.interfaces.RmiServerInterface;
+import utils.Vote;
 import utils.elections.Election;
 import utils.lists.List;
 import utils.people.Employee;
@@ -49,6 +50,9 @@ public class RmiConnector implements Configuration {
         this.server.createList(list);
     }
 
+    public CopyOnWriteArrayList<Election<?>> getRunningElectionsByDepartment(String dept) throws RemoteException {
+        return server.getRunningElectionsByDepartment(dept);
+    }
     public CopyOnWriteArrayList<Election<?>> getRunningElections() throws RemoteException {
         return server.getRunningElections();
     }
@@ -147,5 +151,13 @@ public class RmiConnector implements Configuration {
 
     public Election<?> getElection(String name) throws RemoteException {
         return this.server.getElection(name);
+    }
+
+    public void vote(Vote vote) throws RemoteException {
+        this.server.vote(vote);
+    }
+
+    public boolean hasVoted(String electionName, int personID) throws RemoteException {
+        return this.server.hasVoted(electionName, personID);
     }
 }

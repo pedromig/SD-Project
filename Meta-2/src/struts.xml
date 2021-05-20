@@ -134,5 +134,10 @@
             <result name="success">pages/removeRestraint.jsp</result>
             <result name="admin">pages/adminConsole.jsp</result>
         </action>
+
+        <action name="vote" class="core.actions.VoteAction" method="execute">
+            <result name="success">pages/voteMenu.jsp</result>
+            <result name="user">pages/userConsole.jsp</result>
+        </action>
     </package>
 </struts>
