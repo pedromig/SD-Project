@@ -74,7 +74,7 @@ public interface Configuration {
 
     String SELECTABLE_VOTING_ELECTIONS_KEY = "votingSelectableElectionsKey";
     String SELECTED_VOTING_ELECTION_KEY = "selectedVotingElectionKey";
-    String SELECTRABLE_VOTING_LISTS_KEY = "votingSelectableListsKey";
+    String SELECTABLE_VOTING_LISTS_KEY = "votingSelectableListsKey";
 
 
 
