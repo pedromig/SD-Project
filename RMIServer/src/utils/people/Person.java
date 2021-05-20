@@ -10,7 +10,7 @@ import java.util.GregorianCalendar;
 public abstract class Person implements Serializable {
     private int phoneNumber, identityCardNumber;
     private String list;
-    private String name, password, address, faculty, department;
+    private String name, password, address, faculty, department, facebookID;
     private GregorianCalendar identityCardExpiryDate;
 
     /**
@@ -88,6 +88,21 @@ public abstract class Person implements Serializable {
      */
     public int getIdentityCardNumber() {
         return this.identityCardNumber;
+    }
+
+    /**
+     * Getter for the facebookID attribute
+     * @return this identityCardNumber
+     */
+    public String getFacebookID() {
+        return facebookID;
+    }
+
+    /**
+     * Setter for the facebookID attribute
+     */
+    public void setFacebookID(String facebookID) {
+        this.facebookID = facebookID;
     }
 
     /**
