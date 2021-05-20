@@ -119,5 +119,10 @@
             <result name="success">pages/addDepartment.jsp</result>
             <result name="admin">pages/adminConsole.jsp</result>
         </action>
+
+        <action name="removeDepartment" class="core.actions.RemoveDepartmentAction" method="execute">
+            <result name="success">pages/removeDepartment.jsp</result>
+            <result name="admin">pages/adminConsole.jsp</result>
+        </action>
     </package>
 </struts>

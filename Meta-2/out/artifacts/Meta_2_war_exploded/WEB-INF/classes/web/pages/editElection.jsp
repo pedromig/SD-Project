@@ -33,9 +33,9 @@
             </s:form>
             <div>
                 <s:a action="addDepartment"><button>Add Department</button></s:a>
-                <s:a action=""><button>Remove Department</button></s:a>
-                <s:a action=""><button>Add Restraint</button></s:a>
-                <s:a action=""><button>Remove Restraint</button></s:a>
+                <s:a action="removeDepartment"><button>Remove Department</button></s:a>
+                <s:a action="addRestraint"><button>Add Restraint</button></s:a>
+                <s:a action="removeRestraint"><button>Remove Restraint</button></s:a>
             </div>
         </s:if>
     </body>
