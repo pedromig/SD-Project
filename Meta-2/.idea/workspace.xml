@@ -12,11 +12,6 @@
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Configuration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/actions/VoteAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/VoteAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/database/elections.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/database/elections.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/database/lists.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/database/lists.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/database/people.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/database/people.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,19 +104,6 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>

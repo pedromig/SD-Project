@@ -76,35 +76,6 @@ public interface Configuration {
     String SELECTED_VOTING_ELECTION_KEY = "selectedVotingElectionKey";
     String SELECTABLE_VOTING_LISTS_KEY = "votingSelectableListsKey";
 
-
-    String SELECTABLE_LISTS_KEY_ADD_LE = "selectableListsKeyAddLE";
-    String SELECTABLE_LISTS_KEY_ADD_PL = "selectableListsKeyAddPL";
-    String SELECTABLE_LISTS_KEY_REM_LE = "selectableListsKeyRemLE";
-    String SELECTABLE_LISTS_KEY_REM_PL = "selectableListsKeyRemPL";
-
-    String SELECTED_PERSON_KEY_ADD_PL = "selectedPersonKeyAddPL";
-    String SELECTED_PERSON_KEY_REM_PL = "selectedPersonKeyRemPL";
-
-    String SELECTED_ELECTION_KEY_ADD_LE = "selectedElectionKeyAddLE";
-    String SELECTED_ELECTION_KEY_REM_LE = "selectedElectionKeyRemLE";
-
-    String SELECTED_LIST_KEY_ADD_LE = "selectedListKeyAddLE";
-    String SELECTED_LIST_KEY_ADD_PL = "selectedListKeyAddPL";
-    String SELECTED_LIST_KEY_REM_LE = "selectedListKeyRemLE";
-    String SELECTED_LIST_KEY_REM_PL = "selectedListKeyRemPL";
-
-    String SELECTED_ELECTION_EDIT = "selectedElectionEdit";
-    String SELECTABLE_ELECTIONS_EDIT = "selectableElectionsEdit";
-
-    String SELECTABLE_DEPARTMENTS_ADD = "selectableDepartmentsAdd";
-    String SELECTABLE_DEPARTMENTS_ADD_REST = "selectableDepartmentsAddRest";
-    String SELECTABLE_DEPARTMENTS_REM = "selectableDepartmentsRem";
-    String SELECTABLE_DEPARTMENTS_REM_REST = "selectableDepartmentsRemRest";
-
-    String SELECTABLE_VOTING_ELECTIONS_KEY = "votingSelectableElectionsKey";
-    String SELECTED_VOTING_ELECTION_KEY = "selectedVotingElectionKey";
-    String SELECTABLE_VOTING_LISTS_KEY = "votingSelectableListsKey";
-
     String SERVICE_KEY = "oauthSession";
     String AUTH_URL_KEY = "authURL";
 
