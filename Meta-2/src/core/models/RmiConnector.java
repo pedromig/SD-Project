@@ -137,6 +137,14 @@ public class RmiConnector implements Configuration {
         this.server.removeDepartment(electionName, dept);
     }
 
+    public void addRestriction(String electionName, String dept) throws RemoteException {
+        this.server.addRestriction(electionName, dept);
+    }
+
+    public void removeRestriction(String electionName, String dept) throws RemoteException {
+        this.server.removeRestriction(electionName, dept);
+    }
+
     public Election<?> getElection(String name) throws RemoteException {
         return this.server.getElection(name);
     }

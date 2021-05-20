@@ -4,8 +4,9 @@ import core.Configuration;
 import utils.elections.Election;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class RemoveDepartmentAction extends Action implements Configuration {
+public class AddRestraintAction extends Action implements Configuration {
     private Integer selectedElectionJsp;
     private String selectedDepartmentName;
     private List<String> departments;
@@ -18,10 +19,17 @@ public class RemoveDepartmentAction extends Action implements Configuration {
                 Election<?> election = super.getSelectableElections(SELECTABLE_ELECTIONS_EDIT).get(this.selectedElectionJsp);
                 election = super.getRmiConnector().getElection(election.getName());
                 if (selectedDepartmentName != null) {
-                    super.getRmiConnector().removeDepartment(election.getName(), selectedDepartmentName);
+                    super.getRmiConnector().addRestriction(election.getName(), selectedDepartmentName);
                     return ADMIN;
                 }
-                this.departments = election.getDepartments();
+                String[] depts = super.getRmiConnector().getDepartments();
+                CopyOnWriteArrayList<String> selectableDepartments = new CopyOnWriteArrayList<>();
+                for (String deptName : depts) {
+                    if (!election.getRestrictions().contains(deptName)) {
+                        selectableDepartments.add(deptName);
+                    }
+                }
+                this.departments = selectableDepartments;
                 return SUCCESS;
             }
         } catch (Exception e) {

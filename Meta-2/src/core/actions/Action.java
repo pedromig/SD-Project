@@ -65,7 +65,7 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
     public void setElections(CopyOnWriteArrayList<Election<?>> elections) {
         ArrayList<String> prints = new ArrayList<>();
         for (Election<?> e : elections) {
-            prints.add(e.toString() + "\n" + e.getDepartments() + "\n");
+            prints.add(e.toString() + "\n" + e.getDepartments() + "\n" + e.getRestrictions() + "\n");
         }
         this.session.put(ELECTIONS_PRINT_KEY, prints);
     }

@@ -124,5 +124,10 @@
             <result name="success">pages/removeDepartment.jsp</result>
             <result name="admin">pages/adminConsole.jsp</result>
         </action>
+
+        <action name="addRestraint" class="core.actions.AddRestraintAction" method="execute">
+            <result name="success">pages/addRestraint.jsp</result>
+            <result name="admin">pages/adminConsole.jsp</result>
+        </action>
     </package>
 </struts>
