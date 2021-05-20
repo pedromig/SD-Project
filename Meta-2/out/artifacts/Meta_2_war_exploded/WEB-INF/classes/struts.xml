@@ -8,17 +8,17 @@
     <package name="default" namespace="/" extends="struts-default">
         <!--  **  Interceptors  **  -->
         <interceptors>
-            <interceptor name="rmiInterceptor" class="core.interceptors.RmiInterceptor" />
-            <interceptor name="loginInterceptor" class="core.interceptors.LoginInterceptor" />
+            <interceptor name="rmiInterceptor" class="core.interceptors.RmiInterceptor"/>
+            <interceptor name="loginInterceptor" class="core.interceptors.LoginInterceptor"/>
 
             <interceptor-stack name="rmi-stack">
-                <interceptor-ref name="rmiInterceptor" />
+                <interceptor-ref name="rmiInterceptor"/>
                 <interceptor-ref name="defaultStack"/>
             </interceptor-stack>
 
             <interceptor-stack name="login-stack">
-                <interceptor-ref name="rmiInterceptor" />
-                <interceptor-ref name="loginInterceptor" />
+                <interceptor-ref name="rmiInterceptor"/>
+                <interceptor-ref name="loginInterceptor"/>
                 <interceptor-ref name="defaultStack"/>
             </interceptor-stack>
 
@@ -27,7 +27,7 @@
         <default-interceptor-ref name="login-stack"/>
 
         <!--  **  Default Action  **  -->
-        <default-action-ref name="index" />
+        <default-action-ref name="index"/>
 
         <!--  **  Global Results  **  -->
         <global-results>
@@ -60,17 +60,29 @@
             <result name="login">pages/userConsole.jsp</result>
         </action>
 
-        <action name="signUpMenu"><result>pages/signUp.jsp</result></action>
+        <action name="loginWithFacebook" class="core.actions.LoginWithFacebookAction" method="execute">
+            <interceptor-ref name="defaultStack"/>
+            <result name="admin">pages/adminConsole.jsp</result>
+            <result name="login">pages/userConsole.jsp</result>
+        </action>
+
+        <action name="signUpMenu">
+            <result>pages/signUp.jsp</result>
+        </action>
         <action name="signUp" class="core.actions.SignUpAction">
             <result name="success">pages/adminConsole.jsp</result>
         </action>
 
-        <action name="createElectionMenu"><result>pages/createElection.jsp</result></action>
+        <action name="createElectionMenu">
+            <result>pages/createElection.jsp</result>
+        </action>
         <action name="createElection" class="core.actions.CreateElectionAction">
             <result name="success">pages/adminConsole.jsp</result>
         </action>
 
-        <action name="createListMenu"><result>pages/createList.jsp</result></action>
+        <action name="createListMenu">
+            <result>pages/createList.jsp</result>
+        </action>
         <action name="createList" class="core.actions.CreateListAction">
             <result name="success">pages/adminConsole.jsp</result>
         </action>

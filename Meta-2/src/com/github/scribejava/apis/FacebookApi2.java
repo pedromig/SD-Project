@@ -1,4 +1,4 @@
-package rest;
+package com.github.scribejava.apis;
 
 import com.github.scribejava.core.builder.api.DefaultApi20;
 import com.github.scribejava.core.exceptions.OAuthException;
@@ -9,7 +9,6 @@ import com.github.scribejava.core.model.Token;
 import com.github.scribejava.core.utils.OAuthEncoder;
 import com.github.scribejava.core.utils.Preconditions;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 

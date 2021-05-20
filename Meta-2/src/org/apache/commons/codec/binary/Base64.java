@@ -448,7 +448,7 @@ public class Base64 extends BaseNCodec {
             ensureBufferSize(decodeSize);
             
             // We have some spare bits remaining
-            // Output all whole multiples of 8 bits and ignore the rest
+            // Output all whole multiples of 8 bits and ignore the com.github.scribejava.rest
             switch (modulus) {
            //   case 1: // 6 bits - ignore entirely
            //       break;
