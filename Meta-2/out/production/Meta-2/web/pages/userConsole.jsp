@@ -7,8 +7,7 @@
 	</head>
 	<body>
 		<h2>User Console</h2>
-		<s:a action="">
-			<button>Votar</button>
-		</s:a>
+		<p>Welcome, ${sessionScope.get('username')}.</p>
+		<s:a action="vote"><button>Votar</button></s:a>
 	</body>
 </html>

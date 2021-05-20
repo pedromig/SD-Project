@@ -33,7 +33,7 @@ public class PersonAuditAction extends Action implements Configuration {
     }
 
     public void setPeopleAuditNames(CopyOnWriteArrayList<Person> people) {
-        this.peopleAuditNames = super.makeSelectablePeople(people);
+        this.peopleAuditNames = super.makeSelectablePeople(SELECTABLE_PEOPLE_AUDIT_KEY, people);
     }
 
     public Map<Integer, String> getPeopleAuditNames() {

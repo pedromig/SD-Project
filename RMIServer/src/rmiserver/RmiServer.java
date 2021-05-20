@@ -30,6 +30,10 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 			listsFilePath = "lists.obj";
 
 	private static final String[] UC_DEPARTMENTS = new String[]{
+
+			/* Meta 2 - Online */
+			"Online",
+
 			/* Faculdade de Letras */
 
 			"DFCI",             // Departamento de Filosofia, Comunicação e Informação

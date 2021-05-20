@@ -9,125 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/async_http_client_1_9_31.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/json_simple_1_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/slf4j_api_1_7_13.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/apis/FacebookApi2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/builder/AbstractServiceBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/builder/ServiceBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/builder/ServiceBuilderAsync.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/builder/api/Api.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/builder/api/DefaultApi10a.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/builder/api/DefaultApi20.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/exceptions/OAuthConnectionException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/exceptions/OAuthException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/exceptions/OAuthParametersMissingException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/exceptions/OAuthSignatureException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/extractors/AccessTokenExtractor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/extractors/BaseStringExtractor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/extractors/BaseStringExtractorImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/extractors/HeaderExtractor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/extractors/HeaderExtractorImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/extractors/JsonTokenExtractor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/extractors/RequestTokenExtractor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/extractors/TokenExtractor20Impl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/extractors/TokenExtractorImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/AbstractRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/ForceTypeOfHttpRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/OAuthAsyncRequestCallback.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/OAuthConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/OAuthConfigAsync.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/OAuthConstants.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/OAuthRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/OAuthRequestAsync.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/Parameter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/ParameterList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/Response.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/ScribeJavaConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/SignatureType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/Token.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/Verb.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/model/Verifier.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/oauth/OAuth10aServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/oauth/OAuth20ServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/oauth/OAuthService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/services/Base64Encoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/services/CommonsEncoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/services/DatatypeConverterEncoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/services/HMACSha1SignatureService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/services/PlaintextSignatureService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/services/RSASha1SignatureService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/services/SignatureService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/services/TimestampService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/services/TimestampServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/utils/MapUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/utils/OAuthEncoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/utils/Preconditions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/github/scribejava/core/utils/StreamUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/core/actions/LoginWithFacebookAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/BinaryDecoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/BinaryEncoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/CharEncoding.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/Decoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/DecoderException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/Encoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/EncoderException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/StringDecoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/StringEncoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/StringEncoderComparator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/Base32.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/Base32InputStream.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/Base32OutputStream.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/Base64.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/Base64InputStream.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/Base64OutputStream.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/BaseNCodec.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/BaseNCodecInputStream.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/BaseNCodecOutputStream.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/BinaryCodec.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/Hex.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/StringUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/binary/package.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/digest/DigestUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/digest/package.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/language/AbstractCaverphone.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/language/Caverphone.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/language/Caverphone1.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/language/Caverphone2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/language/ColognePhonetic.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/language/DoubleMetaphone.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/language/Metaphone.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/language/RefinedSoundex.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/language/Soundex.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/language/SoundexUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/language/package.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/net/BCodec.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/net/QCodec.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/net/QuotedPrintableCodec.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/net/RFC1522Codec.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/net/URLCodec.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/net/Utils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/net/package.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/overview.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/apache/commons/codec/package.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Meta_2_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Meta_2_war_exploded.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/war.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/war.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta-2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta-2.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/pages/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/pages/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Configuration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/actions/LoginAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/LoginAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/actions/RmiConnectAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/RmiConnectAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/pages/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/login.jsp" afterDir="false" />
-    </list>
+    <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -308,7 +190,6 @@
       <method v="2">
         <option name="Make" enabled="true" />
         <option name="BuildArtifacts" enabled="true">
-          <artifact name="war" />
           <artifact name="Meta-2:war exploded" />
         </option>
       </method>

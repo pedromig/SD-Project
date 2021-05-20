@@ -43,8 +43,4 @@ public class LoginAction extends Action {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getAuthorizationURL() {
-        return (String) session.get(AUTH_URL_KEY);
-    }
 }

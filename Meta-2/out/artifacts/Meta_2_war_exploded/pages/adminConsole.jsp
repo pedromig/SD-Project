@@ -17,16 +17,16 @@
 
 		<h3>Elections</h3>
 		<s:a action="createElectionMenu"><button>Create Election</button></s:a>
-		<s:a action=""><button>Edit Election</button></s:a>
+		<s:a action="editElectionMenu"><button>Edit Election</button></s:a>
 		<s:a action="endedElectionLogMenu"><button>Ended Elections Log</button></s:a>
 		<s:a action="personAuditMenu"><button>Person Audit</button></s:a>
 
 		<h3>Lists</h3>
 		<s:a action="createListMenu"><button>Create List</button></s:a>
-		<s:a action=""><button>Add List to Election</button></s:a>
-		<s:a action=""><button>Remove List from Election</button></s:a>
+		<s:a action="addListToElection"><button>Add List to Election</button></s:a>
+		<s:a action="removeListFromElection"><button>Remove List from Election</button></s:a>
 		<s:a action="addPeopleToList"><button>Add People to List </button></s:a>
-		<s:a action=""><button>Remove People from List </button></s:a>
+		<s:a action="removePeopleFromList"><button>Remove People from List </button></s:a>
 
 		<h3>Real Time Data</h3>
 		<p>To be continued... (websockets)</p>

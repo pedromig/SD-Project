@@ -2,31 +2,30 @@ package core.actions;
 
 import core.Configuration;
 import utils.lists.List;
-import utils.people.Person;
 
 import java.util.Map;
 
 
 public class AddPeopleToListAction extends Action implements Configuration {
-    private Integer selectedList;
-    private Integer selectedPerson;
+    private Integer selectedListJsp;
+    private Integer selectedPersonJsp;
     private Map<Integer, String> peopleOpts, listOpts;
 
 
     @Override
     public String execute() throws Exception {
         try {
-            if (selectedPerson != null) {
-                List<?> list = super.getSelectableLists().get(super.getSelectedList());
-                super.setSelectedPerson(selectedPerson); // Not Needed
-                super.getRmiConnector().associatePersonToList(list.getName(), selectedPerson);
+            if (selectedPersonJsp != null) {
+                List<?> list = super.getSelectableLists(SELECTABLE_LISTS_KEY_ADD_PL).get(super.getSelectedList(SELECTED_LIST_KEY_ADD_PL));
+                super.setSelectedPerson(SELECTED_PERSON_KEY_ADD_PL, selectedPersonJsp); // Not Needed
+                super.getRmiConnector().associatePersonToList(list.getName(), selectedPersonJsp);
                 return ADMIN;
-            } else if (this.selectedList == null) {
-                this.listOpts = super.makeSelectableLists(super.getRmiConnector().getEditableLists());
+            } else if (this.selectedListJsp == null) {
+                this.listOpts = super.makeSelectableLists(SELECTABLE_LISTS_KEY_ADD_PL, super.getRmiConnector().getEditableLists());
             } else {
-                List<?> list = super.getSelectableLists().get(selectedList);
-                super.setSelectedList(selectedList);
-                this.peopleOpts = super.makeSelectablePeople(super.getRmiConnector().getPeopleUnassignedOfType(list.getType()));
+                List<?> list = super.getSelectableLists(SELECTABLE_LISTS_KEY_ADD_PL).get(selectedListJsp);
+                super.setSelectedList(SELECTED_LIST_KEY_ADD_PL, selectedListJsp);
+                this.peopleOpts = super.makeSelectablePeople(SELECTABLE_PEOPLE_KEY_ADD_PL, super.getRmiConnector().getPeopleUnassignedOfType(list.getType()));
             }
             return SUCCESS;
         } catch (Exception e) {
@@ -35,20 +34,20 @@ public class AddPeopleToListAction extends Action implements Configuration {
         return ERROR;
     }
 
-    public Integer getSelectedList() {
-        return selectedList;
+    public Integer getSelectedListJsp() {
+        return this.selectedListJsp;
     }
 
-    public void setSelectedList(Integer selectedList) {
-        this.selectedList = selectedList;
+    public void setSelectedListJsp(Integer selectedListJsp) {
+        this.selectedListJsp = selectedListJsp;
     }
 
-    public Integer getSelectedPerson() {
-        return selectedPerson;
+    public Integer getSelectedPersonJsp() {
+        return this.selectedPersonJsp;
     }
 
-    public void setSelectedPerson(Integer selectedPerson) {
-        this.selectedPerson = selectedPerson;
+    public void setSelectedPersonJsp(Integer selectedPersonJsp) {
+        this.selectedPersonJsp = selectedPersonJsp;
     }
 
     public Map<Integer, String> getPeopleOpts() {

@@ -8,17 +8,17 @@
     <package name="default" namespace="/" extends="struts-default">
         <!--  **  Interceptors  **  -->
         <interceptors>
-            <interceptor name="rmiInterceptor" class="core.interceptors.RmiInterceptor"/>
-            <interceptor name="loginInterceptor" class="core.interceptors.LoginInterceptor"/>
+            <interceptor name="rmiInterceptor" class="core.interceptors.RmiInterceptor" />
+            <interceptor name="loginInterceptor" class="core.interceptors.LoginInterceptor" />
 
             <interceptor-stack name="rmi-stack">
-                <interceptor-ref name="rmiInterceptor"/>
+                <interceptor-ref name="rmiInterceptor" />
                 <interceptor-ref name="defaultStack"/>
             </interceptor-stack>
 
             <interceptor-stack name="login-stack">
-                <interceptor-ref name="rmiInterceptor"/>
-                <interceptor-ref name="loginInterceptor"/>
+                <interceptor-ref name="rmiInterceptor" />
+                <interceptor-ref name="loginInterceptor" />
                 <interceptor-ref name="defaultStack"/>
             </interceptor-stack>
 
@@ -27,7 +27,7 @@
         <default-interceptor-ref name="login-stack"/>
 
         <!--  **  Default Action  **  -->
-        <default-action-ref name="index"/>
+        <default-action-ref name="index" />
 
         <!--  **  Global Results  **  -->
         <global-results>
@@ -64,25 +64,20 @@
             <interceptor-ref name="defaultStack"/>
             <result name="admin">pages/adminConsole.jsp</result>
             <result name="login">pages/userConsole.jsp</result>
+            <result name="error">pages/login.jsp</result>
         </action>
 
-        <action name="signUpMenu">
-            <result>pages/signUp.jsp</result>
-        </action>
+        <action name="signUpMenu"><result>pages/signUp.jsp</result></action>
         <action name="signUp" class="core.actions.SignUpAction">
             <result name="success">pages/adminConsole.jsp</result>
         </action>
 
-        <action name="createElectionMenu">
-            <result>pages/createElection.jsp</result>
-        </action>
+        <action name="createElectionMenu"><result>pages/createElection.jsp</result></action>
         <action name="createElection" class="core.actions.CreateElectionAction">
             <result name="success">pages/adminConsole.jsp</result>
         </action>
 
-        <action name="createListMenu">
-            <result>pages/createList.jsp</result>
-        </action>
+        <action name="createListMenu"><result>pages/createList.jsp</result></action>
         <action name="createList" class="core.actions.CreateListAction">
             <result name="success">pages/adminConsole.jsp</result>
         </action>
@@ -104,5 +99,52 @@
             <result name="admin">pages/adminConsole.jsp</result>
         </action>
 
+        <action name="removePeopleFromList" class="core.actions.RemovePeopleFromListAction" method="execute">
+            <result name="success">pages/removePeopleFromList.jsp</result>
+            <result name="admin">pages/adminConsole.jsp</result>
+        </action>
+
+        <action name="addListToElection" class="core.actions.AddListToElectionAction" method="execute">
+            <result name="success">pages/addListToElection.jsp</result>
+            <result name="admin">pages/adminConsole.jsp</result>
+        </action>
+
+        <action name="removeListFromElection" class="core.actions.RemoveListFromElectionAction" method="execute">
+            <result name="success">pages/removeListFromElection.jsp</result>
+            <result name="admin">pages/adminConsole.jsp</result>
+        </action>
+
+        <action name="editElectionMenu" class="core.actions.EditElectionMenuAction" method="execute">
+            <result>pages/editElection.jsp</result>
+        </action>
+
+        <action name="editElectionAttribute" class="core.actions.EditElectionAttributeAction" method="execute">
+            <result>pages/adminConsole.jsp</result>
+        </action>
+
+        <action name="addDepartment" class="core.actions.AddDepartmentAction" method="execute">
+            <result name="success">pages/addDepartment.jsp</result>
+            <result name="admin">pages/adminConsole.jsp</result>
+        </action>
+
+        <action name="removeDepartment" class="core.actions.RemoveDepartmentAction" method="execute">
+            <result name="success">pages/removeDepartment.jsp</result>
+            <result name="admin">pages/adminConsole.jsp</result>
+        </action>
+
+        <action name="addRestraint" class="core.actions.AddRestraintAction" method="execute">
+            <result name="success">pages/addRestraint.jsp</result>
+            <result name="admin">pages/adminConsole.jsp</result>
+        </action>
+
+        <action name="removeRestraint" class="core.actions.RemoveRestraintAction" method="execute">
+            <result name="success">pages/removeRestraint.jsp</result>
+            <result name="admin">pages/adminConsole.jsp</result>
+        </action>
+
+        <action name="vote" class="core.actions.VoteAction" method="execute">
+            <result name="success">pages/voteMenu.jsp</result>
+            <result name="user">pages/userConsole.jsp</result>
+        </action>
     </package>
 </struts>

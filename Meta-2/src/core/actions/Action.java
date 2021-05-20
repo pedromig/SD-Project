@@ -8,6 +8,8 @@ import utils.elections.Election;
 import utils.lists.List;
 import utils.people.Person;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +65,7 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
     public void setElections(CopyOnWriteArrayList<Election<?>> elections) {
         ArrayList<String> prints = new ArrayList<>();
         for (Election<?> e : elections) {
-            prints.add(e.toString());
+            prints.add(e.toString() + "\n" + e.getDepartments() + "\n" + e.getRestrictions() + "\n");
         }
         this.session.put(ELECTIONS_PRINT_KEY, prints);
     }
@@ -97,39 +99,57 @@ public abstract class Action extends ActionSupport implements SessionAware, Conf
     }
 
     /* Selectable objects Getters and Setters */
-    public HashMap<Integer, String> makeSelectablePeople(CopyOnWriteArrayList<Person> people) {
+    public HashMap<Integer, String> makeSelectablePeople(String reference, CopyOnWriteArrayList<Person> people) {
         HashMap<Integer, String> names = new HashMap<>();
         for (Person p : people) {
             names.put(p.getIdentityCardNumber(), p.getName() + " - " + p.getIdentityCardNumber());
         }
-        this.session.put(SELECTABLE_PEOPLE_KEY, people);
+        this.session.put(reference, people);
         return names;
     }
-    public CopyOnWriteArrayList<Person> getSelectablePeople() {
-        return (CopyOnWriteArrayList<Person>) this.session.get(SELECTABLE_PEOPLE_KEY);
+    public CopyOnWriteArrayList<Person> getSelectablePeople(String reference) {
+        return (CopyOnWriteArrayList<Person>) this.session.get(reference);
     }
-    public void setSelectedPerson(Integer personID) {
-        this.session.put(SELECTED_PERSON_KEY, personID);
+    public void setSelectedPerson(String reference, Integer personID) {
+        this.session.put(reference, personID);
     }
-    public Integer getSelectedPerson() {
-        return (Integer) this.session.get(SELECTED_PERSON_KEY);
+    public Integer getSelectedPerson(String reference) {
+        return (Integer) this.session.get(reference);
     }
 
-    public HashMap<Integer, String> makeSelectableLists(CopyOnWriteArrayList<List<?>> lists) {
+    public HashMap<Integer, String> makeSelectableLists(String reference, CopyOnWriteArrayList<List<?>> lists) {
         HashMap<Integer, String> names = new HashMap<>();
-        for (int i=0; i < lists.size(); i++) {
+        for (int i = 0; i < lists.size(); i++) {
             names.put(i, lists.get(i).getName());
         }
-        this.session.put(SELECTABLE_LISTS_KEY, lists);
+        this.session.put(reference, lists);
         return names;
     }
-    public CopyOnWriteArrayList<List<?>> getSelectableLists() {
-        return (CopyOnWriteArrayList<List<?>>) this.session.get(SELECTABLE_LISTS_KEY);
+    public CopyOnWriteArrayList<List<?>> getSelectableLists(String reference) {
+        return (CopyOnWriteArrayList<List<?>>) this.session.get(reference);
     }
-    public void setSelectedList(Integer idx) {
-        this.session.put(SELECTED_LIST_KEY, idx);
+    public void setSelectedList(String reference, Integer idx) {
+        this.session.put(reference, idx);
     }
-    public Integer getSelectedList() {
-        return (Integer) this.session.get(SELECTED_LIST_KEY);
+    public Integer getSelectedList(String reference) {
+        return (Integer) this.session.get(reference);
+    }
+
+    public HashMap<Integer, String> makeSelectableElections(String reference, CopyOnWriteArrayList<Election<?>> elections) {
+        HashMap<Integer, String> names = new HashMap<>();
+        for (int i = 0; i < elections.size(); i++) {
+            names.put(i, elections.get(i).getName());
+        }
+        this.session.put(reference, elections);
+        return names;
+    }
+    public CopyOnWriteArrayList<Election<?>> getSelectableElections(String reference) {
+        return (CopyOnWriteArrayList<Election<?>>) this.session.get(reference);
+    }
+    public void setSelectedElection(String reference, Integer idx) {
+        this.session.put(reference, idx);
+    }
+    public Integer getSelectedElection(String reference) {
+        return (Integer) this.session.get(reference);
     }
 }

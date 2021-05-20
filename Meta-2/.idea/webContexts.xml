@@ -5,6 +5,7 @@
       <map>
         <entry key="file://$PROJECT_DIR$/src/web/pages/addPeopleToList.jsp" value="file://$PROJECT_DIR$/src/web/pages" />
         <entry key="file://$PROJECT_DIR$/src/web/pages/databaseInfo.jsp" value="file://$PROJECT_DIR$/src/web/pages" />
+        <entry key="file://$PROJECT_DIR$/src/web/pages/editElection.jsp" value="file://$PROJECT_DIR$/src/web/pages" />
       </map>
     </option>
   </component>
