@@ -122,8 +122,8 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	 */
 	@Override
 	public synchronized String pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException {
+		String output = "";
 		for (Map.Entry<String, RmiMulticastServerInterface> entry : this.multicastServers.entrySet()) {
-			String output = "";
 			String name = entry.getKey();
 			RmiMulticastServerInterface msi = entry.getValue();
 			try {

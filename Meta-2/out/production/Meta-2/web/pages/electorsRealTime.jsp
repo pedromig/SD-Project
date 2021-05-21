@@ -56,8 +56,8 @@
         </script>
     </head>
     <body>
-        <noscript>JavaScript must be enabled for WebSockets to work.</noscript>
         <h2>Real Time Electors</h2>
+        <noscript>JavaScript must be enabled for WebSockets to work.</noscript>
         <div>
             <div id="container"><div id="history"></div></div>
         </div>

@@ -10,10 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/websockets/ElectorsWebSocketAnnotation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/chat.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/desksAndPeopleRealTime.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/websockets/WebSocketAnnotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/websockets/DesksAndPeopleWebSocketAnnotation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/desksAndPeopleRealTime.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/desksAndPeopleRealTime.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/electorsRealTime.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/electorsRealTime.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/desksAndPeopleRealTime.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/desksAndPeopleRealTime.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/electorsRealTime.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/electorsRealTime.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,8 +27,8 @@
       <list>
         <option value="Interface" />
         <option value="jsf" />
-        <option value="Jsp File" />
         <option value="Class" />
+        <option value="Jsp File" />
       </list>
     </option>
   </component>
@@ -333,7 +335,7 @@
       <workItem from="1621546950712" duration="2809000" />
       <workItem from="1621551182428" duration="33000" />
       <workItem from="1621552847637" duration="66000" />
-      <workItem from="1621555073861" duration="6199000" />
+      <workItem from="1621555073861" duration="7889000" />
     </task>
     <servers />
   </component>
