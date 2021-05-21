@@ -64,12 +64,25 @@ public interface RmiServerInterface extends Remote {
     void subscribe(RmiMulticastServerInterface multicastDesk, String name) throws RemoteException;
 
     /**
+     * A method to login a webuser
+     * @throws RemoteException
+     */
+    void login(int personID) throws RemoteException;
+
+    /**
+     * A method to logout a webuser
+     * @throws RemoteException
+     */
+    void logout(int personID) throws RemoteException;
+
+    /**
      * Callback where the RMI server gets a request from an Administrator Console about the state of the voting desks
      * and their respective terminals, pings all the desks subscribed to him, and prints the replies on the requester
      * @param adminConsole admin console that requested the information
+     * @return String with the message output
      * @throws RemoteException
      */
-    void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException;
+    String pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException;
 
     /**
      * Callback to get an overview of the objects in the database
@@ -345,4 +358,10 @@ public interface RmiServerInterface extends Remote {
      */
     String printElectorVotesInfo(RmiAdminConsoleInterface admin, int personID) throws RemoteException;
 
+    /**
+     * Getter for web users
+     * @return web users
+     * @throws RemoteException
+     */
+    CopyOnWriteArrayList<Person> getWebPeople() throws RemoteException;
 }

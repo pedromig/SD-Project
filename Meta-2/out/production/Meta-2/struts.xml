@@ -5,11 +5,16 @@
         "http://struts.apache.org/dtds/struts-2.5.dtd">
 
 <struts>
+    <constant name="struts.action.excludePattern" value="/desksAndPeopleWS"/>
+
     <package name="default" namespace="/" extends="struts-default">
+
         <!--  **  Interceptors  **  -->
         <interceptors>
             <interceptor name="rmiInterceptor" class="core.interceptors.RmiInterceptor" />
             <interceptor name="loginInterceptor" class="core.interceptors.LoginInterceptor" />
+            <interceptor name="adminInterceptor" class="core.interceptors.AdminInterceptor"/>
+            <interceptor name="userInterceptor" class="core.interceptors.UserInterceptor"/>
 
             <interceptor-stack name="rmi-stack">
                 <interceptor-ref name="rmiInterceptor" />
@@ -22,9 +27,23 @@
                 <interceptor-ref name="defaultStack"/>
             </interceptor-stack>
 
+            <interceptor-stack name="admin-stack">
+                <interceptor-ref name="rmiInterceptor" />
+                <interceptor-ref name="loginInterceptor" />
+                <interceptor-ref name="adminInterceptor"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+
+            <interceptor-stack name="user-stack">
+                <interceptor-ref name="rmiInterceptor" />
+                <interceptor-ref name="loginInterceptor" />
+                <interceptor-ref name="userInterceptor"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+
         </interceptors>
         <!--  **  Default Interceptor  **  -->
-        <default-interceptor-ref name="login-stack"/>
+        <default-interceptor-ref name="admin-stack"/>
 
         <!--  **  Default Action  **  -->
         <default-action-ref name="index" />
@@ -61,7 +80,7 @@
         </action>
 
         <action name="loginWithFacebook" class="core.actions.LoginWithFacebookAction" method="execute">
-            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="rmi-stack"/>
             <result name="admin">pages/adminConsole.jsp</result>
             <result name="login">pages/userConsole.jsp</result>
             <result name="error">pages/login.jsp</result>
@@ -148,8 +167,13 @@
         </action>
 
         <action name="vote" class="core.actions.VoteAction" method="execute">
+            <interceptor-ref name="user-stack"/>
             <result name="success">pages/voteMenu.jsp</result>
             <result name="user">pages/userConsole.jsp</result>
+        </action>
+
+        <action name="desksAndPeopleRealTime">
+            <result>pages/desksAndPeopleRealTime.jsp</result>
         </action>
     </package>
 </struts>

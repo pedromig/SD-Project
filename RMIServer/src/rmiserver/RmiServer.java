@@ -87,6 +87,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	private CopyOnWriteArrayList<Person> people;
 	private CopyOnWriteArrayList<RmiAdminConsoleInterface> adminConsoles;
 	private Hashtable<String, RmiMulticastServerInterface> multicastServers;
+	private CopyOnWriteArrayList<Person> webUsers;
 
 	/* ################## RmiServerInterface interface methods ######################## */
 
@@ -114,24 +115,56 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	}
 
 	/**
-	 * Callback where the RMI server gets a request from an Administrator Console about the state of the voting desks
-	 * and their respective terminals, pings all the desks subscribed to him, and prints the replies on the requester
-	 * @param adminConsole admin console that requested the information
+	 * A method to login a webuser
 	 * @throws RemoteException
 	 */
 	@Override
-	public synchronized void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException {
+	public synchronized void login(int personID) throws RemoteException {
+		for	(Person p : this.webUsers) {
+			if (p.getIdentityCardNumber() == personID)
+				return;
+		}
+		this.webUsers.add(this.getPerson(personID));
+	}
+
+	/**
+	 * A method to logout a webuser
+	 * @throws RemoteException
+	 */
+	@Override
+	public synchronized void logout(int personID) throws RemoteException {
+		this.webUsers.removeIf(p -> p.getIdentityCardNumber() == personID);
+	}
+
+	/**
+	 * Callback where the RMI server gets a request from an Administrator Console about the state of the voting desks
+	 * and their respective terminals, pings all the desks subscribed to him, and prints the replies on the requester
+	 * @param adminConsole admin console that requested the information
+	 * @return String with the message output
+	 * @throws RemoteException
+	 */
+	@Override
+	public synchronized String pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException {
+		String output = "";
 		for (Map.Entry<String, RmiMulticastServerInterface> entry : this.multicastServers.entrySet()) {
 			String name = entry.getKey();
 			RmiMulticastServerInterface msi = entry.getValue();
 			try {
 				String additionalInfo = msi.ping();
-				adminConsole.print("Server[" + name + "]: ON");
-				adminConsole.print(additionalInfo);
+				if (adminConsole != null) {
+					adminConsole.print("Server[" + name + "]: ON");
+					adminConsole.print(additionalInfo);
+				}
+				output = output + "Server[" + name + "]: ON" + "\n";
+				output = output + additionalInfo + "\n";
+
 			} catch (Exception e) {
-				adminConsole.print("Server[" + name + "]: OFF");
+				if (adminConsole != null)
+					adminConsole.print("Server[" + name + "]: OFF");
+				output = output + "Server[" + name + "]: OFF" + "\n";
 			}
 		}
+		return output;
 	}
 
 	/**
@@ -701,22 +734,22 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		/* Printing */
 		if(admin != null)
 			admin.print(" - " + election.getName());
-		output = output + " - " + election.getName();
+		output = output + " - " + election.getName() + "\n";
 		if (total + nullVotes != 0) {
 			for (Map.Entry<String, Integer> entry : results.entrySet()) {
 				String key = entry.getKey();
 				Integer value = entry.getValue();
 				if(admin != null)
 					admin.print("\tList: " + key + "\t Votes:" + value + "\t % " + 100 * value / (float) total);
-				output = output + "\tList: " + key + "\t Votes:" + value + "\t % " + 100 * value / (float) total;
+				output = output + "\tList: " + key + "\t Votes:" + value + "\t % " + 100 * value / (float) total  + "\n";
 			}
 			if(admin != null)
 				admin.print("\tNull Votes: " + nullVotes);
-			output = output + "\tNull Votes: " + nullVotes;
+			output = output + "\tNull Votes: " + nullVotes + "\n";
 		} else {
 			if(admin != null)
 				admin.print("\tNo Votes available");
-			output = output + "\tNo Votes available";
+			output = output + "\tNo Votes available" + "\n";
 		}
 		return output;
 	}
@@ -736,13 +769,21 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 				if (v.getPersonID() == personID) {
 					if (admin != null)
 						admin.print(" [" + e.getName() + "]\n\tDesk: " + v.getVotingDeskID() + "\n\tTime: " + v.getMoment().getTime().toString());
-					output = output + " [" + e.getName() + "]\n\tDesk: " + v.getVotingDeskID() + "\n\tTime: " + v.getMoment().getTime().toString();
+					output = output + " [" + e.getName() + "]\n\tDesk: " + v.getVotingDeskID() + "\n\tTime: " + v.getMoment().getTime().toString() + "\n";
 				}
 			}
 		}
 		return output;
 	}
 
+	/**
+	 * Getter for web users
+	 * @return web users
+	 * @throws RemoteException
+	 */
+	public synchronized CopyOnWriteArrayList<Person> getWebPeople() throws RemoteException {
+		return this.webUsers;
+	}
 
 	/* ################################################################################# */
 
@@ -765,6 +806,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		this.dirPath = dirPath;
 		this.adminConsoles = new CopyOnWriteArrayList<>();
 		this.multicastServers = new Hashtable<>();
+		this.webUsers = new CopyOnWriteArrayList<>();
 	}
 
 	/* Save Data */

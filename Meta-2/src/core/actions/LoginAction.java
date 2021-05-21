@@ -11,6 +11,10 @@ public class LoginAction extends Action {
             /* Admin Login*/
             if (this.username.equals(ADMIN_USERNAME) && this.password.equals(ADMIN_PASSWORD)) {
                 super.getRmiConnector().getServer().ping(); // If server is null || is not reachable it will throw an exception;
+                try {
+                    int id = Integer.parseInt(super.getUsername());
+                    super.getRmiConnector().getServer().logout(id);
+                } catch (Exception ignore) {}
                 super.setLogin(this.username, this.password, true);
                 return ADMIN;
             }
@@ -19,6 +23,8 @@ public class LoginAction extends Action {
             int idCardNumber = Integer.parseInt(this.username); // Note: The form input Username is the String(idCardNumber)
             if (super.getRmiConnector().checkLogin(idCardNumber, this.password)) {
                 super.setLogin(this.username, this.password, false);
+                System.out.println(idCardNumber);
+                super.getRmiConnector().getServer().login(idCardNumber);
                 return LOGIN;
             }
         } catch (Exception e) {
@@ -31,6 +37,10 @@ public class LoginAction extends Action {
 //                return ADMIN;
 //            return LOGIN;
 //        }
+        try {
+            int id = Integer.parseInt(this.username);
+            super.getRmiConnector().getServer().logout(id);
+        } catch (Exception ignore) {}
 
         super.clearLogin();
         return ERROR;
