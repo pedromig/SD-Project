@@ -29,6 +29,6 @@
 		<s:a action="removePeopleFromList"><button>Remove People from List </button></s:a>
 
 		<h3>Real Time Data</h3>
-		<s:a action="desksAndPeopleRealTime"><button>Chat</button></s:a>
+		<s:a action="desksAndPeopleRealTime"><button>Desks and People</button></s:a>
 	</body>
 </html>

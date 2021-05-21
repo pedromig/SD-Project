@@ -35,7 +35,6 @@ public class DesksAndPeopleWebSocketAnnotation {
                             if (connector.getServer() == null) {
                                 connector = new RmiConnector();
                             }
-//                            this.sendMessage(connector.getServer().ping());
                             this.sendMessage(connector.getServer().pingDesks(null));
                         } catch (Exception e){
                             e.printStackTrace();

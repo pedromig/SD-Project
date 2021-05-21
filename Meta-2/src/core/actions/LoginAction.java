@@ -19,6 +19,7 @@ public class LoginAction extends Action {
             int idCardNumber = Integer.parseInt(this.username); // Note: The form input Username is the String(idCardNumber)
             if (super.getRmiConnector().checkLogin(idCardNumber, this.password)) {
                 super.setLogin(this.username, this.password, false);
+                super.getRmiConnector().getServer().login(idCardNumber);
                 return LOGIN;
             }
         } catch (Exception e) {
@@ -31,6 +32,10 @@ public class LoginAction extends Action {
 //                return ADMIN;
 //            return LOGIN;
 //        }
+        try {
+            int id = Integer.parseInt(this.username);
+            super.getRmiConnector().getServer().logout(id);
+        } catch (Exception ignore) {}
 
         super.clearLogin();
         return ERROR;

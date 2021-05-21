@@ -87,6 +87,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	private CopyOnWriteArrayList<Person> people;
 	private CopyOnWriteArrayList<RmiAdminConsoleInterface> adminConsoles;
 	private Hashtable<String, RmiMulticastServerInterface> multicastServers;
+	private CopyOnWriteArrayList<Person> webUsers;
 
 	/* ################## RmiServerInterface interface methods ######################## */
 
@@ -111,6 +112,28 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		System.out.println("Name: " + name);
 		System.out.println("msi: "+ multicastDesk);
 		this.multicastServers.put(name, multicastDesk);
+	}
+
+	/**
+	 * A method to login a webuser
+	 * @throws RemoteException
+	 */
+	@Override
+	public synchronized void login(int personID) throws RemoteException {
+		for	(Person p : this.webUsers) {
+			if (p.getIdentityCardNumber() == personID)
+				return;
+		}
+		this.webUsers.add(this.getPerson(personID));
+	}
+
+	/**
+	 * A method to logout a webuser
+	 * @throws RemoteException
+	 */
+	@Override
+	public synchronized void logout(int personID) throws RemoteException {
+		this.webUsers.removeIf(p -> p.getIdentityCardNumber() == personID);
 	}
 
 	/**
