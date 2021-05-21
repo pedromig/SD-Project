@@ -9,8 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
+    <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="Adding 2 first REST API features (still needs fixing)">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/websockets/ElectorsWebSocketAnnotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/websockets/ElectorsWebSocketAnnotation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/database/elections.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/database/elections.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/database/lists.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/database/lists.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/database/people.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/database/people.obj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -320,7 +324,7 @@
       <workItem from="1621551182428" duration="33000" />
       <workItem from="1621552847637" duration="66000" />
       <workItem from="1621555073861" duration="13115000" />
-      <workItem from="1621628956902" duration="4750000" />
+      <workItem from="1621628956902" duration="6582000" />
     </task>
     <servers />
   </component>

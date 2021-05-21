@@ -1,9 +1,12 @@
 package websockets;
 
 import core.models.RmiConnector;
+import utils.Vote;
 import utils.elections.Election;
+import utils.people.Person;
 
 import java.io.IOException;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.websocket.*;
@@ -38,6 +41,11 @@ public class ElectorsWebSocketAnnotation {
                                 }
                                 Election<?> election = connector.getElection(electionName);
                                 this.sendMessage(connector.getServer().printVotingProcessedData(null, election));
+                                CopyOnWriteArrayList<Vote> votes = election.getVotes();
+                                for (Vote v : votes) {
+                                    Person person = connector.getPerson(v.getPersonID());
+                                    this.sendMessage("[ID -> "+ v.getPersonID() +"][" + person.getType() + "][" + person.getDepartment() + "][" + v.getVotingDeskID() + "]");
+                                }
                                 this.sendMessage("");
                             }
                         } catch (Exception e){
