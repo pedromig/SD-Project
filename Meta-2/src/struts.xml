@@ -67,6 +67,11 @@
             <result name="error">pages/login.jsp</result>
         </action>
 
+        <action name="addFacebookAccount" class="core.actions.AddFacebookAccount" method="execute">
+            <interceptor-ref name="defaultStack"/>
+            <result name="success">pages/userConsole.jsp</result>
+        </action>
+
         <action name="signUpMenu"><result>pages/signUp.jsp</result></action>
         <action name="signUp" class="core.actions.SignUpAction">
             <result name="success">pages/adminConsole.jsp</result>

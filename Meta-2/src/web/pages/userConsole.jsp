@@ -9,5 +9,10 @@
 		<h2>User Console</h2>
 		<p>Welcome, ${sessionScope.get('username')}.</p>
 		<s:a action="vote"><button>Votar</button></s:a>
+
+		<a href="${sessionScope.get('accountAuthURL')}">
+			<button>Link with Facebook</button>
+		</a>
 	</body>
+
 </html>

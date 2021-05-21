@@ -67,23 +67,22 @@ public interface Configuration {
     String SELECTED_ELECTION_EDIT = "selectedElectionEdit";
     String SELECTABLE_ELECTIONS_EDIT = "selectableElectionsEdit";
 
-    String SELECTABLE_DEPARTMENTS_ADD = "selectableDepartmentsAdd";
-    String SELECTABLE_DEPARTMENTS_ADD_REST = "selectableDepartmentsAddRest";
-    String SELECTABLE_DEPARTMENTS_REM = "selectableDepartmentsRem";
-    String SELECTABLE_DEPARTMENTS_REM_REST = "selectableDepartmentsRemRest";
-
     String SELECTABLE_VOTING_ELECTIONS_KEY = "votingSelectableElectionsKey";
     String SELECTED_VOTING_ELECTION_KEY = "selectedVotingElectionKey";
     String SELECTABLE_VOTING_LISTS_KEY = "votingSelectableListsKey";
-
-    String SERVICE_KEY = "oauthSession";
-    String AUTH_URL_KEY = "authURL";
 
     String API_KEY = "1257434004717144";
     String API_SECRET = "61f5c98dd683b9d4a6d9cf51685213a3";
     String[] REQUIRED_PERMISSIONS = {"public_profile"};
 
     String CLIENT_ENDPOINT_URL = "https://graph.facebook.com/me/";
-    String CALLBACK_URL = "http://localhost:8080/Meta_2_war_exploded/loginWithFacebook";
+
+    String LOGIN_SERVICE_KEY = "oauthSessionLogin";
+    String LOGIN_AUTH_URL_KEY = "loginAuthURL";
+    String LOGIN_CALLBACK_URL = "http://localhost:8080/Meta_2_war_exploded/loginWithFacebook";
+
+    String ACCOUNT_SERVICE_KEY = "oauthSessionAddAccount";
+    String ACCOUNT_AUTH_URL_KEY = "accountAuthURL";
+    String ACCOUNT_CALLBACK_URL = "http://localhost:8080/Meta_2_war_exploded/addFacebookAccount";
 
 }

@@ -13,7 +13,7 @@
     <s:submit/>
 </s:form>
 
-<a href="${sessionScope.get('authURL')}">
+<a href="${sessionScope.get('loginAuthURL')}">
     <button>Login With Facebook</button>
 </a>
 </body>

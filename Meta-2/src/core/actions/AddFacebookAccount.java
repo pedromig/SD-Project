@@ -11,13 +11,14 @@ import utils.people.Person;
 
 import java.rmi.RemoteException;
 
-public class LoginWithFacebookAction extends Action implements Configuration {
+
+public class AddFacebookAccount extends Action implements Configuration {
 	private String code;
 
 	@Override
 	public String execute() {
 		RmiServerInterface server = super.getRmiConnector().getServer();
-		OAuthService service = (OAuthService) session.get(LOGIN_SERVICE_KEY);
+		OAuthService service = (OAuthService) session.get(ACCOUNT_SERVICE_KEY);
 		Token token = service.getAccessToken(null, new Verifier(code));
 
 		OAuthRequest request = new OAuthRequest(Verb.GET, CLIENT_ENDPOINT_URL, service);
@@ -30,24 +31,16 @@ public class LoginWithFacebookAction extends Action implements Configuration {
 				JSONObject json = (JSONObject) parser.parse(response.getBody());
 				String id = (String) json.get("id");
 
+				int idNumber = Integer.parseInt((String) session.get(USERNAME_KEY));
 				for (Person p : server.getPeople()) {
-					System.out.println(p.getName());
-					System.out.println(p.getFacebookID());
-					if (p.getFacebookID().equals(id)) {
-						if (p.getName().equals(ADMIN_USERNAME) && p.getPassword().equals(ADMIN_PASSWORD)) {
-							super.getRmiConnector().getServer().ping();
-							super.setLogin(p.getName(), p.getPassword(), true);
-							return ADMIN;
-						}
-
-						if (super.getRmiConnector().checkLogin(p.getIdentityCardNumber(), p.getPassword())) {
-							super.setLogin(p.getName(), p.getPassword(), false);
-							return LOGIN;
-						}
+					if (p.getIdentityCardNumber() == idNumber){
+						// This cant be a setter it need to be a editPersonID();
+						p.setFacebookID(id);
+						return SUCCESS;
 					}
 				}
 			} catch (ParseException | RemoteException e) {
-				System.err.println("Login Exception!!");
+				System.err.println("Add Account Exception!!");
 			}
 		}
 		return ERROR;
