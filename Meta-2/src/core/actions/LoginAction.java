@@ -19,6 +19,7 @@ public class LoginAction extends Action {
             int idCardNumber = Integer.parseInt(this.username); // Note: The form input Username is the String(idCardNumber)
             if (super.getRmiConnector().checkLogin(idCardNumber, this.password)) {
                 super.setLogin(this.username, this.password, false);
+                System.out.println(idCardNumber);
                 super.getRmiConnector().getServer().login(idCardNumber);
                 return LOGIN;
             }

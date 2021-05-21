@@ -1,8 +1,10 @@
 package websockets;
 
 import core.models.RmiConnector;
+import utils.people.Person;
 
 import java.io.IOException;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.websocket.server.ServerEndpoint;
@@ -36,6 +38,11 @@ public class DesksAndPeopleWebSocketAnnotation {
                                 connector = new RmiConnector();
                             }
                             this.sendMessage(connector.getServer().pingDesks(null));
+                            CopyOnWriteArrayList<Person> webPeople =  connector.getServer().getWebPeople();
+                            this.sendMessage("Online:");
+                            for (Person p : webPeople) {
+                                this.sendMessage("Name:" + p.getName() + "ID: " + p.getIdentityCardNumber());
+                            }
                         } catch (Exception e){
                             e.printStackTrace();
                         };

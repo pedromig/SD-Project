@@ -806,6 +806,7 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		this.dirPath = dirPath;
 		this.adminConsoles = new CopyOnWriteArrayList<>();
 		this.multicastServers = new Hashtable<>();
+		this.webUsers = new CopyOnWriteArrayList<>();
 	}
 
 	/* Save Data */
