@@ -5,7 +5,10 @@
         "http://struts.apache.org/dtds/struts-2.5.dtd">
 
 <struts>
+    <constant name="struts.action.excludePattern" value="/desksAndPeopleWS"/>
+
     <package name="default" namespace="/" extends="struts-default">
+
         <!--  **  Interceptors  **  -->
         <interceptors>
             <interceptor name="rmiInterceptor" class="core.interceptors.RmiInterceptor" />
@@ -145,6 +148,10 @@
         <action name="vote" class="core.actions.VoteAction" method="execute">
             <result name="success">pages/voteMenu.jsp</result>
             <result name="user">pages/userConsole.jsp</result>
+        </action>
+
+        <action name="chat">
+            <result>chat.jsp</result>
         </action>
     </package>
 </struts>

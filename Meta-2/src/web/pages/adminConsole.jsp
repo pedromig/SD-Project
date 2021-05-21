@@ -29,6 +29,6 @@
 		<s:a action="removePeopleFromList"><button>Remove People from List </button></s:a>
 
 		<h3>Real Time Data</h3>
-		<p>To be continued... (websockets)</p>
+		<s:a action="chat"><button>Chat</button></s:a>
 	</body>
 </html>
