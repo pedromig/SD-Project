@@ -776,6 +776,14 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 		return output;
 	}
 
+	/**
+	 * Getter for web users
+	 * @return web users
+	 * @throws RemoteException
+	 */
+	public synchronized CopyOnWriteArrayList<Person> getWebPeople() throws RemoteException {
+		return this.webUsers;
+	}
 
 	/* ################################################################################# */
 

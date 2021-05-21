@@ -358,4 +358,10 @@ public interface RmiServerInterface extends Remote {
      */
     String printElectorVotesInfo(RmiAdminConsoleInterface admin, int personID) throws RemoteException;
 
+    /**
+     * Getter for web users
+     * @return web users
+     * @throws RemoteException
+     */
+    CopyOnWriteArrayList<Person> getWebPeople() throws RemoteException;
 }
