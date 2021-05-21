@@ -1,13 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 	<head>
-		<title>WebSocket Chat</title>
+		<title>Real Time Desks And People</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<script type="text/javascript">
 
 			var websocket = null;
 
-			window.onload = async function () { // URI = ws://10.16.0.165:8080/WebSocket/ws
+			window.onload = async function () {
 				connect('ws://' + window.location.host + '/Meta_2_war_exploded/desksAndPeopleWS');
 			}
 
@@ -21,7 +21,7 @@
 					return;
 				}
 
-				websocket.onopen    = onOpen; // set the 4 event listeners below
+				websocket.onopen    = onOpen;
 				websocket.onclose   = onClose;
 				websocket.onmessage = onMessage;
 				websocket.onerror   = onError;
@@ -35,7 +35,7 @@
 				writeToHistory('WebSocket closed (code ' + event.code + ').');
 			}
 
-			function onMessage(message) { // print the received message
+			function onMessage(message) {
 				writeToHistory(message.data);
 			}
 
@@ -56,6 +56,7 @@
 		</script>
 	</head>
 	<body>
+		<h2>Real Time Desks And People</h2>
 		<noscript>JavaScript must be enabled for WebSockets to work.</noscript>
 		<div>
 			<div id="container"><div id="history"></div></div>

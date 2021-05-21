@@ -8,18 +8,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.websocket.server.ServerEndpoint;
 import javax.websocket.OnOpen;
 import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
 import javax.websocket.OnError;
 import javax.websocket.Session;
 
-@ServerEndpoint(value = "/desksAndPeopleWS")
-public class WebSocketAnnotation {
+@ServerEndpoint(value = "/Electors")
+public class ElectorsWebSocketAnnotation {
     private static final AtomicInteger sequence = new AtomicInteger(1);
     private Session session;
     private Thread thread;
     private boolean running;
 
-    public WebSocketAnnotation() {
+    public ElectorsWebSocketAnnotation() {
         sequence.getAndIncrement();
         this.running = true;
     }

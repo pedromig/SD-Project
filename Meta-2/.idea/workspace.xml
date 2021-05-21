@@ -10,19 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/javax_websocket_javax_websocket_api_1_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/web/chat.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/websockets/WebSocketAnnotation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Meta_2_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Meta_2_war_exploded.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Meta-2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Meta-2.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/WEB-INF/classes/web/pages/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Meta_2_war_exploded/pages/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Meta-2/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Meta-2/web/pages/adminConsole.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/websockets/ElectorsWebSocketAnnotation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/adminConsole.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/web/chat.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/desksAndPeopleRealTime.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/websockets/WebSocketAnnotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/websockets/DesksAndPeopleWebSocketAnnotation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,8 +88,8 @@
       <recent name="$PROJECT_DIR$/src/rmiserver/interfaces" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/web/pages" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/web/WEB-INF" />
       <recent name="$PROJECT_DIR$/src" />
     </key>
@@ -342,7 +333,7 @@
       <workItem from="1621546950712" duration="2809000" />
       <workItem from="1621551182428" duration="33000" />
       <workItem from="1621552847637" duration="66000" />
-      <workItem from="1621555073861" duration="5790000" />
+      <workItem from="1621555073861" duration="6199000" />
     </task>
     <servers />
   </component>

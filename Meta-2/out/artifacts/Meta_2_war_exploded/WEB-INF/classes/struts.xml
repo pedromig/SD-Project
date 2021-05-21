@@ -150,8 +150,8 @@
             <result name="user">pages/userConsole.jsp</result>
         </action>
 
-        <action name="chat">
-            <result>chat.jsp</result>
+        <action name="desksAndPeopleRealTime">
+            <result>pages/desksAndPeopleRealTime.jsp</result>
         </action>
     </package>
 </struts>

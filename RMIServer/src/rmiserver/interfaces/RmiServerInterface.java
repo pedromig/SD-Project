@@ -67,9 +67,10 @@ public interface RmiServerInterface extends Remote {
 	 * Callback where the RMI server gets a request from an Administrator Console about the state of the voting desks
 	 * and their respective terminals, pings all the desks subscribed to him, and prints the replies on the requester
 	 * @param adminConsole admin console that requested the information
+	 * @return String with the message output
 	 * @throws RemoteException
 	 */
-	void pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException;
+	String pingDesks(RmiAdminConsoleInterface adminConsole) throws RemoteException;
 
 	/**
 	 * Callback to get an overview of the objects in the database
