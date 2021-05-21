@@ -41,7 +41,7 @@ public class DesksAndPeopleWebSocketAnnotation {
                             CopyOnWriteArrayList<Person> webPeople =  connector.getServer().getWebPeople();
                             this.sendMessage("Online:");
                             for (Person p : webPeople) {
-                                this.sendMessage("Name:" + p.getName() + "ID: " + p.getIdentityCardNumber());
+                                this.sendMessage("      Name:" + p.getName() + "      ID: " + p.getIdentityCardNumber());
                             }
                         } catch (Exception e){
                             e.printStackTrace();
