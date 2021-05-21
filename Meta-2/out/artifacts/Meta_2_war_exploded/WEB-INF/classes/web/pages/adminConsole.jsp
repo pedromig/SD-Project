@@ -30,5 +30,6 @@
 
 		<h3>Real Time Data</h3>
 		<s:a action="desksAndPeopleRealTime"><button>Desks and People</button></s:a>
+		<s:a action="electorsRealTime"><button>Elections</button></s:a>
 	</body>
 </html>

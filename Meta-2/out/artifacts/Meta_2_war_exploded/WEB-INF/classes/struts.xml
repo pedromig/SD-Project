@@ -6,6 +6,7 @@
 
 <struts>
     <constant name="struts.action.excludePattern" value="/desksAndPeopleWS"/>
+    <constant name="struts.action.excludePattern" value="/electorsWS"/>
 
     <package name="default" namespace="/" extends="struts-default">
 
@@ -174,6 +175,10 @@
 
         <action name="desksAndPeopleRealTime">
             <result>pages/desksAndPeopleRealTime.jsp</result>
+        </action>
+
+        <action name="electorsRealTime" class="core.actions.RealTimeElectorsAction" method="execute">
+            <result>pages/electorsRealTime.jsp</result>
         </action>
     </package>
 </struts>

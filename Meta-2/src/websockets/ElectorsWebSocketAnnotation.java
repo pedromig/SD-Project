@@ -5,22 +5,21 @@ import core.models.RmiConnector;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
-import javax.websocket.OnOpen;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.Session;
 
-@ServerEndpoint(value = "/Electors")
+@ServerEndpoint(value = "/electorsWS")
 public class ElectorsWebSocketAnnotation {
     private static final AtomicInteger sequence = new AtomicInteger(1);
     private Session session;
     private Thread thread;
     private boolean running;
+    private String electionName;
 
     public ElectorsWebSocketAnnotation() {
         sequence.getAndIncrement();
         this.running = true;
+        this.electionName = null;
     }
 
     @OnOpen
@@ -32,13 +31,15 @@ public class ElectorsWebSocketAnnotation {
                     while (running) {
                         try {
                             Thread.sleep(2000);
-                            if (connector.getServer() == null) {
-                                connector = new RmiConnector();
+                            if (electionName != null) {
+                                if (connector.getServer() == null) {
+                                    connector = new RmiConnector();
+                                }
+                                this.sendMessage(electionName);
                             }
-                            this.sendMessage(connector.getServer().ping());
                         } catch (Exception e){
                             e.printStackTrace();
-                        };
+                        }
                     }
                 }
         );
@@ -53,6 +54,11 @@ public class ElectorsWebSocketAnnotation {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @OnMessage
+    public void receiveMessage(String message) {
+        this.electionName = message;
     }
 
     @OnError
