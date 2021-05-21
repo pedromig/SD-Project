@@ -11,6 +11,10 @@ public class LoginAction extends Action {
             /* Admin Login*/
             if (this.username.equals(ADMIN_USERNAME) && this.password.equals(ADMIN_PASSWORD)) {
                 super.getRmiConnector().getServer().ping(); // If server is null || is not reachable it will throw an exception;
+                try {
+                    int id = Integer.parseInt(super.getUsername());
+                    super.getRmiConnector().getServer().logout(id);
+                } catch (Exception ignore) {}
                 super.setLogin(this.username, this.password, true);
                 return ADMIN;
             }
