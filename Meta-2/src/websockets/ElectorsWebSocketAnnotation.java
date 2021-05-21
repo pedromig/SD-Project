@@ -1,6 +1,7 @@
 package websockets;
 
 import core.models.RmiConnector;
+import utils.elections.Election;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -35,7 +36,9 @@ public class ElectorsWebSocketAnnotation {
                                 if (connector.getServer() == null) {
                                     connector = new RmiConnector();
                                 }
-                                this.sendMessage(electionName);
+                                Election<?> election = connector.getElection(electionName);
+                                this.sendMessage(connector.getServer().printVotingProcessedData(null, election));
+                                this.sendMessage("");
                             }
                         } catch (Exception e){
                             e.printStackTrace();

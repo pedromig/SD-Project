@@ -10,11 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/core/actions/RealTimeElectorsAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/pages/adminConsole.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/adminConsole.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/web/pages/electorsRealTime.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/web/pages/electorsRealTime.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/websockets/ElectorsWebSocketAnnotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/websockets/ElectorsWebSocketAnnotation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -325,7 +320,7 @@
       <workItem from="1621551182428" duration="33000" />
       <workItem from="1621552847637" duration="66000" />
       <workItem from="1621555073861" duration="13115000" />
-      <workItem from="1621628956902" duration="3952000" />
+      <workItem from="1621628956902" duration="4750000" />
     </task>
     <servers />
   </component>
@@ -348,5 +343,9 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Adding 2 first REST API features (still needs fixing)" />
     <option name="LAST_COMMIT_MESSAGE" value="Adding 2 first REST API features (still needs fixing)" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
