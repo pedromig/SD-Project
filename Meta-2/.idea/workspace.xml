@@ -9,17 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="Merging with miguel">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/actions/AddFacebookAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/AddFacebookAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiServerInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/database/elections.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/database/lists.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/database/people.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/databasepeople.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/databasepeople.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RMIServer/src/rmiserver/interfaces/RmiServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/interfaces/RmiServerInterface.java" afterDir="false" />
-    </list>
+    <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="Adding 2 first REST API features (still needs fixing)" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
