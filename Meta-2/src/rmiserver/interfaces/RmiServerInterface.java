@@ -364,4 +364,11 @@ public interface RmiServerInterface extends Remote {
      * @throws RemoteException
      */
     CopyOnWriteArrayList<Person> getWebPeople() throws RemoteException;
+
+    /**
+     * Links a facebook account to a person in the rmi server's database
+     * @param idCardNumber The id card number of the person to link the account to
+     * @param facebookId The facebook account unique user ID
+     */
+    void linkWithFacebook(int idCardNumber, String facebookId) throws RemoteException;
 }

@@ -9,7 +9,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="" />
+    <list default="true" id="63d2a0b2-6e5f-4340-8b2c-8f2f23c9bcdc" name="Default Changelist" comment="Merging with miguel">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/actions/AddFacebookAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/actions/AddFacebookAccount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rmiserver/interfaces/RmiServerInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/database/elections.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/database/lists.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/database/people.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/databasepeople.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/databasepeople.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/RmiServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RMIServer/src/rmiserver/interfaces/RmiServerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RMIServer/src/rmiserver/interfaces/RmiServerInterface.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -89,7 +99,7 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Tomcat Server.Tomcat 8.5.65">
+  <component name="RunManager" selected="Tomcat Server.Tomcat 9.0.31 (Ubuntu)">
     <configuration name="RmiConnector" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -105,18 +115,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Tomcat 8.5.65" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.65" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+    <configuration name="Tomcat 9.0.31 (Ubuntu)" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.31 (Ubuntu)" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="UPDATE_ON_FRAME_DEACTIVATION" value="true" />
       <option name="UPDATE_CLASSES_ON_FRAME_DEACTIVATION" value="true" />
       <deployment>
@@ -284,7 +283,7 @@
     </configuration>
     <list>
       <item itemvalue="Application.RmiConnector" />
-      <item itemvalue="Tomcat Server.Tomcat 8.5.65" />
+      <item itemvalue="Tomcat Server.Tomcat 9.0.31 (Ubuntu)" />
     </list>
     <recent_temporary>
       <list>
@@ -329,7 +328,16 @@
       <workItem from="1621551182428" duration="33000" />
       <workItem from="1621552847637" duration="66000" />
       <workItem from="1621555073861" duration="13115000" />
+      <workItem from="1621636039324" duration="1433000" />
     </task>
+    <task id="LOCAL-00001" summary="Merging with miguel">
+      <created>1621588762793</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1621588762793</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -350,6 +358,7 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Adding 2 first REST API features (still needs fixing)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding 2 first REST API features (still needs fixing)" />
+    <MESSAGE value="Merging with miguel" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merging with miguel" />
   </component>
 </project>

@@ -31,14 +31,9 @@ public class AddFacebookAccount extends Action implements Configuration {
 				JSONObject json = (JSONObject) parser.parse(response.getBody());
 				String id = (String) json.get("id");
 
-				int idNumber = Integer.parseInt((String) session.get(USERNAME_KEY));
-				for (Person p : server.getPeople()) {
-					if (p.getIdentityCardNumber() == idNumber){
-						// This cant be a setter it need to be a editPersonID();
-						p.setFacebookID(id);
-						return SUCCESS;
-					}
-				}
+				int idCardNumber = Integer.parseInt((String) session.get(USERNAME_KEY));
+				server.linkWithFacebook(idCardNumber, id);
+				return SUCCESS;
 			} catch (ParseException | RemoteException e) {
 				System.err.println("Add Account Exception!!");
 			}
