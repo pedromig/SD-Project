@@ -777,6 +777,20 @@ public class RmiServer extends UnicastRemoteObject implements RmiServerInterface
 	}
 
 	/**
+	 * Links a facebook account to a person in the rmi server's database
+	 * @param idCardNumber The id card number of the person to link the account to
+	 * @param facebookId The facebook account unique user ID
+	 */
+	public synchronized void linkWithFacebook(int idCardNumber, String facebookId) throws RemoteException {
+		for (Person p : this.people) {
+			if (p.getIdentityCardNumber() == idCardNumber){
+				p.setFacebookID(facebookId);
+				break;
+			}
+		}
+	}
+
+	/**
 	 * Getter for web users
 	 * @return web users
 	 * @throws RemoteException
